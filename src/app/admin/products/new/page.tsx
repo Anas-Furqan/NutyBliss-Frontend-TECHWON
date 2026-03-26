@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
+import Image from 'next/image';
 import { FiUpload, FiX, FiPlus, FiTrash2 } from 'react-icons/fi';
 import { adminAPI } from '@/lib/api';
 import toast from 'react-hot-toast';
@@ -33,6 +34,7 @@ export default function AddProductPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [images, setImages] = useState<string[]>([]);
+  const [uploadingImages, setUploadingImages] = useState(false);
   const [variants, setVariants] = useState<Variant[]>([
     { size: '500g', price: 0, discountPrice: 0, stock: 0, sku: '' }
   ]);
@@ -89,9 +91,37 @@ export default function AddProductPage() {
     setIngredients(updated);
   };
 
+  const handleUploadImages = async (files: FileList | null) => {
+    if (!files || files.length === 0) return;
+    setUploadingImages(true);
+    try {
+      const selected = Array.from(files);
+      const { data } = await adminAPI.uploadImages(selected);
+      const urls = (data.images || []).map((img: any) => img.url).filter(Boolean);
+      if (urls.length === 0) {
+        toast.error('Upload succeeded but returned no URLs');
+        return;
+      }
+      setImages((prev) => [...prev, ...urls]);
+      toast.success(`${urls.length} image(s) uploaded`);
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || 'Failed to upload images');
+    } finally {
+      setUploadingImages(false);
+    }
+  };
+
+  const removeImage = (index: number) => {
+    setImages((prev) => prev.filter((_, i) => i !== index));
+  };
+
   const onSubmit = async (data: ProductForm) => {
     if (variants.some(v => !v.size || v.price <= 0)) {
       toast.error('Please fill all variant details');
+      return;
+    }
+    if (images.length === 0) {
+      toast.error('Please upload at least 1 product image');
       return;
     }
 
@@ -217,6 +247,44 @@ export default function AddProductPage() {
               />
             </div>
           </div>
+        </div>
+
+        {/* Images */}
+        <div className="bg-white rounded-xl shadow-sm p-6">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-lg font-semibold text-gray-900">Product Images</h2>
+            <label className={`btn-outline flex items-center gap-2 cursor-pointer ${uploadingImages ? 'opacity-50 pointer-events-none' : ''}`}>
+              <FiUpload className="w-5 h-5" />
+              {uploadingImages ? 'Uploading...' : 'Upload Images'}
+              <input
+                type="file"
+                accept="image/*"
+                multiple
+                className="hidden"
+                onChange={(e) => handleUploadImages(e.target.files)}
+              />
+            </label>
+          </div>
+
+          {images.length === 0 ? (
+            <p className="text-sm text-gray-500">Upload at least 1 image (stored in Supabase Storage).</p>
+          ) : (
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+              {images.map((url, index) => (
+                <div key={`${url}-${index}`} className="relative aspect-square rounded-xl overflow-hidden bg-gray-100 border">
+                  <Image src={url} alt={`Product image ${index + 1}`} fill className="object-cover" />
+                  <button
+                    type="button"
+                    onClick={() => removeImage(index)}
+                    className="absolute top-2 right-2 p-2 bg-white/90 hover:bg-white rounded-full shadow"
+                    aria-label="Remove image"
+                  >
+                    <FiX className="w-4 h-4 text-gray-700" />
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* Variants */}

@@ -9,10 +9,14 @@ const nextConfig = {
         port: '5000',
         pathname: '/uploads/**',
       },
+      // Supabase Storage public URLs:
+      // https://<project-ref>.supabase.co/storage/v1/object/public/<bucket>/<path>
+      {
+        protocol: 'https',
+        hostname: '*.supabase.co',
+        pathname: '/storage/v1/object/public/**',
+      },
     ],
-  },
-  env: {
-    API_URL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api',
   },
 }
 

@@ -213,7 +213,7 @@ export default function CheckoutPage() {
                       <div key={`${item.productId}-${item.variant?.size}`} className="flex gap-3">
                         <div className="relative w-16 h-16 rounded-lg overflow-hidden flex-shrink-0">
                           <Image
-                            src={item.product.images[0]?.url || '/placeholder.png'}
+                            src={item.product.images[0]?.url || '/images/placeholder.svg'}
                             alt={item.product.title}
                             fill
                             className="object-cover"

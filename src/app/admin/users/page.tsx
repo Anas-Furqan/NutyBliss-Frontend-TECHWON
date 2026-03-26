@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { FiSearch, FiUser } from 'react-icons/fi';
 import { adminAPI } from '@/lib/api';
 import { User } from '@/types';
@@ -11,11 +11,7 @@ export default function AdminUsersPage() {
   const [search, setSearch] = useState('');
   const [pagination, setPagination] = useState({ page: 1, pages: 1, total: 0 });
 
-  useEffect(() => {
-    fetchUsers();
-  }, [search]);
-
-  const fetchUsers = async (page = 1) => {
+  const fetchUsers = useCallback(async (page = 1) => {
     setLoading(true);
     try {
       const { data } = await adminAPI.getUsers({ page, search, limit: 10 });
@@ -26,7 +22,11 @@ export default function AdminUsersPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [search]);
+
+  useEffect(() => {
+    fetchUsers();
+  }, [fetchUsers]);
 
   return (
     <div>

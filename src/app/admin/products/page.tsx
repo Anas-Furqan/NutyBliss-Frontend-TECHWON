@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { FiPlus, FiEdit2, FiTrash2, FiSearch } from 'react-icons/fi';
@@ -14,11 +14,7 @@ export default function AdminProductsPage() {
   const [search, setSearch] = useState('');
   const [pagination, setPagination] = useState({ page: 1, pages: 1, total: 0 });
 
-  useEffect(() => {
-    fetchProducts();
-  }, [search]);
-
-  const fetchProducts = async (page = 1) => {
+  const fetchProducts = useCallback(async (page = 1) => {
     setLoading(true);
     try {
       const { data } = await adminAPI.getAllProducts({ page, search, limit: 10 });
@@ -29,7 +25,11 @@ export default function AdminProductsPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [search]);
+
+  useEffect(() => {
+    fetchProducts();
+  }, [fetchProducts]);
 
   const handleDelete = async (id: string) => {
     if (!confirm('Are you sure you want to delete this product?')) return;
@@ -107,7 +107,7 @@ export default function AdminProductsPage() {
                       <div className="flex items-center gap-3">
                         <div className="relative w-12 h-12 rounded-lg overflow-hidden bg-gray-100">
                           <Image
-                            src={product.images[0]?.url || '/placeholder.png'}
+                            src={product.images[0]?.url || '/images/placeholder.svg'}
                             alt={product.title}
                             fill
                             className="object-cover"

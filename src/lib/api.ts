@@ -1,9 +1,15 @@
 import axios from 'axios';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
+if (!API_URL && typeof window !== 'undefined') {
+  // Fail fast in the browser runtime (not at build-time).
+  throw new Error('Missing NEXT_PUBLIC_API_URL. Set it in your frontend environment variables.');
+}
 
 const api = axios.create({
-  baseURL: API_URL,
+  // Keep build/SSR from crashing if env isn't injected yet.
+  baseURL: API_URL || '',
   headers: {
     'Content-Type': 'application/json',
   },
@@ -27,7 +33,7 @@ api.interceptors.response.use(
     if (error.response?.status === 401) {
       if (typeof window !== 'undefined') {
         localStorage.removeItem('token');
-        localStorage.removeItem('user');
+        localStorage.removeItem('auth-storage');
       }
     }
     return Promise.reject(error);
@@ -105,12 +111,14 @@ export const adminAPI = {
 
   // Products
   getAllProducts: (params?: any) => api.get('/products/admin/all', { params }),
+  getProductAdmin: (idOrSlug: string) => api.get(`/products/admin/${idOrSlug}`),
   createProduct: (data: any) => api.post('/products', data),
   updateProduct: (id: string, data: any) => api.put(`/products/${id}`, data),
   deleteProduct: (id: string) => api.delete(`/products/${id}`),
 
   // Orders
   getAllOrders: (params?: any) => api.get('/orders', { params }),
+  getOrderDetails: (id: string) => api.get(`/orders/${id}`),
   updateOrderStatus: (id: string, data: any) => api.put(`/orders/${id}/status`, data),
   cancelOrder: (id: string, reason?: string) => api.put(`/orders/${id}/cancel`, { reason }),
 

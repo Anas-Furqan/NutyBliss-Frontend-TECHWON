@@ -21,15 +21,17 @@ const sidebarLinks = [
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
-  const { user, isAuthenticated, logout } = useAuthStore();
+  const { user, isAuthenticated, isHydrated, logout } = useAuthStore();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   useEffect(() => {
+    if (!isHydrated) return;
     if (!isAuthenticated || user?.role !== 'admin') {
       router.push('/login');
     }
-  }, [isAuthenticated, user]);
+  }, [isHydrated, isAuthenticated, user, router]);
 
+  if (!isHydrated) return null;
   if (!isAuthenticated || user?.role !== 'admin') return null;
 
   const handleLogout = () => {

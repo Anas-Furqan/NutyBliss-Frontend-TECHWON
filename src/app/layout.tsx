@@ -1,10 +1,8 @@
 import type { Metadata } from 'next'
 import { Mulish } from 'next/font/google'
 import './globals.css'
-import Navbar from '@/components/layout/Navbar'
-import Footer from '@/components/layout/Footer'
-import AnnouncementBar from '@/components/layout/AnnouncementBar'
 import { Toaster } from 'react-hot-toast'
+import AppChrome from '@/components/layout/AppChrome'
 
 const mulish = Mulish({
   subsets: ['latin'],
@@ -54,10 +52,7 @@ export default function RootLayout({
             },
           }}
         />
-        <AnnouncementBar />
-        <Navbar />
-        <main className="min-h-screen">{children}</main>
-        <Footer />
+        <AppChrome>{children}</AppChrome>
       </body>
     </html>
   )

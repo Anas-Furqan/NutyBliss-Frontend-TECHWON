@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Image from 'next/image';
 import { useParams } from 'next/navigation';
 import { motion } from 'framer-motion';
@@ -25,11 +25,7 @@ export default function ProductDetailPage() {
   const { addItem } = useCartStore();
   const { isAuthenticated } = useAuthStore();
 
-  useEffect(() => {
-    fetchProduct();
-  }, [slug]);
-
-  const fetchProduct = async () => {
+  const fetchProduct = useCallback(async () => {
     try {
       const { data } = await productsAPI.getOne(slug as string);
       setProduct(data.product);
@@ -46,7 +42,11 @@ export default function ProductDetailPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [slug]);
+
+  useEffect(() => {
+    fetchProduct();
+  }, [fetchProduct]);
 
   if (loading) {
     return (
@@ -106,7 +106,7 @@ export default function ProductDetailPage() {
               className="relative aspect-square rounded-2xl overflow-hidden bg-gray-100"
             >
               <Image
-                src={product.images[selectedImage]?.url || '/placeholder.png'}
+                src={product.images[selectedImage]?.url || '/images/placeholder.svg'}
                 alt={product.title}
                 fill
                 className="object-cover"

@@ -44,7 +44,7 @@ export default function CartPage() {
             </svg>
           </div>
           <h2 className="text-2xl font-bold text-gray-900 mb-2">Your cart is empty</h2>
-          <p className="text-gray-500 mb-6">Looks like you haven't added anything yet.</p>
+          <p className="text-gray-500 mb-6">Looks like you haven&apos;t added anything yet.</p>
           <Link href="/products" className="btn-primary">
             Start Shopping
           </Link>
@@ -83,7 +83,7 @@ export default function CartPage() {
                   <div className="flex gap-4">
                     <Link href={`/products/${item.product.slug}`} className="relative w-24 h-24 md:w-32 md:h-32 rounded-xl overflow-hidden flex-shrink-0">
                       <Image
-                        src={item.product.images[0]?.url || '/placeholder.png'}
+                        src={item.product.images[0]?.url || '/images/placeholder.svg'}
                         alt={item.product.title}
                         fill
                         className="object-cover"
@@ -172,7 +172,7 @@ export default function CartPage() {
                 </div>
                 {couponCode && (
                   <div className="mt-2 flex items-center justify-between text-sm">
-                    <span className="text-green-600">Coupon "{couponCode}" applied</span>
+                    <span className="text-green-600">Coupon &quot;{couponCode}&quot; applied</span>
                     <button onClick={removeCoupon} className="text-red-500 hover:underline">
                       Remove
                     </button>

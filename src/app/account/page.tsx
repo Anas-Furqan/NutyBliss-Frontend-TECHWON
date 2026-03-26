@@ -12,18 +12,19 @@ import toast from 'react-hot-toast';
 
 export default function AccountPage() {
   const router = useRouter();
-  const { user, isAuthenticated, logout, updateUser } = useAuthStore();
+  const { user, isAuthenticated, isHydrated, logout, updateUser } = useAuthStore();
   const [orders, setOrders] = useState<Order[]>([]);
   const [activeTab, setActiveTab] = useState('orders');
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (!isHydrated) return;
     if (!isAuthenticated) {
       router.push('/login');
       return;
     }
     fetchOrders();
-  }, [isAuthenticated]);
+  }, [isHydrated, isAuthenticated, router]);
 
   const fetchOrders = async () => {
     try {
@@ -42,6 +43,7 @@ export default function AccountPage() {
     toast.success('Logged out successfully');
   };
 
+  if (!isHydrated) return null;
   if (!isAuthenticated) return null;
 
   const getStatusColor = (status: string) => {

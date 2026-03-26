@@ -108,7 +108,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                         >
                           <div className="relative w-16 h-16 rounded-lg overflow-hidden bg-gray-100">
                             <Image
-                              src={product.images[0]?.url || '/placeholder.png'}
+                              src={product.images[0]?.url || '/images/placeholder.svg'}
                               alt={product.title}
                               fill
                               className="object-cover"
@@ -126,7 +126,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                     </div>
                   ) : query.trim() ? (
                     <div className="p-8 text-center text-gray-500">
-                      No products found for "{query}"
+                      No products found for &quot;{query}&quot;
                     </div>
                   ) : (
                     <div className="p-8 text-center text-gray-500">
