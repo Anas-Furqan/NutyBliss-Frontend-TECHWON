@@ -1,0 +1,405 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Import Mulish font (modern version of Muli) */
+@import url('https://fonts.googleapis.com/css2?family=Mulish:wght@400;600;700;800&display=swap');
+
+/* CSS Variables - Organic Inn exact colors */
+:root {
+  --primary: #633bb1;
+  --primary-rgb: 99, 59, 177;
+  --accent: #fedd00;
+  --accent-rgb: 254, 221, 0;
+  --cream: #fffae9;
+  --dark: #121212;
+  --white: #ffffff;
+
+  /* Shadows */
+  --shadow-btn: 12px 12px 5px rgba(99, 59, 177, 0.15);
+  --shadow-btn-hover: 8px 8px 3px rgba(99, 59, 177, 0.2);
+  --shadow-accent: 12px 12px 5px rgba(254, 221, 0, 0.3);
+  --shadow-accent-hover: 8px 8px 3px rgba(254, 221, 0, 0.4);
+  --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --shadow-card-hover: 0 8px 24px rgba(0, 0, 0, 0.15);
+  --shadow-feature: 4px 4px 20px rgba(99, 59, 177, 0.2);
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html {
+  font-size: 15px;
+  scroll-behavior: smooth;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+body {
+  font-family: 'Mulish', sans-serif;
+  color: var(--dark);
+  background: var(--white);
+  letter-spacing: 0.02rem;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+/* Display font for headings */
+.font-display {
+  font-family: var(--font-luckiest, 'LuckiestGuy'), cursive;
+}
+
+.font-secondary {
+  font-family: var(--font-gilroy, 'Gilroy-Semibold'), sans-serif;
+}
+
+@layer components {
+  /* ============================================
+     PRIMARY BUTTON - Organic Inn Style
+     ============================================ */
+  .btn-primary {
+    @apply bg-primary-500 text-white px-6 py-3 font-bold
+           border-2 border-primary-500
+           transition-all duration-300 ease-out
+           active:scale-95 inline-flex items-center justify-center gap-2;
+    border-radius: 12px;
+    box-shadow: var(--shadow-btn);
+  }
+
+  .btn-primary:hover {
+    box-shadow: var(--shadow-btn-hover);
+    transform: translate(2px, 2px);
+  }
+
+  .btn-primary:disabled {
+    @apply opacity-50 cursor-not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+
+  /* ============================================
+     ACCENT BUTTON (Yellow CTA) - Organic Inn Style
+     ============================================ */
+  .btn-accent {
+    @apply bg-accent-500 text-primary-500 px-6 py-3 font-bold
+           border-2 border-accent-500
+           transition-all duration-300 ease-out
+           active:scale-95 inline-flex items-center justify-center gap-2;
+    border-radius: 12px;
+    box-shadow: var(--shadow-accent);
+  }
+
+  .btn-accent:hover {
+    @apply bg-accent-400;
+    box-shadow: var(--shadow-accent-hover);
+    transform: translate(2px, 2px);
+  }
+
+  .btn-accent:disabled {
+    @apply opacity-50 cursor-not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+
+  /* ============================================
+     OUTLINE BUTTON
+     ============================================ */
+  .btn-outline {
+    @apply border-2 border-primary-500 text-primary-500 px-6 py-3
+           font-bold bg-transparent
+           hover:bg-primary-500 hover:text-white
+           transition-all duration-300 active:scale-95
+           inline-flex items-center justify-center gap-2;
+    border-radius: 12px;
+  }
+
+  /* ============================================
+     INPUT FIELDS
+     ============================================ */
+  .input-field {
+    @apply w-full px-4 py-3 border-2 border-gray-200
+           focus:outline-none focus:ring-2 focus:ring-primary-500/20
+           focus:border-primary-500 transition-all duration-200;
+    border-radius: 12px;
+  }
+
+  .input-field::placeholder {
+    @apply text-gray-400;
+  }
+
+  /* ============================================
+     PRODUCT CARD - Organic Inn Style
+     ============================================ */
+  .product-card {
+    @apply bg-white overflow-hidden text-left
+           transition-all duration-300;
+    box-shadow: var(--shadow-card);
+  }
+
+  .product-card:hover {
+    box-shadow: var(--shadow-card-hover);
+  }
+
+  .product-card-image {
+    @apply relative aspect-square overflow-hidden bg-gray-50;
+  }
+
+  .product-card-badge {
+    @apply absolute top-2 left-2 px-2 py-1 text-xs font-bold;
+    border-radius: 4px;
+  }
+
+  .product-card-badge-sale {
+    @apply bg-accent-500 text-primary-500;
+  }
+
+  .product-card-badge-new {
+    @apply bg-primary-500 text-white;
+  }
+
+  /* ============================================
+     SECTION TITLES
+     ============================================ */
+  .section-title {
+    @apply text-3xl md:text-4xl font-bold text-dark;
+    font-family: var(--font-luckiest, inherit);
+  }
+
+  .section-subtitle {
+    @apply text-gray-600 mt-2;
+  }
+
+  /* ============================================
+     FEATURE BAR - Organic Inn Style
+     ============================================ */
+  .feature-bar {
+    @apply bg-primary-500 py-8 px-4;
+    border-top: 38px solid var(--accent);
+    border-bottom: 38px solid var(--accent);
+    border-radius: 16px;
+    box-shadow: var(--shadow-feature);
+  }
+
+  .feature-bar-item {
+    @apply flex flex-col items-center text-center text-accent-500;
+  }
+
+  .feature-bar-icon {
+    @apply w-10 h-10 md:w-12 md:h-12 mb-2;
+  }
+
+  .feature-bar-title {
+    @apply text-lg md:text-xl font-bold;
+    font-family: var(--font-luckiest, inherit);
+  }
+
+  .feature-bar-desc {
+    @apply text-sm opacity-90;
+  }
+
+  /* ============================================
+     ANNOUNCEMENT BAR
+     ============================================ */
+  .announcement-bar {
+    @apply bg-primary-500 text-accent-500 py-2 px-4 text-center text-sm;
+    font-family: var(--font-luckiest, inherit);
+  }
+
+  /* ============================================
+     CARDS & CONTAINERS
+     ============================================ */
+  .card {
+    @apply bg-white overflow-hidden;
+    border-radius: 16px;
+    box-shadow: var(--shadow-card);
+  }
+
+  .card:hover {
+    box-shadow: var(--shadow-card-hover);
+  }
+
+  /* ============================================
+     STAR RATINGS
+     ============================================ */
+  .star-filled {
+    color: var(--accent);
+    fill: var(--accent);
+  }
+
+  .star-empty {
+    @apply text-gray-300;
+  }
+
+  /* ============================================
+     BADGES
+     ============================================ */
+  .badge {
+    @apply inline-flex items-center px-3 py-1 text-xs font-bold;
+    border-radius: 4rem;
+  }
+
+  .badge-primary {
+    @apply bg-primary-500 text-white;
+  }
+
+  .badge-accent {
+    @apply bg-accent-500 text-primary-500;
+  }
+
+  .badge-success {
+    @apply bg-green-100 text-green-800;
+  }
+
+  .badge-warning {
+    @apply bg-yellow-100 text-yellow-800;
+  }
+
+  .badge-danger {
+    @apply bg-red-100 text-red-800;
+  }
+}
+
+/* ============================================
+   WAVE DIVIDER
+   ============================================ */
+.wave-divider {
+  height: 36px;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+.wave-divider svg {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  bottom: 0;
+}
+
+.wave-divider.flip {
+  transform: rotate(180deg);
+}
+
+/* ============================================
+   CUSTOM SCROLLBAR
+   ============================================ */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--primary);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #5432a0;
+}
+
+/* ============================================
+   SWIPER CUSTOMIZATION
+   ============================================ */
+.swiper-pagination-bullet {
+  background: #d1d5db !important;
+  opacity: 1 !important;
+  width: 10px !important;
+  height: 10px !important;
+}
+
+.swiper-pagination-bullet-active {
+  background: var(--primary) !important;
+  width: 24px !important;
+  border-radius: 5px !important;
+}
+
+.swiper-button-next,
+.swiper-button-prev {
+  color: var(--primary) !important;
+  background: white;
+  width: 44px !important;
+  height: 44px !important;
+  border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.swiper-button-next::after,
+.swiper-button-prev::after {
+  font-size: 18px !important;
+  font-weight: bold;
+}
+
+/* ============================================
+   LINK STYLES
+   ============================================ */
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+a.link-primary {
+  @apply text-primary-500 hover:underline;
+}
+
+a.link-accent {
+  @apply text-accent-500 hover:text-accent-400;
+}
+
+/* ============================================
+   LOADING SPINNER
+   ============================================ */
+.spinner {
+  @apply w-8 h-8 border-4 border-primary-200 border-t-primary-500 rounded-full;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ============================================
+   RESPONSIVE UTILITIES
+   ============================================ */
+@media (max-width: 640px) {
+  .btn-primary,
+  .btn-accent,
+  .btn-outline {
+    @apply px-4 py-2.5 text-sm;
+  }
+}
+
+/* ============================================
+   SELECTION STYLING
+   ============================================ */
+::selection {
+  background: rgba(99, 59, 177, 0.2);
+  color: var(--dark);
+}
+
+/* ============================================
+   FOCUS VISIBLE STYLES
+   ============================================ */
+:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}

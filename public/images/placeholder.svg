@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="500" height="500" viewBox="0 0 500 500">
+  <rect width="500" height="500" fill="#fffae9"/>
+  <circle cx="250" cy="200" r="80" fill="#633bb1"/>
+  <text x="250" y="215" text-anchor="middle" fill="#fedd00" font-family="Arial" font-size="48" font-weight="bold">NB</text>
+  <text x="250" y="320" text-anchor="middle" fill="#633bb1" font-family="Arial" font-size="24" font-weight="bold">Nuty Bliss</text>
+  <text x="250" y="355" text-anchor="middle" fill="#888" font-family="Arial" font-size="16">Product Image</text>
+</svg>
