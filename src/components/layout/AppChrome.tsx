@@ -6,7 +6,7 @@ import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import SmoothScroll from '@/components/SmoothScroll';
 import Ornaments from '@/components/Ornaments';
-// import PageTransition from '@/components/Layout/PageTransition';
+import PageTransition from '@/components/layout/PageTransition';
 
 export default function AppChrome({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
