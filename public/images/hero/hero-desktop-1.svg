@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="730" viewBox="0 0 1920 730">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#633bb1;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#462888;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="1920" height="730" fill="url(#bg)"/>
+  <circle cx="1400" cy="365" r="250" fill="#fedd00" opacity="0.2"/>
+  <circle cx="1450" cy="320" r="180" fill="#fedd00" opacity="0.3"/>
+  <text x="200" y="280" fill="#fedd00" font-family="Arial" font-size="32" font-weight="bold">100% NATURAL</text>
+  <text x="200" y="380" fill="#ffffff" font-family="Arial" font-size="72" font-weight="bold">Premium</text>
+  <text x="200" y="470" fill="#ffffff" font-family="Arial" font-size="72" font-weight="bold">Peanut Butter</text>
+  <text x="200" y="530" fill="#ffffff" font-family="Arial" font-size="24" opacity="0.8">Made with high-quality roasted peanuts. No added sugar, no preservatives.</text>
+  <rect x="200" y="580" width="180" height="56" rx="12" fill="#fedd00"/>
+  <text x="290" y="616" text-anchor="middle" fill="#633bb1" font-family="Arial" font-size="18" font-weight="bold">Shop Now</text>
+</svg>
