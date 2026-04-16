@@ -5,11 +5,17 @@ import Image from 'next/image';
 import { useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { gsap, initGSAP } from '@/lib/gsap';
+import { authAPI } from '@/lib/api';
+import { useAuthStore } from '@/store';
+import { useRouter } from 'next/navigation';
+import toast from 'react-hot-toast';
 
 type LoginForm = { email: string; password: string };
 
 export default function LoginPage() {
   const { register, handleSubmit } = useForm<LoginForm>();
+  const setAuth = useAuthStore((state) => state.setAuth);
+  const router = useRouter();
   const jarRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -24,6 +30,21 @@ export default function LoginPage() {
       ease: 'none',
     });
   }, []);
+
+  const onSubmit = async (values: LoginForm) => {
+    try {
+      const { data } = await authAPI.login(values);
+      setAuth(data.user, data.token);
+      toast.success('Welcome back!');
+      if (data.user?.role === 'admin') {
+        router.push('/admin');
+      } else {
+        router.push('/shop');
+      }
+    } catch (error: any) {
+      toast.error(error?.response?.data?.message || 'Login failed');
+    }
+  };
 
   return (
     <main className="min-h-screen bg-surface pb-32 pt-24">
@@ -41,7 +62,7 @@ export default function LoginPage() {
             <p className="text-xs uppercase tracking-[0.22em] text-amber-400">Welcome Back</p>
             <h1 className="mt-3 font-display text-5xl tracking-tighter leading-tight text-slate-200">Login</h1>
 
-            <form onSubmit={handleSubmit(() => undefined)} className="mt-8 space-y-5">
+            <form onSubmit={handleSubmit(onSubmit)} className="mt-8 space-y-5">
               <label className="group relative block">
                 <input {...register('email')} type="email" placeholder=" " className="peer h-14 w-full border-b border-white/20 bg-transparent px-1 text-slate-200 outline-none transition-colors focus:border-[#FF8C00]" />
                 <span className="pointer-events-none absolute left-1 top-4 text-sm text-slate-400 transition-all peer-focus:-top-3 peer-focus:text-xs peer-focus:text-amber-400 peer-[&:not(:placeholder-shown)]:-top-3 peer-[&:not(:placeholder-shown)]:text-xs">Email</span>
@@ -59,6 +80,9 @@ export default function LoginPage() {
 
             <p className="mt-5 text-sm text-slate-300/80">
               New here? <Link href="/signup" className="text-amber-400">Create account</Link>
+            </p>
+            <p className="mt-2 text-sm text-slate-400">
+              Admin? <Link href="/admin/login" className="text-amber-400">Access admin login</Link>
             </p>
           </div>
         </div>

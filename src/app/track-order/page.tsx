@@ -3,20 +3,37 @@
 import Image from 'next/image';
 import { FormEvent, useRef, useState } from 'react';
 import { gsap, initGSAP } from '@/lib/gsap';
-
-const states = ['Ordered', 'Packed', 'Shipped', 'Out for Delivery', 'Delivered'];
+import { ordersAPI } from '@/lib/api';
+import toast from 'react-hot-toast';
 
 export default function TrackOrderPage() {
   const [orderId, setOrderId] = useState('');
   const [revealed, setRevealed] = useState(false);
+  const [statusHistory, setStatusHistory] = useState<{ status: string; timestamp?: string; note?: string }[]>([]);
   const timelineRef = useRef<HTMLDivElement>(null);
   const markerRef = useRef<HTMLDivElement>(null);
 
-  const onTrack = (event: FormEvent) => {
+  const onTrack = async (event: FormEvent) => {
     event.preventDefault();
     if (!orderId.trim()) return;
-    initGSAP();
-    setRevealed(true);
+
+    let historyLength = 0;
+
+    try {
+      const { data } = await ordersAPI.track(orderId.trim());
+      const history = data?.order?.statusHistory?.length
+        ? data.order.statusHistory
+        : [{ status: data?.order?.status || 'pending' }];
+
+      historyLength = history.length;
+      setStatusHistory(history);
+      initGSAP();
+      setRevealed(true);
+    } catch (error: any) {
+      toast.error(error?.response?.data?.message || 'Order not found');
+      return;
+    }
+
     requestAnimationFrame(() => {
       if (!timelineRef.current || !markerRef.current) return;
       gsap.fromTo(
@@ -29,7 +46,7 @@ export default function TrackOrderPage() {
         { scaleY: 0, transformOrigin: 'center top' },
         { scaleY: 1, duration: 0.7, ease: 'power2.out' },
       );
-      const finalY = (states.length - 1) * 108;
+      const finalY = Math.max(0, (historyLength - 1) * 108);
       gsap.fromTo(markerRef.current, { y: 0, autoAlpha: 0 }, { y: finalY, autoAlpha: 1, duration: 1.2, ease: 'power3.inOut' });
     });
   };
@@ -46,7 +63,7 @@ export default function TrackOrderPage() {
               <input
                 value={orderId}
                 onChange={(e) => setOrderId(e.target.value)}
-                placeholder="NB-ORDER-2026-001"
+                placeholder="NUTY-0001"
                 className="h-14 flex-1 rounded-full border border-white/10 bg-[#090913] px-6 text-lg text-slate-200 outline-none placeholder:text-slate-500 focus:border-[#FF8C00]"
               />
               <button type="submit" className="h-14 rounded-full bg-[#FF8C00] px-7 text-sm font-semibold text-[#1c1206] shadow-neon transition hover:brightness-110">
@@ -65,11 +82,11 @@ export default function TrackOrderPage() {
             </div>
 
             <div className="space-y-7 pl-16">
-              {states.map((item, index) => (
-                <article key={item} data-track-item className="glass-card p-5">
+              {statusHistory.map((item, index) => (
+                <article key={`${item.status}-${index}`} data-track-item className="glass-card p-5">
                   <p className="text-xs uppercase tracking-[0.18em] text-amber-400">Step {index + 1}</p>
-                  <h2 className="mt-2 font-display text-3xl tracking-tighter leading-tight text-slate-200">{item}</h2>
-                  <p className="mt-2 text-sm text-slate-300/75">Premium timeline preview for live order transit states.</p>
+                  <h2 className="mt-2 font-display text-3xl tracking-tighter leading-tight text-slate-200">{item.status.replace(/-/g, ' ')}</h2>
+                  <p className="mt-2 text-sm text-slate-300/75">{item.note || 'Status updated by admin dashboard'}</p>
                 </article>
               ))}
             </div>

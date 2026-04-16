@@ -10,6 +10,7 @@ if (!API_URL && typeof window !== 'undefined') {
 const api = axios.create({
   // Keep build/SSR from crashing if env isn't injected yet.
   baseURL: API_URL || '',
+  withCredentials: true,
   headers: {
     'Content-Type': 'application/json',
   },
@@ -46,6 +47,7 @@ export const authAPI = {
     api.post('/auth/register', data),
   login: (data: { email: string; password: string }) =>
     api.post('/auth/login', data),
+  logout: () => api.post('/auth/logout'),
   getMe: () => api.get('/auth/me'),
   updateProfile: (data: { name: string; phone?: string }) =>
     api.put('/auth/profile', data),
@@ -62,6 +64,13 @@ export const productsAPI = {
   getOne: (idOrSlug: string) => api.get(`/products/${idOrSlug}`),
   getRelated: (id: string) => api.get(`/products/${id}/related`),
   getCategories: () => api.get('/products/categories'),
+};
+
+export const categoriesAPI = {
+  getAll: () => api.get('/categories'),
+  create: (data: { name: string; description?: string }) => api.post('/categories', data),
+  update: (id: string, data: { name?: string; description?: string; isActive?: boolean }) => api.put(`/categories/${id}`, data),
+  remove: (id: string) => api.delete(`/categories/${id}`),
 };
 
 // Cart API
@@ -148,6 +157,12 @@ export const adminAPI = {
       headers: { 'Content-Type': 'multipart/form-data' },
     });
   },
+
+  // Categories
+  getAllCategories: () => api.get('/categories'),
+  createCategory: (data: { name: string; description?: string }) => api.post('/categories', data),
+  updateCategory: (id: string, data: { name?: string; description?: string; isActive?: boolean }) => api.put(`/categories/${id}`, data),
+  deleteCategory: (id: string) => api.delete(`/categories/${id}`),
 };
 
 export default api;

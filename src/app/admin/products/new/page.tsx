@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import Image from 'next/image';
@@ -13,7 +13,7 @@ interface ProductForm {
   slug: string;
   description: string;
   shortDescription: string;
-  category: string;
+  categoryId: string;
   basePrice: number;
   baseDiscountPrice: number;
   totalStock: number;
@@ -39,10 +39,11 @@ export default function AddProductPage() {
     { size: '500g', price: 0, discountPrice: 0, stock: 0, sku: '' }
   ]);
   const [ingredients, setIngredients] = useState<string[]>(['']);
+  const [categories, setCategories] = useState<Array<{ _id: string; name: string }>>([]);
 
   const { register, handleSubmit, watch, setValue, formState: { errors } } = useForm<ProductForm>({
     defaultValues: {
-      category: 'peanut-butter',
+      categoryId: '',
       isFeatured: false,
       isHotSelling: false,
       isNewArrival: true,
@@ -50,6 +51,23 @@ export default function AddProductPage() {
   });
 
   const title = watch('title');
+
+  useEffect(() => {
+    const loadCategories = async () => {
+      try {
+        const { data } = await adminAPI.getAllCategories();
+        const list = data?.categories || [];
+        setCategories(list);
+        if (list.length > 0) {
+          setValue('categoryId', list[0]._id);
+        }
+      } catch {
+        toast.error('Failed to load categories');
+      }
+    };
+
+    loadCategories();
+  }, [setValue]);
 
   // Auto-generate slug from title
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -183,10 +201,10 @@ export default function AddProductPage() {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Category *</label>
-              <select {...register('category')} className="input-field">
-                <option value="peanut-butter">Peanut Butter</option>
-                <option value="oats">Oats</option>
-                <option value="bundles">Bundles</option>
+              <select {...register('categoryId', { required: true })} className="input-field">
+                {categories.map((category) => (
+                  <option key={category._id} value={category._id}>{category.name}</option>
+                ))}
               </select>
             </div>
 

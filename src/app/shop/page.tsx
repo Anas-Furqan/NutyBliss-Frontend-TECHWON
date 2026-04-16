@@ -1,23 +1,53 @@
 'use client';
 
 import { useEffect, useMemo, useRef, useState } from 'react';
-import ProductCard from '@/components/ProductCard';
-import { nutyProducts } from '@/lib/site-data';
+import ProductCard from '@/components/ui/ProductCard';
+import { categoriesAPI, productsAPI } from '@/lib/api';
 import { Flip, initGSAP } from '@/lib/gsap';
+import { Product } from '@/types';
+import toast from 'react-hot-toast';
 
-const filters = ['All', 'Organic', 'Classic', 'Crunchy'] as const;
-type FilterType = (typeof filters)[number];
+type CategoryFilter = { id: string; name: string; slug: string };
 
 export default function ShopPage() {
-  const [activeFilter, setActiveFilter] = useState<FilterType>('All');
+  const [activeFilter, setActiveFilter] = useState<string>('all');
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [filters, setFilters] = useState<CategoryFilter[]>([{ id: 'all', name: 'All', slug: 'all' }]);
   const gridRef = useRef<HTMLDivElement>(null);
 
-  const products = useMemo(
-    () => (activeFilter === 'All' ? nutyProducts : nutyProducts.filter((item) => item.category === activeFilter)),
-    [activeFilter],
-  );
+  const fetchCatalog = async (categorySlug = 'all') => {
+    try {
+      setLoading(true);
+      const [{ data: productsData }, { data: categoriesData }] = await Promise.all([
+        productsAPI.getAll({ limit: 60, ...(categorySlug !== 'all' ? { category: categorySlug } : {}) }),
+        categoriesAPI.getAll(),
+      ]);
+
+      const dynamicFilters = [
+        { id: 'all', name: 'All', slug: 'all' },
+        ...(categoriesData?.categories || []).map((category: any) => ({
+          id: category._id || category.id,
+          name: category.name,
+          slug: category.slug,
+        })),
+      ];
+
+      setFilters(dynamicFilters);
+      setProducts(productsData?.products || []);
+    } catch (error) {
+      toast.error('Failed to load products');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
+    fetchCatalog(activeFilter);
+  }, [activeFilter]);
+
+  useEffect(() => {
+    if (loading) return;
     initGSAP();
     const container = gridRef.current;
     if (!container) return;
@@ -25,7 +55,7 @@ export default function ShopPage() {
     requestAnimationFrame(() => {
       Flip.from(state, { duration: 0.45, ease: 'power2.inOut', absolute: true, stagger: 0.02 });
     });
-  }, [activeFilter]);
+  }, [activeFilter, loading, products.length]);
 
   return (
     <main className="relative z-10 bg-surface pb-40 pt-32">
@@ -39,21 +69,27 @@ export default function ShopPage() {
         <div className="mt-7 flex flex-wrap gap-2">
           {filters.map((filter) => (
             <button
-              key={filter}
-              className={`${activeFilter === filter ? 'btn-primary' : 'btn-secondary'} !px-4`}
-              onClick={() => setActiveFilter(filter)}
+              key={filter.id}
+              className={`${activeFilter === filter.slug ? 'btn-primary' : 'btn-secondary'} !px-4`}
+              onClick={() => setActiveFilter(filter.slug)}
             >
-              {filter}
+              {filter.name}
             </button>
           ))}
         </div>
 
         <div ref={gridRef} className="mt-8 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-          {products.map((product) => (
-            <div key={product.id} data-flip-item>
-              <ProductCard product={product} />
-            </div>
-          ))}
+          {loading ? (
+            <p className="col-span-full text-slate-400">Loading products...</p>
+          ) : products.length > 0 ? (
+            products.map((product) => (
+              <div key={product._id} data-flip-item>
+                <ProductCard product={product} />
+              </div>
+            ))
+          ) : (
+            <p className="col-span-full text-slate-400">No products found for this category.</p>
+          )}
         </div>
       </section>
     </main>

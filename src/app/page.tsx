@@ -1,11 +1,12 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import Hero from '@/components/Hero';
-import ProductCard from '@/components/ProductCard';
-import { nutyProducts } from '@/lib/site-data';
+import ProductCard from '@/components/ui/ProductCard';
+import { productsAPI } from '@/lib/api';
 import { gsap, initGSAP } from '@/lib/gsap';
+import { Product } from '@/types';
 
 const homeFeatures = [
   '100% roasted peanut core',
@@ -15,6 +16,19 @@ const homeFeatures = [
 
 export default function HomePage() {
   const sectionRef = useRef<HTMLDivElement>(null);
+  const [featuredProducts, setFeaturedProducts] = useState<Product[]>([]);
+
+  useEffect(() => {
+    const loadFeatured = async () => {
+      try {
+        const { data } = await productsAPI.getAll({ featured: true, limit: 3 });
+        setFeaturedProducts(data?.products || []);
+      } catch {
+        setFeaturedProducts([]);
+      }
+    };
+    loadFeatured();
+  }, []);
 
   useEffect(() => {
     initGSAP();
@@ -72,8 +86,8 @@ export default function HomePage() {
         </div>
 
         <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-          {nutyProducts.slice(0, 3).map((product) => (
-            <div key={product.id} data-product-card>
+          {featuredProducts.map((product) => (
+            <div key={product._id} data-product-card>
               <ProductCard product={product} />
             </div>
           ))}

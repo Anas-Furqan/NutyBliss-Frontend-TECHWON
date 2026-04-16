@@ -3,11 +3,15 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useMemo, useRef } from 'react';
-import { useCartStore } from '@/store';
+import { useAuthStore, useCartStore } from '@/store';
 import { gsap } from '@/lib/gsap';
+import { useRouter } from 'next/navigation';
+import toast from 'react-hot-toast';
 
 export default function CartPage() {
   const { items, updateQuantity, removeItem, getSubtotal } = useCartStore();
+  const { isAuthenticated } = useAuthStore();
+  const router = useRouter();
   const progressRef = useRef<HTMLDivElement>(null);
   const subtotal = getSubtotal();
   const freeShippingThreshold = 4000;
@@ -17,6 +21,13 @@ export default function CartPage() {
     if (!progressRef.current) return;
     gsap.to(progressRef.current, { width: `${progress * 100}%`, duration: 0.7, ease: 'power2.out' });
   }, [progress]);
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      toast.error('Please login to access your cart');
+      router.push('/login');
+    }
+  }, [isAuthenticated, router]);
 
   const totalItems = useMemo(() => items.reduce((sum, item) => sum + item.quantity, 0), [items]);
 

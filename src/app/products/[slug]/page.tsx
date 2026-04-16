@@ -4,19 +4,41 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
-import { nutyProducts } from '@/lib/site-data';
-import { useCartStore } from '@/store';
+import { productsAPI } from '@/lib/api';
+import { useAuthStore, useCartStore } from '@/store';
 import { gsap, initGSAP } from '@/lib/gsap';
 import Button from '@/components/ui/Button';
 import GlassCard from '@/components/ui/GlassCard';
+import { Product } from '@/types';
+import AuthGateModal from '@/components/ui/AuthGateModal';
+import toast from 'react-hot-toast';
 
 export default function ProductDetailPage() {
   const { slug } = useParams();
   const slugValue = Array.isArray(slug) ? slug[0] : slug;
-  const product = nutyProducts.find((item) => item.slug === slugValue);
+  const [product, setProduct] = useState<Product | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [showAuthGate, setShowAuthGate] = useState(false);
   const [quantity, setQuantity] = useState(1);
   const imageWrapRef = useRef<HTMLDivElement>(null);
   const { addItem } = useCartStore();
+  const { isAuthenticated } = useAuthStore();
+
+  useEffect(() => {
+    const fetchProduct = async () => {
+      try {
+        if (!slugValue) return;
+        const { data } = await productsAPI.getOne(slugValue);
+        setProduct(data?.product || null);
+      } catch {
+        setProduct(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProduct();
+  }, [slugValue]);
 
   useEffect(() => {
     initGSAP();
@@ -37,6 +59,14 @@ export default function ProductDetailPage() {
     return () => ctx.revert();
   }, []);
 
+  if (loading) {
+    return (
+      <main className="flex min-h-[70vh] items-center justify-center bg-surface pt-28 text-ink">
+        Loading product...
+      </main>
+    );
+  }
+
   if (!product) {
     return (
       <main className="flex min-h-[70vh] items-center justify-center bg-surface pt-28 text-ink">
@@ -51,18 +81,15 @@ export default function ProductDetailPage() {
         <div ref={imageWrapRef} className="sticky top-28 h-fit">
           <Link href="/shop" className="text-xs uppercase tracking-[0.18em] text-primary/80">Back to shop</Link>
           <div className="group relative mt-4 aspect-square overflow-hidden rounded-[2rem] border border-white/[0.08] bg-white/[0.03]">
-            <Image src={product.image} alt={product.name} fill className="object-cover transition-transform duration-500 group-hover:scale-110" />
-          </div>
-          <div className="mt-4 rounded-xl border border-white/[0.08] bg-white/[0.03] p-3 backdrop-blur-2xl">
-            <Image src={product.labelImage} alt="Nutrition label reference" width={220} height={120} className="rounded-lg" />
+            <Image src={product.images?.[0]?.url || '/images/placeholder.svg'} alt={product.title} fill className="object-cover transition-transform duration-500 group-hover:scale-110" />
           </div>
         </div>
 
         <div>
           <p className="text-xs uppercase tracking-[0.22em] text-primary/75">{product.category}</p>
-          <h1 className="mt-3 font-display text-6xl tracking-tighter leading-tight text-slate-200">{product.name}</h1>
+          <h1 className="mt-3 font-display text-6xl tracking-tighter leading-tight text-slate-200">{product.title}</h1>
           <p className="mt-4 max-w-2xl text-slate-300/80">{product.description}</p>
-          <p className="mt-4 text-2xl font-semibold text-primary">PKR {product.price.toLocaleString()}</p>
+          <p className="mt-4 text-2xl font-semibold text-primary">PKR {(product.baseDiscountPrice || product.basePrice).toLocaleString()}</p>
 
           <div className="mt-6 flex items-center gap-3">
             <button className="btn-secondary !px-3" onClick={() => setQuantity((q) => Math.max(1, q - 1))}>-</button>
@@ -70,30 +97,17 @@ export default function ProductDetailPage() {
             <button className="btn-secondary !px-3" onClick={() => setQuantity((q) => q + 1)}>+</button>
             <Button
               className="ml-2"
-              onClick={() =>
-                addItem(
-                  {
-                    _id: product.id,
-                    title: product.name,
-                    slug: product.slug,
-                    description: product.description,
-                    images: [{ url: product.image }],
-                    category: product.category.toLowerCase(),
-                    variants: [],
-                    basePrice: product.price,
-                    totalStock: 100,
-                    rating: { average: 4.8, count: 40 },
-                    isActive: true,
-                    createdAt: new Date().toISOString(),
-                    updatedAt: new Date().toISOString(),
-                    ingredients: product.ingredients,
-                    nutritionFacts: {
-                      servingSize: product.nutrition[0]?.value,
-                    },
-                  },
-                  quantity,
-                )
-              }
+              onClick={() => {
+                if (!isAuthenticated) {
+                  setShowAuthGate(true);
+                  return;
+                }
+                addItem(product, quantity, product.variants?.[0] ? {
+                  size: product.variants[0].size,
+                  price: product.variants[0].discountPrice || product.variants[0].price,
+                } : undefined);
+                toast.success('Added to cart');
+              }}
             >
               Add to Cart
             </Button>
@@ -102,10 +116,10 @@ export default function ProductDetailPage() {
           <GlassCard className="mt-10 p-6">
             <h2 className="font-display text-3xl tracking-tighter leading-tight text-slate-200">Nutrition Table</h2>
             <div className="mt-4 grid gap-2">
-              {product.nutrition.map((entry) => (
-                <p key={entry.key} className="flex justify-between border-b border-primary/10 py-1 text-sm text-slate-300">
-                  <span>{entry.key}</span>
-                  <span className="font-semibold text-slate-200">{entry.value}</span>
+              {Object.entries(product.nutritionFacts || {}).map(([key, value]) => (
+                <p key={key} className="flex justify-between border-b border-primary/10 py-1 text-sm text-slate-300">
+                  <span className="capitalize">{key}</span>
+                  <span className="font-semibold text-slate-200">{String(value)}</span>
                 </p>
               ))}
             </div>
@@ -114,7 +128,7 @@ export default function ProductDetailPage() {
           <section data-ingredients className="mt-10">
             <h2 className="font-display text-3xl tracking-tighter leading-tight text-slate-200">Ingredients</h2>
             <div className="mt-4 flex flex-wrap gap-3">
-              {product.ingredients.map((item) => (
+              {(product.ingredients || []).map((item) => (
                 <span key={item} data-ingredient className="rounded-full border border-primary/20 bg-white/[0.05] px-4 py-2 text-sm text-slate-200">
                   {item}
                 </span>
@@ -123,6 +137,7 @@ export default function ProductDetailPage() {
           </section>
         </div>
       </section>
+      <AuthGateModal open={showAuthGate} onClose={() => setShowAuthGate(false)} />
     </main>
   );
 }

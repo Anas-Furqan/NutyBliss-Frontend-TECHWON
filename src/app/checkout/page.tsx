@@ -3,10 +3,13 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
-import { useCartStore } from '@/store';
+import { useAuthStore, useCartStore } from '@/store';
 import Input from '@/components/ui/Input';
 import Button from '@/components/ui/Button';
 import GlassCard from '@/components/ui/GlassCard';
+import { ordersAPI } from '@/lib/api';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 
 type CheckoutForm = {
   fullName: string;
@@ -20,6 +23,8 @@ type CheckoutForm = {
 
 export default function CheckoutPage() {
   const { items, getSubtotal, discount, clearCart } = useCartStore();
+  const { isAuthenticated } = useAuthStore();
+  const router = useRouter();
   const [loading, setLoading] = useState(false);
 
   const { register, handleSubmit, watch, formState: { errors } } = useForm<CheckoutForm>({
@@ -31,12 +36,47 @@ export default function CheckoutPage() {
   const shipping = subtotal >= 2000 ? 0 : 200;
   const total = subtotal - discount + shipping;
 
-  const onSubmit = async () => {
+  useEffect(() => {
+    if (!isAuthenticated) {
+      router.push('/login');
+    }
+  }, [isAuthenticated, router]);
+
+  const onSubmit = async (values: CheckoutForm) => {
+    if (!isAuthenticated) {
+      toast.error('Please login to continue checkout');
+      router.push('/login');
+      return;
+    }
+
     setLoading(true);
-    await new Promise((resolve) => setTimeout(resolve, 800));
-    clearCart();
-    toast.success('Order placed successfully');
-    setLoading(false);
+    try {
+      const payload = {
+        items: items.map((item) => ({
+          productId: item.productId,
+          quantity: item.quantity,
+          variant: item.variant,
+        })),
+        shippingAddress: {
+          fullName: values.fullName,
+          email: values.email,
+          phone: values.phone,
+          address: values.address,
+          city: values.city,
+          postalCode: values.postalCode,
+        },
+        paymentMethod: values.paymentMethod,
+      };
+
+      const { data } = await ordersAPI.create(payload);
+      clearCart();
+      toast.success('Order placed successfully');
+      router.push(`/order-success?orderNumber=${data?.order?.orderNumber || ''}`);
+    } catch (error: any) {
+      toast.error(error?.response?.data?.message || 'Failed to place order');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (

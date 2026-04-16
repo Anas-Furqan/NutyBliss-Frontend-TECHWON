@@ -5,11 +5,17 @@ import Image from 'next/image';
 import { useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { gsap, initGSAP } from '@/lib/gsap';
+import { authAPI } from '@/lib/api';
+import { useAuthStore } from '@/store';
+import { useRouter } from 'next/navigation';
+import toast from 'react-hot-toast';
 
 type SignupForm = { name: string; email: string; phone: string; password: string };
 
 export default function RegisterPage() {
   const { register, handleSubmit } = useForm<SignupForm>();
+  const setAuth = useAuthStore((state) => state.setAuth);
+  const router = useRouter();
   const jarRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -24,6 +30,17 @@ export default function RegisterPage() {
       ease: 'none',
     });
   }, []);
+
+  const onSubmit = async (values: SignupForm) => {
+    try {
+      const { data } = await authAPI.register(values);
+      setAuth(data.user, data.token);
+      toast.success('Account created successfully');
+      router.push('/shop');
+    } catch (error: any) {
+      toast.error(error?.response?.data?.message || 'Registration failed');
+    }
+  };
 
   return (
     <main className="min-h-screen bg-surface pb-32 pt-24">
@@ -41,7 +58,7 @@ export default function RegisterPage() {
             <p className="text-xs uppercase tracking-[0.22em] text-amber-400">Join Nuty</p>
             <h1 className="mt-3 font-display text-5xl tracking-tighter leading-tight text-slate-200">Signup</h1>
 
-            <form onSubmit={handleSubmit(() => undefined)} className="mt-8 space-y-5">
+            <form onSubmit={handleSubmit(onSubmit)} className="mt-8 space-y-5">
               <label className="group relative block">
                 <input {...register('name')} placeholder=" " className="peer h-14 w-full border-b border-white/20 bg-transparent px-1 text-slate-200 outline-none transition-colors focus:border-[#FF8C00]" />
                 <span className="pointer-events-none absolute left-1 top-4 text-sm text-slate-400 transition-all peer-focus:-top-3 peer-focus:text-xs peer-focus:text-amber-400 peer-[&:not(:placeholder-shown)]:-top-3 peer-[&:not(:placeholder-shown)]:text-xs">Full name</span>

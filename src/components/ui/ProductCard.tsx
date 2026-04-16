@@ -5,8 +5,10 @@ import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { FiStar, FiShoppingCart } from 'react-icons/fi';
 import { Product } from '@/types';
-import { useCartStore } from '@/store';
+import { useAuthStore, useCartStore } from '@/store';
 import toast from 'react-hot-toast';
+import { useState } from 'react';
+import AuthGateModal from '@/components/ui/AuthGateModal';
 
 interface ProductCardProps {
   product: Product;
@@ -14,6 +16,8 @@ interface ProductCardProps {
 
 export default function ProductCard({ product }: ProductCardProps) {
   const { addItem } = useCartStore();
+  const { isAuthenticated } = useAuthStore();
+  const [showAuthGate, setShowAuthGate] = useState(false);
   const isDarkVisual = /cacao|dark|chocolate|classic-roast|crunchy-bites/i.test(product.slug);
 
   const price = product.baseDiscountPrice || product.basePrice;
@@ -25,6 +29,11 @@ export default function ProductCard({ product }: ProductCardProps) {
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
+
+    if (!isAuthenticated) {
+      setShowAuthGate(true);
+      return;
+    }
 
     if (product.totalStock <= 0) {
       toast.error('Product is out of stock');
@@ -41,13 +50,14 @@ export default function ProductCard({ product }: ProductCardProps) {
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      className="group relative overflow-hidden rounded-[1.25rem] border border-white/[0.08] bg-white/[0.03] backdrop-blur-2xl"
-    >
-      <Link href={`/products/${product.slug}`}>
+    <>
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        className="group relative overflow-hidden rounded-[1.25rem] border border-white/[0.08] bg-white/[0.03] backdrop-blur-2xl"
+      >
+        <Link href={`/products/${product.slug}`}>
         <div
           className="pointer-events-none absolute inset-0 opacity-0 transition-all duration-500 group-hover:opacity-100"
           style={{
@@ -172,7 +182,9 @@ export default function ProductCard({ product }: ProductCardProps) {
             </button>
           )}
         </div>
-      </Link>
-    </motion.div>
+        </Link>
+      </motion.div>
+      <AuthGateModal open={showAuthGate} onClose={() => setShowAuthGate(false)} />
+    </>
   );
 }
