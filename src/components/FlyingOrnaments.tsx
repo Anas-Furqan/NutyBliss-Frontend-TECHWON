@@ -20,6 +20,12 @@ const assets = [
   { src: '/images/product (2).jpeg', alt: 'Organic nut ornament' },
 ];
 
+const seededValue = (seed: number, min: number, max: number) => {
+  const raw = Math.sin(seed * 999.91) * 10000;
+  const normalized = raw - Math.floor(raw);
+  return min + normalized * (max - min);
+};
+
 export default function FlyingOrnaments() {
   const rootRef = useRef<HTMLDivElement>(null);
 
@@ -29,10 +35,10 @@ export default function FlyingOrnaments() {
         const asset = assets[i % assets.length];
         return {
           id: i,
-          x: Math.round(gsap.utils.random(3, 95)),
-          y: Math.round(gsap.utils.random(4, 92)),
-          size: Math.round(gsap.utils.random(42, 120)),
-          depth: Number(gsap.utils.random(0.2, 1).toFixed(2)),
+          x: Math.round(seededValue(i + 1, 3, 95)),
+          y: Math.round(seededValue(i + 21, 4, 92)),
+          size: Math.round(seededValue(i + 41, 42, 120)),
+          depth: Number(seededValue(i + 71, 0.2, 1).toFixed(2)),
           src: asset.src,
           alt: asset.alt,
         };
@@ -50,11 +56,13 @@ export default function FlyingOrnaments() {
 
       items.forEach((item) => {
         const depth = Number(item.dataset.depth ?? '0.5');
+        const drift = gsap.utils.mapRange(0.2, 1, 7, 3, depth);
+        const parallaxSpeed = gsap.utils.mapRange(0.2, 1, 0.35, 1.1, depth);
         gsap.to(item, {
           y: `${gsap.utils.random(-22, 22)}`,
           x: `${gsap.utils.random(-18, 18)}`,
           rotate: gsap.utils.random(-8, 8),
-          duration: gsap.utils.random(4, 8),
+          duration: gsap.utils.random(drift, drift + 2),
           ease: 'sine.inOut',
           repeat: -1,
           yoyo: true,
@@ -67,7 +75,7 @@ export default function FlyingOrnaments() {
             trigger: document.body,
             start: 'top top',
             end: 'bottom bottom',
-            scrub: 0.8,
+            scrub: parallaxSpeed,
           },
         });
       });
@@ -77,7 +85,7 @@ export default function FlyingOrnaments() {
   }, []);
 
   return (
-    <div ref={rootRef} className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
+    <div ref={rootRef} className="pointer-events-none fixed inset-0 -z-10 overflow-hidden [contain:layout_paint_style]">
       {ornaments.map((item) => (
         <div
           key={item.id}
@@ -91,6 +99,8 @@ export default function FlyingOrnaments() {
             height: item.size,
             opacity: 0.18 + item.depth * 0.4,
             filter: item.depth > 0.78 ? 'blur(0.6px)' : 'none',
+            boxShadow: '0 20px 50px rgba(0,0,0,0.5)',
+            zIndex: item.depth > 0.6 ? 2 : 1,
           }}
         >
           <Image

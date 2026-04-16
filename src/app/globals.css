@@ -5,9 +5,10 @@
 :root {
   --nuty-purple: #4b0082;
   --nuty-orange: #ff8c00;
-  --nuty-peanut: #d2b48c;
-  --nuty-chocolate: #3e2723;
-  --nuty-surface: #fdf5e6;
+  --nuty-amber: #fbbf24;
+  --nuty-text: #e2e8f0;
+  --nuty-surface: #050505;
+  --nuty-surface-alt: #0d0d0d;
 }
 
 * {
@@ -18,9 +19,16 @@ html,
 body {
   margin: 0;
   padding: 0;
-  background: var(--nuty-surface);
-  color: var(--nuty-chocolate);
-  overflow-x: clip;
+  background:
+    radial-gradient(80% 65% at 50% 20%, #1a1000 0%, transparent 58%),
+    linear-gradient(180deg, var(--nuty-surface) 0%, var(--nuty-surface-alt) 100%);
+  color: var(--nuty-text);
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+body {
+  overflow-y: auto !important;
 }
 
 body {
@@ -29,14 +37,41 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-scrolling iframe {
+  pointer-events: none;
+}
+
 @layer base {
+  main,
+  section {
+    position: relative;
+    z-index: 1;
+  }
+
+  section {
+    overflow-x: clip;
+  }
+
   h1,
   h2,
   h3,
   h4,
   h5,
   h6 {
-    color: var(--nuty-chocolate);
+    color: var(--nuty-text);
     font-family: var(--font-fredoka), Fredoka, sans-serif;
     letter-spacing: -0.05em;
     line-height: 1.04;
@@ -44,7 +79,7 @@ body {
   }
 
   p, li, span {
-    color: color-mix(in srgb, var(--nuty-chocolate) 86%, #000 14%);
+    color: color-mix(in srgb, var(--nuty-text) 82%, #000 18%);
   }
 
   a {
@@ -55,39 +90,69 @@ body {
 
 @layer components {
   .glass-card {
-    @apply rounded-glass border border-white/60 bg-white/80 shadow-glass backdrop-blur-md;
+    @apply rounded-glass border border-white/[0.08] bg-white/[0.03] shadow-glass backdrop-blur-2xl;
   }
 
   .floating-shell {
-    @apply fixed left-4 right-4 top-4 z-50 rounded-[1.4rem] border border-white/60 bg-white/80 px-4 py-3 shadow-glow backdrop-blur-lg;
+    @apply sticky top-0 z-50 mx-auto mt-3 w-[min(1200px,94vw)] rounded-[1.35rem] border border-white/[0.08] bg-[#090909]/75 px-4 py-3 shadow-glass backdrop-blur-md;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
   }
 
   .btn-primary {
-    @apply inline-flex items-center justify-center rounded-full px-5 py-2.5 text-sm font-semibold text-[#FDF5E6] transition-all duration-300 hover:-translate-y-0.5;
-    background: linear-gradient(110deg, var(--nuty-purple), var(--nuty-orange));
-    box-shadow: 0 14px 28px rgba(75, 0, 130, 0.22);
+    @apply inline-flex items-center justify-center rounded-full px-5 py-2.5 text-sm font-semibold text-[#fff7ea] transition-all duration-300 hover:-translate-y-0.5;
+    background: linear-gradient(110deg, #ff8c00, #ff7a00);
+    box-shadow: 0 14px 28px rgba(255, 140, 0, 0.26);
   }
 
   .btn-secondary {
-    @apply inline-flex items-center justify-center rounded-full border px-5 py-2.5 text-sm font-semibold transition-all duration-300 hover:bg-white;
-    border-color: color-mix(in srgb, var(--nuty-purple) 22%, white 78%);
-    color: var(--nuty-purple);
+    @apply inline-flex items-center justify-center rounded-full border px-5 py-2.5 text-sm font-semibold transition-all duration-300 hover:bg-white/10;
+    border-color: rgba(255, 255, 255, 0.16);
+    color: var(--nuty-text);
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center justify-center rounded-full border border-orange-500 px-4 py-2 text-sm font-semibold text-orange-500 transition-all duration-300;
+    background: transparent;
+  }
+
+  .btn-ghost:hover {
+    color: #2b1605;
+    border-color: transparent;
+    background: linear-gradient(110deg, #ff8c00, #ff6f00);
+    box-shadow: 0 14px 30px rgba(255, 140, 0, 0.28);
   }
 
   .focus-gradient {
-    @apply border border-transparent bg-white px-4 py-3 outline-none transition-all duration-300;
+    @apply border border-white/10 bg-white/[0.03] px-4 py-3 text-white outline-none transition-all duration-300;
     border-image-slice: 1;
   }
 
   .focus-gradient:focus {
     border-image-source: linear-gradient(120deg, var(--nuty-purple), var(--nuty-orange));
-    box-shadow: 0 0 0 4px rgba(75, 0, 130, 0.12);
+    box-shadow: 0 0 0 4px rgba(255, 140, 0, 0.16);
   }
 }
 
+.grain-bg {
+  background-image:
+    radial-gradient(circle at 30% 20%, rgba(255, 140, 0, 0.12) 0%, transparent 45%),
+    radial-gradient(circle at 80% 80%, rgba(75, 0, 130, 0.18) 0%, transparent 50%),
+    linear-gradient(135deg, #080808 0%, #101010 100%);
+}
+
+.grain-bg::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.14;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.55) 0.5px, transparent 0.5px);
+  background-size: 3px 3px;
+}
+
 ::selection {
-  background: rgba(75, 0, 130, 0.22);
-  color: var(--nuty-chocolate);
+  background: rgba(255, 140, 0, 0.3);
+  color: #fff7ea;
 }
 
 ::-webkit-scrollbar {
@@ -96,12 +161,12 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #efe4d3;
+  background: #0b0b10;
 }
 
 ::-webkit-scrollbar-thumb {
   border-radius: 999px;
-  border: 2px solid #efe4d3;
+  border: 2px solid #0b0b10;
   background: linear-gradient(180deg, var(--nuty-purple), var(--nuty-orange));
 }
 

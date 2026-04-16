@@ -37,10 +37,10 @@ export default function Navbar() {
       <header className="floating-shell">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4">
           <Link href="/" className="flex items-center gap-2">
-            <div className="h-10 w-10 overflow-hidden rounded-full border border-primary/20 bg-white">
+            <div className="h-10 w-10 overflow-hidden rounded-full border border-white/15 bg-white/10">
               <Image src="/images/logo.jpeg" alt="Nuty logo" width={40} height={40} className="h-full w-full object-cover" />
             </div>
-            <span className="font-display text-lg tracking-tight text-primary">Nuty Bliss</span>
+            <span className="font-display text-lg tracking-tight text-slate-200">Nuty Bliss</span>
           </Link>
 
           <nav className="hidden items-center gap-6 md:flex">
@@ -48,7 +48,7 @@ export default function Navbar() {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`text-sm transition-colors ${pathname === item.href ? 'text-primary' : 'text-ink/80 hover:text-primary'}`}
+                className={`text-sm transition-colors ${pathname === item.href ? 'text-amber-400' : 'text-slate-300/85 hover:text-amber-400'}`}
               >
                 {item.label}
               </Link>
@@ -56,6 +56,14 @@ export default function Navbar() {
           </nav>
 
           <div className="flex items-center gap-2">
+            <div className="hidden items-center gap-2 lg:flex">
+              <Link href="/login" className="btn-ghost">
+                Login
+              </Link>
+              <Link href="/signup" className="btn-ghost">
+                Sign Up
+              </Link>
+            </div>
             <button
               className="btn-secondary !px-3"
               onClick={() => setCartOpen(true)}
@@ -75,13 +83,21 @@ export default function Navbar() {
         </div>
 
         {menuOpen && (
-          <div className="mt-3 rounded-xl bg-white/90 p-3 md:hidden">
+          <div className="mt-3 rounded-xl border border-white/10 bg-[#10101a]/95 p-3 md:hidden">
             <div className="grid gap-2">
               {links.map((item) => (
-                <Link key={item.href} href={item.href} className="rounded-lg px-3 py-2 text-sm text-ink/90 hover:bg-primary/10">
+                <Link key={item.href} href={item.href} className="rounded-lg px-3 py-2 text-sm text-white/85 hover:bg-white/10 hover:text-amber-400">
                   {item.label}
                 </Link>
               ))}
+              <div className="mt-2 grid grid-cols-2 gap-2">
+                <Link href="/login" className="btn-ghost w-full justify-center">
+                  Login
+                </Link>
+                <Link href="/signup" className="btn-ghost w-full justify-center">
+                  Sign Up
+                </Link>
+              </div>
             </div>
           </div>
         )}
@@ -90,11 +106,11 @@ export default function Navbar() {
       {cartOpen && (
         <div className="fixed inset-0 z-[70] bg-black/40" onClick={() => setCartOpen(false)}>
           <aside
-            className="absolute right-0 top-0 h-full w-full max-w-md border-l border-white/70 bg-white/80 p-5 backdrop-blur-xl"
+            className="absolute right-0 top-0 h-full w-full max-w-md border-l border-white/10 bg-[#0c0c14]/90 p-5 backdrop-blur-xl"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="mb-4 flex items-center justify-between">
-              <h3 className="font-display text-2xl text-primary">Your Cart</h3>
+              <h3 className="font-display text-2xl text-white">Your Cart</h3>
               <button className="btn-secondary !px-3" onClick={() => setCartOpen(false)} aria-label="Close cart">
                 <Icon path="M6 6l12 12M18 6l-12 12" />
               </button>
@@ -106,17 +122,17 @@ export default function Navbar() {
               ) : (
                 items.map((item) => (
                   <GlassCard key={`${item.productId}-${item.variant?.size ?? 'default'}`} className="p-3">
-                    <p className="text-sm font-semibold text-ink">{item.product.title}</p>
-                    <p className="text-xs text-ink/70">Qty {item.quantity}</p>
+                    <p className="text-sm font-semibold text-white">{item.product.title}</p>
+                    <p className="text-xs text-white/70">Qty {item.quantity}</p>
                   </GlassCard>
                 ))
               )}
             </div>
 
-            <div className="mt-6 border-t border-primary/20 pt-4">
-              <p className="flex items-center justify-between text-sm text-ink/80">
+            <div className="mt-6 border-t border-white/10 pt-4">
+              <p className="flex items-center justify-between text-sm text-white/80">
                 <span>Subtotal</span>
-                <span className="font-semibold text-ink">PKR {getSubtotal().toLocaleString()}</span>
+                <span className="font-semibold text-white">PKR {getSubtotal().toLocaleString()}</span>
               </p>
               <Button href="/checkout" className="mt-4 w-full" onClick={() => setCartOpen(false)}>
                 Go to Checkout

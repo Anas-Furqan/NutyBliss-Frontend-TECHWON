@@ -28,11 +28,11 @@ export default function ShopPage() {
   }, [activeFilter]);
 
   return (
-    <main className="bg-surface pb-20 pt-32">
-      <section className="mx-auto w-[min(1200px,92vw)]">
+    <main className="relative z-10 bg-surface pb-40 pt-32">
+      <section className="mx-auto w-[min(1200px,92vw)] pb-24">
         <p className="text-xs uppercase tracking-[0.2em] text-primary/80">Shop</p>
-        <h1 className="mt-3 font-display text-6xl text-ink">Organic Pantry Grid</h1>
-        <p className="mt-3 max-w-2xl text-ink/75">
+        <h1 className="mt-3 font-display text-6xl tracking-tighter leading-tight text-slate-200">Organic Pantry Grid</h1>
+        <p className="mt-3 max-w-2xl text-slate-300/80">
           Filter by texture and style. Every card has GSAP hover motion and nutrition overlays for premium product clarity.
         </p>
 

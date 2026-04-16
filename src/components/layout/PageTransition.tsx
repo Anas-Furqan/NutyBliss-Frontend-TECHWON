@@ -6,17 +6,17 @@ import { gsap } from '@/lib/gsap';
 
 export default function PageTransition({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const mainRef = useRef<HTMLElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!mainRef.current) return;
+    if (!containerRef.current) return;
     gsap.fromTo(
-      mainRef.current,
+      containerRef.current,
       { autoAlpha: 0, y: 22 },
       { autoAlpha: 1, y: 0, duration: 0.55, ease: 'power2.out' },
     );
   }, [pathname]);
 
-  return <main key={pathname} ref={mainRef} className="min-h-screen">{children}</main>;
+  return <div key={pathname} ref={containerRef} className="overflow-visible">{children}</div>;
 }
 

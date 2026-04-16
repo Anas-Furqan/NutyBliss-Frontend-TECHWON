@@ -46,27 +46,27 @@ export default function ProductDetailPage() {
   }
 
   return (
-    <main className="bg-surface pb-20 pt-32">
+    <main className="bg-surface pb-32 pt-32">
       <section className="mx-auto grid w-[min(1200px,92vw)] gap-10 lg:grid-cols-[0.9fr_1.1fr]">
         <div ref={imageWrapRef} className="sticky top-28 h-fit">
           <Link href="/shop" className="text-xs uppercase tracking-[0.18em] text-primary/80">Back to shop</Link>
-          <div className="group relative mt-4 aspect-square overflow-hidden rounded-[2rem] bg-[#f1e1cd]">
+          <div className="group relative mt-4 aspect-square overflow-hidden rounded-[2rem] border border-white/[0.08] bg-white/[0.03]">
             <Image src={product.image} alt={product.name} fill className="object-cover transition-transform duration-500 group-hover:scale-110" />
           </div>
-          <div className="mt-4 rounded-xl bg-white/80 p-3 backdrop-blur">
+          <div className="mt-4 rounded-xl border border-white/[0.08] bg-white/[0.03] p-3 backdrop-blur-2xl">
             <Image src={product.labelImage} alt="Nutrition label reference" width={220} height={120} className="rounded-lg" />
           </div>
         </div>
 
         <div>
           <p className="text-xs uppercase tracking-[0.22em] text-primary/75">{product.category}</p>
-          <h1 className="mt-3 font-display text-6xl text-ink">{product.name}</h1>
-          <p className="mt-4 max-w-2xl text-ink/80">{product.description}</p>
+          <h1 className="mt-3 font-display text-6xl tracking-tighter leading-tight text-slate-200">{product.name}</h1>
+          <p className="mt-4 max-w-2xl text-slate-300/80">{product.description}</p>
           <p className="mt-4 text-2xl font-semibold text-primary">PKR {product.price.toLocaleString()}</p>
 
           <div className="mt-6 flex items-center gap-3">
             <button className="btn-secondary !px-3" onClick={() => setQuantity((q) => Math.max(1, q - 1))}>-</button>
-            <span className="min-w-8 text-center text-ink">{quantity}</span>
+            <span className="min-w-8 text-center text-slate-200">{quantity}</span>
             <button className="btn-secondary !px-3" onClick={() => setQuantity((q) => q + 1)}>+</button>
             <Button
               className="ml-2"
@@ -100,22 +100,22 @@ export default function ProductDetailPage() {
           </div>
 
           <GlassCard className="mt-10 p-6">
-            <h2 className="font-display text-3xl text-ink">Nutrition Table</h2>
+            <h2 className="font-display text-3xl tracking-tighter leading-tight text-slate-200">Nutrition Table</h2>
             <div className="mt-4 grid gap-2">
               {product.nutrition.map((entry) => (
-                <p key={entry.key} className="flex justify-between border-b border-primary/10 py-1 text-sm">
+                <p key={entry.key} className="flex justify-between border-b border-primary/10 py-1 text-sm text-slate-300">
                   <span>{entry.key}</span>
-                  <span className="font-semibold text-ink">{entry.value}</span>
+                  <span className="font-semibold text-slate-200">{entry.value}</span>
                 </p>
               ))}
             </div>
           </GlassCard>
 
           <section data-ingredients className="mt-10">
-            <h2 className="font-display text-3xl text-ink">Ingredients</h2>
+            <h2 className="font-display text-3xl tracking-tighter leading-tight text-slate-200">Ingredients</h2>
             <div className="mt-4 flex flex-wrap gap-3">
               {product.ingredients.map((item) => (
-                <span key={item} data-ingredient className="rounded-full border border-primary/20 bg-white/70 px-4 py-2 text-sm text-ink">
+                <span key={item} data-ingredient className="rounded-full border border-primary/20 bg-white/[0.05] px-4 py-2 text-sm text-slate-200">
                   {item}
                 </span>
               ))}

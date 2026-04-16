@@ -51,10 +51,10 @@ export default function HomePage() {
   }, []);
 
   return (
-    <main ref={sectionRef} className="bg-surface pb-12 pt-8">
+    <main ref={sectionRef} className="bg-surface pb-16 pt-8">
       <Hero />
 
-      <section data-feature-wrap className="mx-auto grid w-[min(1200px,92vw)] gap-4 pb-20 md:grid-cols-3">
+      <section data-feature-wrap className="relative z-20 mx-auto mt-20 grid w-[min(1200px,92vw)] gap-4 pb-20 md:grid-cols-3">
         {homeFeatures.map((item) => (
           <article key={item} data-feature-card className="glass-card p-6">
             <p className="font-display text-2xl text-ink">{item}</p>
@@ -62,11 +62,11 @@ export default function HomePage() {
         ))}
       </section>
 
-      <section data-home-products className="mx-auto w-[min(1200px,92vw)] pb-16">
+      <section data-home-products className="relative z-20 mx-auto w-[min(1200px,92vw)] pb-16">
         <div className="mb-8 flex items-end justify-between gap-4">
           <div>
             <p className="text-xs uppercase tracking-[0.2em] text-primary/80">Featured Collection</p>
-            <h2 className="mt-3 font-display text-5xl text-ink">Scroll-Revealed Favorites</h2>
+            <h2 className="mt-3 font-display text-5xl tracking-tighter leading-tight text-slate-200">Scroll-Revealed Favorites</h2>
           </div>
           <Link href="/shop" className="btn-secondary">View all</Link>
         </div>

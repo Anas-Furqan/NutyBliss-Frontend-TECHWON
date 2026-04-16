@@ -31,14 +31,15 @@ export default function Hero() {
       });
 
       gsap.to(jar, {
-        rotate: 360,
-        ease: 'none',
+        rotate: 18,
+        yPercent: -8,
+        ease: 'power1.out',
+        willChange: 'transform',
         scrollTrigger: {
           trigger: root,
           start: 'top top',
           end: 'bottom top',
           scrub: 1,
-          pin: '[data-hero-pin]',
         },
       });
 
@@ -77,17 +78,18 @@ export default function Hero() {
   }, []);
 
   return (
-    <section ref={rootRef} className="relative min-h-[140vh] pt-28">
-      <div data-hero-pin className="sticky top-20 z-20 mx-auto max-w-7xl px-4">
-        <div className="grid items-center gap-10 lg:grid-cols-[1.1fr_0.9fr]">
+    <section ref={rootRef} className="relative z-10 min-h-screen overflow-hidden pb-16 pt-32">
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,#1a0f00_0%,transparent_58%)]" />
+      <div data-hero-pin className="relative z-10 mx-auto max-w-7xl px-4">
+        <div className="grid items-center gap-10 lg:grid-cols-2">
           <div>
-            <p data-hero-copy className="text-sm uppercase tracking-[0.22em] text-primary/80">
+            <p data-hero-copy className="text-sm uppercase tracking-[0.22em] text-amber-400">
               Organic Energy Collection
             </p>
-            <h1 data-hero-copy className="mt-4 text-5xl font-bold text-ink md:text-7xl">
+            <h1 data-hero-copy className="mt-4 text-5xl font-bold tracking-tighter leading-tight text-slate-200 md:text-7xl">
               Premium Peanut Butter, Animated to Feel Tasty.
             </h1>
-            <p data-hero-copy className="mt-5 max-w-xl text-base text-ink/80">
+            <p data-hero-copy className="mt-5 max-w-xl text-base text-slate-200/78">
               Nuty blends deep-roasted peanuts and rich cacao notes into a premium pantry ritual with clean ingredients.
             </p>
             <div data-hero-copy className="mt-7 flex flex-wrap gap-3">
@@ -100,20 +102,20 @@ export default function Hero() {
             </div>
           </div>
 
-          <div className="relative mx-auto h-[420px] w-full max-w-[420px]">
+          <div className="relative mx-auto h-[420px] w-full max-w-[420px] will-change-transform">
             {backOrnaments.map((src, idx) => (
               <div
                 key={`back-${src}-${idx}`}
                 data-back
                 data-float
-                className="absolute z-0 overflow-hidden rounded-full"
+                className="absolute z-0 overflow-hidden rounded-full will-change-transform"
                 style={{ left: `${10 + idx * 52}%`, top: `${14 + idx * 20}%`, width: 92, height: 92, opacity: 0.4 }}
               >
                 <Image src={src} alt="Back layer ornament" fill className="object-cover" />
               </div>
             ))}
 
-            <div ref={jarRef} className="relative z-20 h-full w-full drop-shadow-[0_28px_48px_rgba(62,39,35,0.28)]">
+            <div ref={jarRef} className="relative z-20 h-full w-full will-change-transform drop-shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
               <Image
                 src="/images/product (1).jpeg"
                 alt="Nuty peanut butter hero jar"
@@ -128,7 +130,7 @@ export default function Hero() {
                 key={`front-${src}-${idx}`}
                 data-front
                 data-float
-                className="absolute z-30 overflow-hidden rounded-full border border-white/40"
+                className="absolute z-30 overflow-hidden rounded-full border border-white/15 will-change-transform"
                 style={{ left: `${idx * 60}%`, top: `${58 + idx * 14}%`, width: 106, height: 106 }}
               >
                 <Image src={src} alt="Front layer ornament" fill className="object-cover" />

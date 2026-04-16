@@ -17,12 +17,14 @@ export default function AppChrome({ children }: { children: React.ReactNode }) {
 
   return (
     <ScrollWrapper>
-      <>
+      <div className="relative isolate flex min-h-screen flex-col overflow-x-hidden overflow-y-visible bg-[#050505] text-slate-200">
         <FlyingOrnaments />
         <Navbar />
-        <PageTransition>{children}</PageTransition>
+        <div className="relative flex-1 overflow-y-visible pb-32">
+          <PageTransition>{children}</PageTransition>
+        </div>
         <Footer />
-      </>
+      </div>
     </ScrollWrapper>
   );
 }
