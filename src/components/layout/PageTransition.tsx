@@ -1,24 +1,22 @@
 'use client';
 
-import { AnimatePresence, motion } from 'framer-motion';
+import { useEffect, useRef } from 'react';
 import { usePathname } from 'next/navigation';
+import { gsap } from '@/lib/gsap';
 
 export default function PageTransition({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const mainRef = useRef<HTMLElement>(null);
 
-  return (
-    <AnimatePresence mode="wait" initial={false}>
-      <motion.main
-        key={pathname}
-        initial={{ opacity: 0, y: 18, filter: 'blur(8px)' }}
-        animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-        exit={{ opacity: 0, y: -18, filter: 'blur(8px)' }}
-        transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-        className="min-h-screen"
-      >
-        {children}
-      </motion.main>
-    </AnimatePresence>
-  );
+  useEffect(() => {
+    if (!mainRef.current) return;
+    gsap.fromTo(
+      mainRef.current,
+      { autoAlpha: 0, y: 22 },
+      { autoAlpha: 1, y: 0, duration: 0.55, ease: 'power2.out' },
+    );
+  }, [pathname]);
+
+  return <main key={pathname} ref={mainRef} className="min-h-screen">{children}</main>;
 }
 

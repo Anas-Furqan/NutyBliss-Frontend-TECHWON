@@ -1,167 +1,39 @@
 'use client';
 
-import { useState } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import { useForm } from 'react-hook-form';
-import { FiUser, FiMail, FiLock, FiPhone, FiEye, FiEyeOff } from 'react-icons/fi';
-import { authAPI } from '@/lib/api';
-import { useAuthStore } from '@/store';
-import toast from 'react-hot-toast';
+import Input from '@/components/ui/Input';
+import Button from '@/components/ui/Button';
 
-interface RegisterForm {
-  name: string;
-  email: string;
-  phone: string;
-  password: string;
-  confirmPassword: string;
-}
+type SignupForm = { name: string; email: string; phone: string; password: string };
 
 export default function RegisterPage() {
-  const router = useRouter();
-  const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const { setAuth } = useAuthStore();
-
-  const { register, handleSubmit, watch, formState: { errors } } = useForm<RegisterForm>();
-  const password = watch('password');
-
-  const onSubmit = async (data: RegisterForm) => {
-    setLoading(true);
-    try {
-      const response = await authAPI.register({
-        name: data.name,
-        email: data.email,
-        password: data.password,
-        phone: data.phone,
-      });
-      setAuth(response.data.user, response.data.token);
-      toast.success('Account created successfully!');
-      router.push('/account');
-    } catch (error: any) {
-      toast.error(error.response?.data?.message || 'Registration failed');
-    } finally {
-      setLoading(false);
-    }
-  };
+  const { register, handleSubmit } = useForm<SignupForm>();
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4">
-      <div className="max-w-md w-full">
-        <div className="text-center mb-8">
-          <Link href="/" className="inline-flex items-center space-x-2 mb-6">
-            <div className="w-12 h-12 bg-primary-500 rounded-full flex items-center justify-center">
-              <span className="text-white font-bold text-2xl">N</span>
-            </div>
-          </Link>
-          <h1 className="text-3xl font-bold text-gray-900">Create Account</h1>
-          <p className="text-gray-600 mt-2">Join Nuty Bliss today</p>
+    <main className="min-h-screen bg-surface pt-28">
+      <section className="mx-auto grid w-[min(1080px,92vw)] overflow-hidden rounded-[1.6rem] border border-primary/15 bg-white/75 backdrop-blur lg:grid-cols-2">
+        <div className="relative min-h-[360px] border-b border-primary/10 lg:border-b-0 lg:border-r">
+          <Image src="/images/product (3).jpeg" alt="Nuty signup visual" fill className="object-cover" />
+          <div className="absolute inset-0 bg-gradient-to-tr from-primary/50 to-transparent" />
         </div>
 
-        <div className="bg-white rounded-2xl shadow-sm p-8">
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
-              <div className="relative">
-                <FiUser className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                <input
-                  {...register('name', { required: 'Name is required' })}
-                  className="input-field pl-10"
-                  placeholder="Your full name"
-                />
-              </div>
-              {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>}
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
-              <div className="relative">
-                <FiMail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                <input
-                  type="email"
-                  {...register('email', {
-                    required: 'Email is required',
-                    pattern: { value: /^\S+@\S+$/i, message: 'Invalid email' },
-                  })}
-                  className="input-field pl-10"
-                  placeholder="your@email.com"
-                />
-              </div>
-              {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>}
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Phone</label>
-              <div className="relative">
-                <FiPhone className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                <input
-                  {...register('phone')}
-                  className="input-field pl-10"
-                  placeholder="03XX-XXXXXXX"
-                />
-              </div>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
-              <div className="relative">
-                <FiLock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                <input
-                  type={showPassword ? 'text' : 'password'}
-                  {...register('password', {
-                    required: 'Password is required',
-                    minLength: { value: 6, message: 'Min 6 characters' },
-                  })}
-                  className="input-field pl-10 pr-10"
-                  placeholder="Create a password"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400"
-                >
-                  {showPassword ? <FiEyeOff className="w-5 h-5" /> : <FiEye className="w-5 h-5" />}
-                </button>
-              </div>
-              {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>}
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Confirm Password</label>
-              <div className="relative">
-                <FiLock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                <input
-                  type="password"
-                  {...register('confirmPassword', {
-                    required: 'Please confirm password',
-                    validate: (value) => value === password || 'Passwords do not match',
-                  })}
-                  className="input-field pl-10"
-                  placeholder="Confirm password"
-                />
-              </div>
-              {errors.confirmPassword && <p className="text-red-500 text-sm mt-1">{errors.confirmPassword.message}</p>}
-            </div>
-
-            <button
-              type="submit"
-              disabled={loading}
-              className="btn-primary w-full disabled:opacity-50"
-            >
-              {loading ? 'Creating account...' : 'Create Account'}
-            </button>
+        <div className="p-8">
+          <p className="text-xs uppercase tracking-[0.2em] text-primary/70">Join Nuty</p>
+          <h1 className="mt-3 font-display text-5xl text-ink">Signup</h1>
+          <form onSubmit={handleSubmit(() => undefined)} className="mt-6 space-y-4">
+            <Input {...register('name')} placeholder="Full name" />
+            <Input {...register('email')} type="email" placeholder="Email" />
+            <Input {...register('phone')} placeholder="Phone" />
+            <Input {...register('password')} type="password" placeholder="Password" />
+            <Button type="submit" className="w-full">Create account</Button>
           </form>
-
-          <div className="mt-6 text-center">
-            <p className="text-gray-600">
-              Already have an account?{' '}
-              <Link href="/login" className="text-primary-500 font-medium hover:underline">
-                Sign in
-              </Link>
-            </p>
-          </div>
+          <p className="mt-4 text-sm text-ink/70">
+            Already have an account? <Link href="/login" className="text-primary">Login</Link>
+          </p>
         </div>
-      </div>
-    </div>
+      </section>
+    </main>
   );
 }

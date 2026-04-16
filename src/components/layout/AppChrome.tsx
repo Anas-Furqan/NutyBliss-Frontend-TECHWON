@@ -1,11 +1,10 @@
 'use client';
 
 import { usePathname } from 'next/navigation';
-import { LayoutGroup } from 'framer-motion';
-import Navbar from '@/components/layout/Navbar';
+import Navbar from '@/components/Navbar';
 import Footer from '@/components/layout/Footer';
-import SmoothScroll from '@/components/SmoothScroll';
-import Ornaments from '@/components/Ornaments';
+import ScrollWrapper from '@/components/animations/ScrollWrapper';
+import FlyingOrnaments from '@/components/FlyingOrnaments';
 import PageTransition from '@/components/layout/PageTransition';
 
 export default function AppChrome({ children }: { children: React.ReactNode }) {
@@ -17,13 +16,13 @@ export default function AppChrome({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <SmoothScroll>
-      <LayoutGroup id="page-layout">
-        <Ornaments />
+    <ScrollWrapper>
+      <>
+        <FlyingOrnaments />
         <Navbar />
         <PageTransition>{children}</PageTransition>
         <Footer />
-      </LayoutGroup>
-    </SmoothScroll>
+      </>
+    </ScrollWrapper>
   );
 }

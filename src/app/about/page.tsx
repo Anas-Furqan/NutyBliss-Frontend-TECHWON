@@ -1,59 +1,65 @@
 'use client';
 
-import Link from 'next/link';
-import { motion } from 'framer-motion';
-import GlobalJar from '@/components/GlobalJar';
+import { useEffect, useRef } from 'react';
+import { gsap, initGSAP } from '@/lib/gsap';
 
-const pillars = [
-  { title: 'Roast Discipline', text: 'Every batch is roasted to a controlled profile for depth and sweetness.' },
-  { title: 'Texture Craft', text: 'From creamy to crush, each jar is tuned for a premium spoon-feel.' },
-  { title: 'Clean Ingredients', text: 'No noise in the label. Just what belongs in a functional pantry.' },
+const timeline = [
+  { title: 'Farm Selection', text: 'Organic growers from rain-fed regions deliver fresh high-oil peanuts.' },
+  { title: 'Small Batch Roast', text: 'Each lot is profiled to unlock sweetness and depth without bitterness.' },
+  { title: 'Stone Textureing', text: 'The blend is milled to creamy body while preserving natural nut fragrance.' },
+  { title: 'Jar & Seal', text: 'Every jar is sealed fresh, labeled, and shipped with lot traceability.' },
 ];
 
 export default function AboutPage() {
+  const wrapRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    initGSAP();
+    const root = wrapRef.current;
+    if (!root) return;
+
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        '[data-timeline-line]',
+        { scaleY: 0, transformOrigin: 'top center' },
+        {
+          scaleY: 1,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: '[data-timeline]',
+            start: 'top 75%',
+            end: 'bottom 75%',
+            scrub: true,
+          },
+        },
+      );
+    }, root);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <div className="bg-[#f9f0e4] pb-24">
-      <section className="mx-auto w-[min(1200px,92vw)] py-16">
-        <div className="flex flex-wrap items-end justify-between gap-8">
-          <div>
-            <p className="text-xs uppercase tracking-[0.22em] text-[#5b4230]/70">About</p>
-            <h1 className="mt-4 text-7xl font-semibold tracking-[-0.06em] text-[#2a1b12] md:text-9xl">
-              RITUAL
-              <br />
-              DRIVEN
-            </h1>
-          </div>
-          <GlobalJar size="lg" className="rotate-[6deg]" />
+    <main ref={wrapRef} className="bg-surface pb-16 pt-32">
+      <section className="mx-auto w-[min(1000px,92vw)]">
+        <p className="text-xs uppercase tracking-[0.22em] text-primary/75">About</p>
+        <h1 className="mt-3 font-display text-6xl text-ink md:text-7xl">Farm-to-Jar Timeline</h1>
+      </section>
+
+      <section data-timeline className="relative mx-auto mt-12 w-[min(1000px,92vw)]">
+        <div className="absolute left-6 top-0 h-full w-[2px] bg-primary/15">
+          <div data-timeline-line className="h-full w-full bg-gradient-to-b from-primary to-secondary" />
+        </div>
+
+        <div className="space-y-10 pl-16">
+          {timeline.map((step) => (
+            <article key={step.title} className="glass-card p-5">
+              <h2 className="font-display text-3xl text-ink">{step.title}</h2>
+              <p className="mt-2 text-ink/80">{step.text}</p>
+            </article>
+          ))}
         </div>
       </section>
-
-      <section className="mx-auto grid w-[min(1200px,92vw)] gap-6 md:grid-cols-3">
-        {pillars.map((pillar, index) => (
-          <motion.div
-            key={pillar.title}
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ delay: index * 0.08 }}
-            viewport={{ once: true }}
-            className="glass-card"
-          >
-            <h2 className="text-3xl font-semibold tracking-[-0.03em] text-[#2a1b12]">{pillar.title}</h2>
-            <p className="mt-3 text-[#5b4230]/80">{pillar.text}</p>
-          </motion.div>
-        ))}
-      </section>
-
-      <section className="mx-auto mt-16 w-[min(1200px,92vw)] rounded-[2.6rem] bg-[#2a1b12] px-8 py-14 md:px-16">
-        <p className="text-xs uppercase tracking-[0.2em] text-[#f1dfc8]/70">Our promise</p>
-        <h2 className="mt-4 text-5xl font-semibold tracking-[-0.05em] text-[#f9f0e4] md:text-7xl">
-          Always premium. Always nourishing.
-        </h2>
-        <p className="mt-5 max-w-2xl text-[#f1dfc8]/75">
-          Nuty Bliss exists for people who want taste without compromise and design without clutter.
-        </p>
-        <Link href="/shop" className="liquid-btn mt-8">Shop now</Link>
-      </section>
-    </div>
+    </main>
   );
 }
 

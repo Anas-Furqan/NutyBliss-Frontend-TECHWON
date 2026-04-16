@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+import { Fredoka, Inter } from 'next/font/google'
 import './globals.css'
 import { Toaster } from 'react-hot-toast'
 import AppChrome from '@/components/layout/AppChrome'
@@ -9,13 +9,19 @@ const inter = Inter({
   variable: '--font-inter',
 })
 
+const fredoka = Fredoka({
+  subsets: ['latin'],
+  variable: '--font-fredoka',
+  weight: ['400', '500', '600', '700'],
+})
+
 export const metadata: Metadata = {
-  title: 'Nuty Bliss - Premium Peanut Butter & Healthy Foods',
-  description: 'Shop premium quality peanut butter, oats, and healthy food products at Nuty Bliss. 100% Natural, No preservatives!',
-  keywords: 'peanut butter, healthy food, oats, protein, fitness, Pakistan, organic, natural',
+  title: 'Nuty Bliss - Organic Peanut Butter',
+  description: 'Premium organic peanut butter experience with smooth shopping and rich product storytelling.',
+  keywords: 'nuty bliss, organic peanut butter, premium food, crunchy, classic, healthy',
   openGraph: {
-    title: 'Nuty Bliss - Premium Peanut Butter & Healthy Foods',
-    description: 'Shop premium quality peanut butter, oats, and healthy food products. 100% Natural!',
+    title: 'Nuty Bliss - Organic Peanut Butter',
+    description: 'Premium organic peanut butter experience with smooth shopping and rich product storytelling.',
     type: 'website',
     locale: 'en_US',
     siteName: 'Nuty Bliss',
@@ -29,24 +35,24 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${inter.variable} font-sans`}>
+      <body className={`${inter.variable} ${fredoka.variable} font-sans`}>
         <Toaster
           position="top-center"
           toastOptions={{
             duration: 3000,
             style: {
-              background: '#8f653f',
-              color: '#fffef9',
+              background: '#4B0082',
+              color: '#FDF5E6',
               borderRadius: '12px',
             },
             success: {
               style: {
-                background: '#10b981',
+                background: '#FF8C00',
               },
             },
             error: {
               style: {
-                background: '#ef4444',
+                background: '#3E2723',
               },
             },
           }}

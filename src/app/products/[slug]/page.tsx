@@ -1,141 +1,129 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
-import { motion } from 'framer-motion';
-import { FiMinus, FiPlus, FiShoppingBag } from 'react-icons/fi';
-import { productsAPI } from '@/lib/api';
-import { Product } from '@/types';
+import { useEffect, useRef, useState } from 'react';
+import { nutyProducts } from '@/lib/site-data';
 import { useCartStore } from '@/store';
-import toast from 'react-hot-toast';
-import GlobalJar from '@/components/GlobalJar';
+import { gsap, initGSAP } from '@/lib/gsap';
+import Button from '@/components/ui/Button';
+import GlassCard from '@/components/ui/GlassCard';
 
 export default function ProductDetailPage() {
   const { slug } = useParams();
-  const [product, setProduct] = useState<Product | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [selectedImage, setSelectedImage] = useState(0);
-  const [selectedVariant, setSelectedVariant] = useState(0);
+  const slugValue = Array.isArray(slug) ? slug[0] : slug;
+  const product = nutyProducts.find((item) => item.slug === slugValue);
   const [quantity, setQuantity] = useState(1);
+  const imageWrapRef = useRef<HTMLDivElement>(null);
   const { addItem } = useCartStore();
 
-  const fetchProduct = useCallback(async () => {
-    setLoading(true);
-    try {
-      const { data } = await productsAPI.getOne(slug as string);
-      setProduct(data.product);
-    } catch (error) {
-      setProduct(null);
-    } finally {
-      setLoading(false);
-    }
-  }, [slug]);
-
   useEffect(() => {
-    fetchProduct();
-  }, [fetchProduct]);
-
-  if (loading) {
-    return <div className="flex min-h-[60vh] items-center justify-center text-[#5b4230]">Loading...</div>;
-  }
+    initGSAP();
+    if (!imageWrapRef.current) return;
+    const root = imageWrapRef.current;
+    const ctx = gsap.context(() => {
+      gsap.from('[data-ingredient]', {
+        x: -25,
+        autoAlpha: 0,
+        stagger: 0.09,
+        duration: 0.45,
+        scrollTrigger: {
+          trigger: '[data-ingredients]',
+          start: 'top 78%',
+        },
+      });
+    }, root);
+    return () => ctx.revert();
+  }, []);
 
   if (!product) {
-    return <div className="flex min-h-[60vh] items-center justify-center text-[#5b4230]">Product not found.</div>;
+    return (
+      <main className="flex min-h-[70vh] items-center justify-center bg-surface pt-28 text-ink">
+        Product not found.
+      </main>
+    );
   }
 
-  const variant = product.variants[selectedVariant];
-  const price = variant?.discountPrice || variant?.price || product.baseDiscountPrice || product.basePrice;
-
-  const addToCart = () => {
-    addItem(product, quantity, variant ? { size: variant.size, price } : undefined);
-    toast.success('Added to cart');
-  };
-
   return (
-    <div className="bg-[#f9f0e4] pb-24">
-      <section className="mx-auto grid w-[min(1200px,92vw)] gap-10 py-14 lg:grid-cols-2">
+    <main className="bg-surface pb-20 pt-32">
+      <section className="mx-auto grid w-[min(1200px,92vw)] gap-10 lg:grid-cols-[0.9fr_1.1fr]">
+        <div ref={imageWrapRef} className="sticky top-28 h-fit">
+          <Link href="/shop" className="text-xs uppercase tracking-[0.18em] text-primary/80">Back to shop</Link>
+          <div className="group relative mt-4 aspect-square overflow-hidden rounded-[2rem] bg-[#f1e1cd]">
+            <Image src={product.image} alt={product.name} fill className="object-cover transition-transform duration-500 group-hover:scale-110" />
+          </div>
+          <div className="mt-4 rounded-xl bg-white/80 p-3 backdrop-blur">
+            <Image src={product.labelImage} alt="Nutrition label reference" width={220} height={120} className="rounded-lg" />
+          </div>
+        </div>
+
         <div>
-          <Link href="/shop" className="text-xs uppercase tracking-[0.18em] text-[#5b4230]/70">Back to gallery</Link>
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="mt-6 overflow-hidden rounded-[2.4rem] bg-[#ead2b6]"
-          >
-            <div className="relative aspect-square">
-              <Image
-                src={product.images[selectedImage]?.url || '/images/placeholder.svg'}
-                alt={product.title}
-                fill
-                className="object-cover"
-                priority
-              />
-            </div>
-          </motion.div>
-          {product.images.length > 1 && (
-            <div className="mt-4 flex gap-3 overflow-x-auto pb-1">
-              {product.images.map((image, idx) => (
-                <button
-                  key={image.url}
-                  onClick={() => setSelectedImage(idx)}
-                  className={`relative h-20 w-20 overflow-hidden rounded-2xl border ${selectedImage === idx ? 'border-[#8f653f]' : 'border-[#b8946f]/30'}`}
-                >
-                  <Image src={image.url} alt={`${product.title}-${idx}`} fill className="object-cover" />
-                </button>
+          <p className="text-xs uppercase tracking-[0.22em] text-primary/75">{product.category}</p>
+          <h1 className="mt-3 font-display text-6xl text-ink">{product.name}</h1>
+          <p className="mt-4 max-w-2xl text-ink/80">{product.description}</p>
+          <p className="mt-4 text-2xl font-semibold text-primary">PKR {product.price.toLocaleString()}</p>
+
+          <div className="mt-6 flex items-center gap-3">
+            <button className="btn-secondary !px-3" onClick={() => setQuantity((q) => Math.max(1, q - 1))}>-</button>
+            <span className="min-w-8 text-center text-ink">{quantity}</span>
+            <button className="btn-secondary !px-3" onClick={() => setQuantity((q) => q + 1)}>+</button>
+            <Button
+              className="ml-2"
+              onClick={() =>
+                addItem(
+                  {
+                    _id: product.id,
+                    title: product.name,
+                    slug: product.slug,
+                    description: product.description,
+                    images: [{ url: product.image }],
+                    category: product.category.toLowerCase(),
+                    variants: [],
+                    basePrice: product.price,
+                    totalStock: 100,
+                    rating: { average: 4.8, count: 40 },
+                    isActive: true,
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString(),
+                    ingredients: product.ingredients,
+                    nutritionFacts: {
+                      servingSize: product.nutrition[0]?.value,
+                    },
+                  },
+                  quantity,
+                )
+              }
+            >
+              Add to Cart
+            </Button>
+          </div>
+
+          <GlassCard className="mt-10 p-6">
+            <h2 className="font-display text-3xl text-ink">Nutrition Table</h2>
+            <div className="mt-4 grid gap-2">
+              {product.nutrition.map((entry) => (
+                <p key={entry.key} className="flex justify-between border-b border-primary/10 py-1 text-sm">
+                  <span>{entry.key}</span>
+                  <span className="font-semibold text-ink">{entry.value}</span>
+                </p>
               ))}
             </div>
-          )}
-        </div>
+          </GlassCard>
 
-        <div className="flex flex-col justify-between">
-          <div>
-            <GlobalJar size="md" className="mb-8 ml-auto rotate-[10deg]" />
-            <p className="text-xs uppercase tracking-[0.2em] text-[#5b4230]/70">{product.category.replace('-', ' ')}</p>
-            <h1 className="mt-4 text-6xl font-semibold tracking-[-0.05em] text-[#2a1b12] md:text-8xl">
-              {product.title}
-            </h1>
-            <p className="mt-6 max-w-xl text-[#5b4230]/85">
-              {product.shortDescription || product.description}
-            </p>
-            <p className="mt-8 text-4xl font-semibold tracking-[-0.03em] text-[#2a1b12]">Rs. {price.toLocaleString()}</p>
-
-            {product.variants.length > 0 && (
-              <div className="mt-8">
-                <p className="mb-3 text-xs uppercase tracking-[0.18em] text-[#5b4230]/70">Size</p>
-                <div className="flex flex-wrap gap-2">
-                  {product.variants.map((item, idx) => (
-                    <button
-                      key={item.size}
-                      onClick={() => setSelectedVariant(idx)}
-                      className={`rounded-full border px-4 py-2 text-sm ${selectedVariant === idx ? 'border-[#8f653f] bg-[#ead2b6]' : 'border-[#b8946f]/40'}`}
-                    >
-                      {item.size}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
-
-          <div className="mt-10 flex flex-wrap items-center gap-4">
-            <div className="flex items-center rounded-full border border-[#b8946f]/40">
-              <button onClick={() => setQuantity((q) => Math.max(1, q - 1))} className="p-3">
-                <FiMinus />
-              </button>
-              <span className="w-10 text-center text-[#2a1b12]">{quantity}</span>
-              <button onClick={() => setQuantity((q) => q + 1)} className="p-3">
-                <FiPlus />
-              </button>
+          <section data-ingredients className="mt-10">
+            <h2 className="font-display text-3xl text-ink">Ingredients</h2>
+            <div className="mt-4 flex flex-wrap gap-3">
+              {product.ingredients.map((item) => (
+                <span key={item} data-ingredient className="rounded-full border border-primary/20 bg-white/70 px-4 py-2 text-sm text-ink">
+                  {item}
+                </span>
+              ))}
             </div>
-            <button onClick={addToCart} className="liquid-btn">
-              <FiShoppingBag className="mr-2" />
-              Add to cart
-            </button>
-          </div>
+          </section>
         </div>
       </section>
-    </div>
+    </main>
   );
 }
 
