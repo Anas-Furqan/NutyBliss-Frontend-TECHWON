@@ -51,6 +51,17 @@ export default function Footer() {
           <p className="text-xs uppercase tracking-[0.18em] text-white/55">
             &copy; {new Date().getFullYear()} Nuty Bliss
           </p>
+          <p className="text-xs text-slate-300/90">
+            Designed and Developed by{' '}
+            <a
+              href="https://www.linkedin.com/in/anas-furqan/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-gradient-to-r from-amber-300 via-orange-300 to-amber-400 bg-clip-text font-semibold text-transparent transition hover:brightness-110"
+            >
+              Anas Furqan
+            </a>
+          </p>
         </div>
       </div>
     </footer>
