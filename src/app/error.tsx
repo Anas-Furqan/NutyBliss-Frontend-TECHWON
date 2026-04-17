@@ -17,24 +17,24 @@ export default function Error({
   }, [error]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-cream px-4">
+    <div className="min-h-screen flex items-center justify-center px-4">
       <div className="text-center max-w-md">
-        <div className="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6">
-          <FiAlertTriangle className="w-10 h-10 text-red-500" />
+        <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full border border-red-500/30 bg-red-500/15">
+          <FiAlertTriangle className="h-10 w-10 text-red-300" />
         </div>
 
-        <h1 className="text-2xl md:text-3xl font-bold text-dark mb-4 font-display">
+        <h1 className="mb-4 font-display text-2xl font-bold text-slate-100 md:text-3xl">
           Oops! Something went wrong
         </h1>
 
-        <p className="text-gray-600 mb-8">
+        <p className="mb-8 text-slate-300">
           We apologize for the inconvenience. An unexpected error has occurred.
           Please try again or contact support if the problem persists.
         </p>
 
         {process.env.NODE_ENV === 'development' && error.message && (
-          <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6 text-left">
-            <p className="text-sm text-red-800 font-mono break-all">
+          <div className="mb-6 rounded-lg border border-red-500/30 bg-red-500/10 p-4 text-left">
+            <p className="break-all font-mono text-sm text-red-200">
               {error.message}
             </p>
           </div>

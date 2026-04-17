@@ -35,7 +35,7 @@ export default function FAQSection() {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
-    <section className="py-16 bg-gray-50">
+    <section className="py-16">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -55,15 +55,15 @@ export default function FAQSection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.05 }}
-              className="bg-white rounded-xl shadow-sm overflow-hidden"
+              className="overflow-hidden rounded-xl border border-white/10 bg-white/[0.03] backdrop-blur-2xl"
             >
               <button
                 onClick={() => setOpenIndex(openIndex === index ? null : index)}
                 className="w-full flex items-center justify-between p-5 text-left"
               >
-                <span className="font-semibold text-gray-900">{faq.question}</span>
+                <span className="font-semibold text-slate-100">{faq.question}</span>
                 <FiChevronDown
-                  className={`w-5 h-5 text-gray-500 transition-transform ${
+                  className={`h-5 w-5 text-slate-400 transition-transform ${
                     openIndex === index ? 'rotate-180' : ''
                   }`}
                 />
@@ -76,7 +76,7 @@ export default function FAQSection() {
                     exit={{ height: 0, opacity: 0 }}
                     transition={{ duration: 0.2 }}
                   >
-                    <div className="px-5 pb-5 text-gray-600">
+                    <div className="px-5 pb-5 text-slate-300">
                       {faq.answer}
                     </div>
                   </motion.div>

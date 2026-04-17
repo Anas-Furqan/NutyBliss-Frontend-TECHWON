@@ -112,7 +112,7 @@ export default function AdminCouponsPage() {
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">Coupons</h1>
+        <h1 className="font-display text-4xl tracking-tighter text-slate-100">Coupons</h1>
         <button
           onClick={() => { resetForm(); setEditingCoupon(null); setShowModal(true); }}
           className="btn-primary flex items-center gap-2"
@@ -123,53 +123,53 @@ export default function AdminCouponsPage() {
       </div>
 
       {/* Coupons Table */}
-      <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+      <div className="overflow-hidden rounded-xl border border-white/10 bg-white/[0.03] backdrop-blur-2xl">
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead className="bg-gray-50">
+            <thead className="border-b border-white/10 bg-white/[0.02]">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Code</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Discount</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Min Order</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Usage</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Valid Until</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
-                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Actions</th>
+                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-[0.14em] text-slate-400">Code</th>
+                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-[0.14em] text-slate-400">Discount</th>
+                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-[0.14em] text-slate-400">Min Order</th>
+                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-[0.14em] text-slate-400">Usage</th>
+                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-[0.14em] text-slate-400">Valid Until</th>
+                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-[0.14em] text-slate-400">Status</th>
+                <th className="px-6 py-3 text-right text-xs font-medium uppercase tracking-[0.14em] text-slate-400">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-200">
+            <tbody className="divide-y divide-white/5">
               {loading ? (
                 <tr>
-                  <td colSpan={7} className="px-6 py-12 text-center text-gray-500">Loading...</td>
+                  <td colSpan={7} className="px-6 py-12 text-center text-slate-400">Loading...</td>
                 </tr>
               ) : coupons.length > 0 ? (
                 coupons.map((coupon) => (
-                  <tr key={coupon._id} className="hover:bg-gray-50">
+                  <tr key={coupon._id} className="hover:bg-white/[0.02]">
                     <td className="px-6 py-4">
-                      <p className="font-mono font-bold text-gray-900">{coupon.code}</p>
+                      <p className="font-mono font-bold text-slate-100">{coupon.code}</p>
                       {coupon.description && (
-                        <p className="text-sm text-gray-500">{coupon.description}</p>
+                        <p className="text-sm text-slate-400">{coupon.description}</p>
                       )}
                     </td>
                     <td className="px-6 py-4">
-                      <span className="text-primary-500 font-medium">
+                      <span className="font-medium text-amber-300">
                         {coupon.discountType === 'percentage'
                           ? `${coupon.discountValue}%`
                           : `Rs. ${coupon.discountValue}`}
                       </span>
                     </td>
-                    <td className="px-6 py-4 text-gray-600">
+                    <td className="px-6 py-4 text-slate-300">
                       Rs. {coupon.minOrderAmount.toLocaleString()}
                     </td>
-                    <td className="px-6 py-4 text-gray-600">
+                    <td className="px-6 py-4 text-slate-300">
                       {coupon.usedCount}{coupon.usageLimit ? ` / ${coupon.usageLimit}` : ''}
                     </td>
-                    <td className="px-6 py-4 text-gray-600">
+                    <td className="px-6 py-4 text-slate-300">
                       {new Date(coupon.validUntil).toLocaleDateString()}
                     </td>
                     <td className="px-6 py-4">
                       <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${
-                        coupon.isActive ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                        coupon.isActive ? 'bg-emerald-500/20 text-emerald-300' : 'bg-red-500/20 text-red-300'
                       }`}>
                         {coupon.isActive ? 'Active' : 'Inactive'}
                       </span>
@@ -178,15 +178,15 @@ export default function AdminCouponsPage() {
                       <div className="flex items-center justify-end gap-2">
                         <button
                           onClick={() => handleEdit(coupon)}
-                          className="p-2 hover:bg-gray-100 rounded-lg"
+                          className="rounded-lg p-2 transition-colors hover:bg-white/[0.08]"
                         >
-                          <FiEdit2 className="w-4 h-4 text-gray-600" />
+                          <FiEdit2 className="h-4 w-4 text-slate-300" />
                         </button>
                         <button
                           onClick={() => handleDelete(coupon._id)}
-                          className="p-2 hover:bg-red-50 rounded-lg"
+                          className="rounded-lg p-2 transition-colors hover:bg-red-500/10"
                         >
-                          <FiTrash2 className="w-4 h-4 text-red-500" />
+                          <FiTrash2 className="h-4 w-4 text-red-400" />
                         </button>
                       </div>
                     </td>
@@ -194,7 +194,7 @@ export default function AdminCouponsPage() {
                 ))
               ) : (
                 <tr>
-                  <td colSpan={7} className="px-6 py-12 text-center text-gray-500">No coupons found</td>
+                  <td colSpan={7} className="px-6 py-12 text-center text-slate-400">No coupons found</td>
                 </tr>
               )}
             </tbody>
@@ -205,83 +205,83 @@ export default function AdminCouponsPage() {
       {/* Modal */}
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-          <div className="bg-white rounded-2xl w-full max-w-md p-6 mx-4">
-            <h2 className="text-xl font-bold text-gray-900 mb-6">
+          <div className="mx-4 w-full max-w-md rounded-2xl border border-white/10 bg-[#0f0f14] p-6 shadow-glass backdrop-blur-2xl">
+            <h2 className="mb-6 text-xl font-bold text-slate-100">
               {editingCoupon ? 'Edit Coupon' : 'Create Coupon'}
             </h2>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Code</label>
+                <label className="mb-1 block text-sm font-medium text-slate-300">Code</label>
                 <input
                   type="text"
                   value={formData.code}
                   onChange={(e) => setFormData({ ...formData, code: e.target.value.toUpperCase() })}
-                  className="input-field"
+                  className="h-11 w-full rounded-xl border border-white/10 bg-white/[0.03] px-4 text-sm text-slate-200 outline-none"
                   placeholder="e.g., SAVE10"
                   required
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                <label className="mb-1 block text-sm font-medium text-slate-300">Description</label>
                 <input
                   type="text"
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                  className="input-field"
+                  className="h-11 w-full rounded-xl border border-white/10 bg-white/[0.03] px-4 text-sm text-slate-200 outline-none"
                   placeholder="Save 10% on your order"
                 />
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Type</label>
+                  <label className="mb-1 block text-sm font-medium text-slate-300">Type</label>
                   <select
                     value={formData.discountType}
                     onChange={(e) => setFormData({ ...formData, discountType: e.target.value })}
-                    className="input-field"
+                    className="h-11 w-full rounded-xl border border-white/10 bg-white/[0.03] px-4 text-sm text-slate-200 outline-none"
                   >
-                    <option value="percentage">Percentage</option>
-                    <option value="fixed">Fixed Amount</option>
+                    <option value="percentage" className="bg-[#0f0f14]">Percentage</option>
+                    <option value="fixed" className="bg-[#0f0f14]">Fixed Amount</option>
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Value</label>
+                  <label className="mb-1 block text-sm font-medium text-slate-300">Value</label>
                   <input
                     type="number"
                     value={formData.discountValue}
                     onChange={(e) => setFormData({ ...formData, discountValue: Number(e.target.value) })}
-                    className="input-field"
+                    className="h-11 w-full rounded-xl border border-white/10 bg-white/[0.03] px-4 text-sm text-slate-200 outline-none"
                     required
                   />
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Min Order</label>
+                  <label className="mb-1 block text-sm font-medium text-slate-300">Min Order</label>
                   <input
                     type="number"
                     value={formData.minOrderAmount}
                     onChange={(e) => setFormData({ ...formData, minOrderAmount: Number(e.target.value) })}
-                    className="input-field"
+                    className="h-11 w-full rounded-xl border border-white/10 bg-white/[0.03] px-4 text-sm text-slate-200 outline-none"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Usage Limit</label>
+                  <label className="mb-1 block text-sm font-medium text-slate-300">Usage Limit</label>
                   <input
                     type="number"
                     value={formData.usageLimit}
                     onChange={(e) => setFormData({ ...formData, usageLimit: Number(e.target.value) })}
-                    className="input-field"
+                    className="h-11 w-full rounded-xl border border-white/10 bg-white/[0.03] px-4 text-sm text-slate-200 outline-none"
                     placeholder="0 = unlimited"
                   />
                 </div>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Valid Until</label>
+                <label className="mb-1 block text-sm font-medium text-slate-300">Valid Until</label>
                 <input
                   type="date"
                   value={formData.validUntil}
                   onChange={(e) => setFormData({ ...formData, validUntil: e.target.value })}
-                  className="input-field"
+                  className="h-11 w-full rounded-xl border border-white/10 bg-white/[0.03] px-4 text-sm text-slate-200 outline-none"
                   required
                 />
               </div>

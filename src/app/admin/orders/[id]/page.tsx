@@ -40,71 +40,84 @@ export default function AdminOrderDetailsPage() {
 
   if (!order) {
     return (
-      <div className="bg-white rounded-xl shadow-sm p-6">
-        <p className="text-gray-600">Order not found.</p>
+      <div className="rounded-xl border border-white/10 bg-white/[0.03] p-6 shadow-glass backdrop-blur-2xl">
+        <p className="text-slate-300">Order not found.</p>
         <button onClick={() => router.back()} className="btn-outline mt-4">Go Back</button>
       </div>
     );
   }
 
+  const statusColors: Record<string, string> = {
+    pending: 'bg-yellow-500/20 text-yellow-300',
+    confirmed: 'bg-blue-500/20 text-blue-300',
+    processing: 'bg-purple-500/20 text-purple-300',
+    'in-progress': 'bg-fuchsia-500/20 text-fuchsia-300',
+    shipped: 'bg-indigo-500/20 text-indigo-300',
+    'on-the-way': 'bg-cyan-500/20 text-cyan-300',
+    delivered: 'bg-emerald-500/20 text-emerald-300',
+    cancelled: 'bg-red-500/20 text-red-300',
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-gray-900">Order #{order.orderNumber}</h1>
+        <h1 className="text-2xl font-bold text-slate-100">Order #{order.orderNumber}</h1>
         <button onClick={() => router.back()} className="btn-outline">Back</button>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2 bg-white rounded-xl shadow-sm p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Items</h2>
+        <div className="lg:col-span-2 rounded-xl border border-white/10 bg-white/[0.03] p-6 shadow-glass backdrop-blur-2xl">
+          <h2 className="mb-4 text-lg font-semibold text-slate-100">Items</h2>
           <div className="space-y-4">
             {(order.items || []).map((item: any, idx: number) => (
-              <div key={idx} className="flex items-start justify-between border rounded-lg p-4">
+              <div key={idx} className="flex items-start justify-between rounded-lg border border-white/10 bg-white/[0.02] p-4">
                 <div>
-                  <p className="font-medium text-gray-900">{item.title}</p>
-                  {item.variant?.size && <p className="text-sm text-gray-600">Size: {item.variant.size}</p>}
-                  <p className="text-sm text-gray-600">Qty: {item.quantity}</p>
+                  <p className="font-medium text-slate-100">{item.title}</p>
+                  {item.variant?.size && <p className="text-sm text-slate-400">Size: {item.variant.size}</p>}
+                  <p className="text-sm text-slate-400">Qty: {item.quantity}</p>
                 </div>
                 <div className="text-right">
-                  <p className="font-semibold text-gray-900">Rs. {Number(item.price || 0).toLocaleString()}</p>
+                  <p className="font-semibold text-amber-300">Rs. {Number(item.price || 0).toLocaleString()}</p>
                 </div>
               </div>
             ))}
           </div>
         </div>
 
-        <div className="bg-white rounded-xl shadow-sm p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Summary</h2>
+        <div className="rounded-xl border border-white/10 bg-white/[0.03] p-6 shadow-glass backdrop-blur-2xl">
+          <h2 className="mb-4 text-lg font-semibold text-slate-100">Summary</h2>
           <div className="space-y-2 text-sm">
-            <div className="flex justify-between text-gray-700">
+            <div className="flex justify-between text-slate-300">
               <span>Status</span>
-              <span className="font-medium capitalize">{order.status}</span>
+              <span className={`inline-flex rounded-full px-2 py-1 font-medium capitalize ${statusColors[order.status] || 'bg-white/10 text-slate-300'}`}>
+                {order.status}
+              </span>
             </div>
-            <div className="flex justify-between text-gray-700">
+            <div className="flex justify-between text-slate-300">
               <span>Payment</span>
-              <span className="font-medium uppercase">{order.paymentMethod} / {order.paymentStatus}</span>
+              <span className="font-medium uppercase text-slate-100">{order.paymentMethod} / {order.paymentStatus}</span>
             </div>
-            <div className="flex justify-between text-gray-700">
+            <div className="flex justify-between text-slate-300">
               <span>Subtotal</span>
-              <span className="font-medium">Rs. {Number(order.subtotal || 0).toLocaleString()}</span>
+              <span className="font-medium text-slate-100">Rs. {Number(order.subtotal || 0).toLocaleString()}</span>
             </div>
-            <div className="flex justify-between text-gray-700">
+            <div className="flex justify-between text-slate-300">
               <span>Shipping</span>
-              <span className="font-medium">Rs. {Number(order.shippingCost || 0).toLocaleString()}</span>
+              <span className="font-medium text-slate-100">Rs. {Number(order.shippingCost || 0).toLocaleString()}</span>
             </div>
-            <div className="flex justify-between text-gray-700">
+            <div className="flex justify-between text-slate-300">
               <span>Discount</span>
-              <span className="font-medium">-Rs. {Number(order.discount || 0).toLocaleString()}</span>
+              <span className="font-medium text-emerald-300">-Rs. {Number(order.discount || 0).toLocaleString()}</span>
             </div>
-            <div className="flex justify-between text-gray-900 border-t pt-2 mt-2">
+            <div className="mt-2 flex justify-between border-t border-white/10 pt-2 text-slate-100">
               <span className="font-semibold">Total</span>
-              <span className="font-semibold">Rs. {Number(order.total || 0).toLocaleString()}</span>
+              <span className="font-semibold text-amber-300">Rs. {Number(order.total || 0).toLocaleString()}</span>
             </div>
           </div>
 
-          <h3 className="text-md font-semibold text-gray-900 mt-6 mb-2">Shipping</h3>
-          <div className="text-sm text-gray-700 space-y-1">
-            <p className="font-medium">{order.shippingAddress?.fullName}</p>
+          <h3 className="mb-2 mt-6 text-md font-semibold text-slate-100">Shipping</h3>
+          <div className="space-y-1 text-sm text-slate-300">
+            <p className="font-medium text-slate-100">{order.shippingAddress?.fullName}</p>
             <p>{order.shippingAddress?.phone}</p>
             <p>{order.shippingAddress?.email}</p>
             <p>{order.shippingAddress?.address}</p>

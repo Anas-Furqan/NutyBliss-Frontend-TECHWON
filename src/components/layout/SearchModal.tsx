@@ -71,21 +71,21 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="w-full max-w-2xl transform rounded-2xl bg-white shadow-xl transition-all">
+              <Dialog.Panel className="w-full max-w-2xl transform rounded-2xl border border-white/10 bg-[#0d0d12]/95 shadow-glass backdrop-blur-2xl transition-all">
                 {/* Search Input */}
-                <div className="flex items-center gap-3 p-4 border-b">
-                  <FiSearch className="w-5 h-5 text-gray-400" />
+                <div className="flex items-center gap-3 border-b border-white/10 p-4">
+                  <FiSearch className="h-5 w-5 text-slate-400" />
                   <input
                     type="text"
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
                     placeholder="Search products..."
-                    className="flex-1 text-lg outline-none"
+                    className="flex-1 bg-transparent text-lg text-slate-100 outline-none placeholder:text-slate-500"
                     autoFocus
                   />
                   <button
                     onClick={handleClose}
-                    className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                    className="rounded-full p-2 text-slate-300 transition-colors hover:bg-white/[0.08]"
                   >
                     <FiX className="w-5 h-5" />
                   </button>
@@ -94,7 +94,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                 {/* Results */}
                 <div className="max-h-96 overflow-y-auto">
                   {loading ? (
-                    <div className="p-8 text-center text-gray-500">
+                    <div className="p-8 text-center text-slate-400">
                       Searching...
                     </div>
                   ) : results.length > 0 ? (
@@ -104,9 +104,9 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                           key={product._id}
                           href={`/products/${product.slug}`}
                           onClick={handleClose}
-                          className="flex items-center gap-4 p-3 hover:bg-gray-50 rounded-xl transition-colors"
+                          className="flex items-center gap-4 rounded-xl p-3 transition-colors hover:bg-white/[0.05]"
                         >
-                          <div className="relative w-16 h-16 rounded-lg overflow-hidden bg-gray-100">
+                          <div className="relative h-16 w-16 overflow-hidden rounded-lg bg-white/[0.08]">
                             <Image
                               src={product.images[0]?.url || '/images/placeholder.svg'}
                               alt={product.title}
@@ -115,9 +115,9 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                             />
                           </div>
                           <div className="flex-1">
-                            <h4 className="font-medium text-gray-900">{product.title}</h4>
-                            <p className="text-sm text-gray-500">{product.category}</p>
-                            <p className="text-primary-500 font-semibold">
+                            <h4 className="font-medium text-slate-100">{product.title}</h4>
+                            <p className="text-sm text-slate-400">{product.category}</p>
+                            <p className="font-semibold text-amber-300">
                               Rs. {(product.baseDiscountPrice || product.basePrice).toLocaleString()}
                             </p>
                           </div>
@@ -125,11 +125,11 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                       ))}
                     </div>
                   ) : query.trim() ? (
-                    <div className="p-8 text-center text-gray-500">
+                    <div className="p-8 text-center text-slate-400">
                       No products found for &quot;{query}&quot;
                     </div>
                   ) : (
-                    <div className="p-8 text-center text-gray-500">
+                    <div className="p-8 text-center text-slate-400">
                       Start typing to search products...
                     </div>
                   )}
@@ -137,14 +137,14 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
 
                 {/* Quick Links */}
                 {!query.trim() && (
-                  <div className="p-4 border-t">
-                    <p className="text-sm text-gray-500 mb-2">Popular searches</p>
+                  <div className="border-t border-white/10 p-4">
+                    <p className="mb-2 text-sm text-slate-400">Popular searches</p>
                     <div className="flex flex-wrap gap-2">
                       {['Peanut Butter', 'Crunchy', 'Oats', 'Bundle'].map((term) => (
                         <button
                           key={term}
                           onClick={() => setQuery(term)}
-                          className="px-3 py-1 bg-gray-100 hover:bg-gray-200 rounded-full text-sm transition-colors"
+                          className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-sm text-slate-200 transition-colors hover:bg-white/[0.1]"
                         >
                           {term}
                         </button>

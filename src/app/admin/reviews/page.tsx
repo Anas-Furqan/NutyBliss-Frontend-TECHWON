@@ -43,74 +43,74 @@ export default function AdminReviewsPage() {
   return (
     <div>
       <div className="flex items-center justify-between gap-4 mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">Reviews</h1>
+        <h1 className="font-display text-4xl tracking-tighter text-slate-100">Reviews</h1>
         <select
           value={approvedFilter}
           onChange={(e) => setApprovedFilter(e.target.value as any)}
-          className="px-4 py-2 border rounded-lg bg-white"
+          className="h-11 rounded-lg border border-white/10 bg-white/[0.02] px-4 text-sm text-slate-200 outline-none"
         >
-          <option value="all">All</option>
-          <option value="pending">Pending</option>
-          <option value="approved">Approved</option>
+          <option value="all" className="bg-[#0f0f14]">All</option>
+          <option value="pending" className="bg-[#0f0f14]">Pending</option>
+          <option value="approved" className="bg-[#0f0f14]">Approved</option>
         </select>
       </div>
 
-      <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+      <div className="overflow-hidden rounded-xl border border-white/10 bg-white/[0.03] backdrop-blur-2xl">
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead className="bg-gray-50">
+            <thead className="border-b border-white/10 bg-white/[0.02]">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Product</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">User</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Rating</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Comment</th>
-                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Actions</th>
+                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-[0.14em] text-slate-400">Product</th>
+                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-[0.14em] text-slate-400">User</th>
+                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-[0.14em] text-slate-400">Rating</th>
+                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-[0.14em] text-slate-400">Comment</th>
+                <th className="px-6 py-3 text-right text-xs font-medium uppercase tracking-[0.14em] text-slate-400">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-200">
+            <tbody className="divide-y divide-white/5">
               {loading ? (
                 <tr>
-                  <td colSpan={5} className="px-6 py-12 text-center text-gray-500">Loading...</td>
+                  <td colSpan={5} className="px-6 py-12 text-center text-slate-400">Loading...</td>
                 </tr>
               ) : reviews.length > 0 ? (
                 reviews.map((review) => (
-                  <tr key={review._id} className="hover:bg-gray-50">
+                  <tr key={review._id} className="hover:bg-white/[0.02]">
                     <td className="px-6 py-4">
                       <div className="min-w-0">
-                        <p className="font-medium text-gray-900 line-clamp-1">{review.product?.title || 'Unknown'}</p>
-                        <p className="text-sm text-gray-500">{review.product?.slug}</p>
+                        <p className="line-clamp-1 font-medium text-slate-100">{review.product?.title || 'Unknown'}</p>
+                        <p className="text-sm text-slate-400">{review.product?.slug}</p>
                       </div>
                     </td>
                     <td className="px-6 py-4">
-                      <p className="text-gray-900">{review.user?.name}</p>
-                      <p className="text-sm text-gray-500">{review.user?.email}</p>
+                      <p className="text-slate-100">{review.user?.name}</p>
+                      <p className="text-sm text-slate-400">{review.user?.email}</p>
                     </td>
                     <td className="px-6 py-4">
-                      <span className="font-medium text-gray-900">{review.rating}/5</span>
+                      <span className="font-medium text-amber-300">{review.rating}/5</span>
                       {review.isVerifiedPurchase && (
-                        <span className="ml-2 text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full">
+                        <span className="ml-2 rounded-full bg-emerald-500/20 px-2 py-0.5 text-xs text-emerald-300">
                           Verified
                         </span>
                       )}
                     </td>
-                    <td className="px-6 py-4 text-gray-700 max-w-md">
+                    <td className="max-w-md px-6 py-4 text-slate-300">
                       <p className="line-clamp-2">{review.comment}</p>
                     </td>
                     <td className="px-6 py-4 text-right">
                       <div className="flex items-center justify-end gap-2">
                         <button
                           onClick={() => setApproval(review._id, true)}
-                          className="p-2 hover:bg-green-50 rounded-lg"
+                          className="rounded-lg p-2 transition-colors hover:bg-emerald-500/10"
                           title="Approve"
                         >
-                          <FiCheck className="w-4 h-4 text-green-600" />
+                          <FiCheck className="h-4 w-4 text-emerald-300" />
                         </button>
                         <button
                           onClick={() => setApproval(review._id, false)}
-                          className="p-2 hover:bg-red-50 rounded-lg"
+                          className="rounded-lg p-2 transition-colors hover:bg-red-500/10"
                           title="Reject"
                         >
-                          <FiX className="w-4 h-4 text-red-600" />
+                          <FiX className="h-4 w-4 text-red-300" />
                         </button>
                       </div>
                     </td>
@@ -118,7 +118,7 @@ export default function AdminReviewsPage() {
                 ))
               ) : (
                 <tr>
-                  <td colSpan={5} className="px-6 py-12 text-center text-gray-500">No reviews found</td>
+                  <td colSpan={5} className="px-6 py-12 text-center text-slate-400">No reviews found</td>
                 </tr>
               )}
             </tbody>
