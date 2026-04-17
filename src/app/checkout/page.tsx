@@ -7,9 +7,10 @@ import { useAuthStore, useCartStore } from '@/store';
 import Input from '@/components/ui/Input';
 import Button from '@/components/ui/Button';
 import GlassCard from '@/components/ui/GlassCard';
-import { ordersAPI } from '@/lib/api';
+import { authAPI, ordersAPI } from '@/lib/api';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
+import { Address } from '@/types';
 
 type CheckoutForm = {
   fullName: string;
@@ -23,11 +24,13 @@ type CheckoutForm = {
 
 export default function CheckoutPage() {
   const { items, getSubtotal, discount, clearCart } = useCartStore();
-  const { isAuthenticated } = useAuthStore();
+  const { isAuthenticated, updateUser } = useAuthStore();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const [savedAddresses, setSavedAddresses] = useState<Address[]>([]);
+  const [selectedAddressId, setSelectedAddressId] = useState<string>('');
 
-  const { register, handleSubmit, watch, formState: { errors } } = useForm<CheckoutForm>({
+  const { register, handleSubmit, watch, setValue, formState: { errors } } = useForm<CheckoutForm>({
     defaultValues: { paymentMethod: 'cod' },
     mode: 'onSubmit',
     reValidateMode: 'onChange',
@@ -41,8 +44,50 @@ export default function CheckoutPage() {
   useEffect(() => {
     if (!isAuthenticated) {
       router.push('/login');
+      return;
     }
+
+    const hydrateCheckout = async () => {
+      try {
+        const { data } = await authAPI.getMe();
+        const me = data?.user;
+        if (!me) return;
+
+        updateUser(me);
+        const addresses: Address[] = me.addresses || [];
+        setSavedAddresses(addresses);
+
+        const defaultAddress = addresses.find((addr) => addr.isDefault) || addresses[0];
+
+        if (defaultAddress?._id) {
+          setSelectedAddressId(defaultAddress._id);
+        }
+
+        setValue('fullName', defaultAddress?.fullName || me.name || '');
+        setValue('email', me.email || '');
+        setValue('phone', defaultAddress?.phone || me.phone || '');
+        setValue('address', defaultAddress?.address || '');
+        setValue('city', defaultAddress?.city || '');
+        setValue('postalCode', defaultAddress?.postalCode || '');
+      } catch {
+        // Keep checkout usable even if profile fetch fails.
+      }
+    };
+
+    hydrateCheckout();
   }, [isAuthenticated, router]);
+
+  const applySavedAddress = (addressId: string) => {
+    setSelectedAddressId(addressId);
+    const address = savedAddresses.find((addr) => addr._id === addressId);
+    if (!address) return;
+
+    setValue('fullName', address.fullName || '');
+    setValue('phone', address.phone || '');
+    setValue('address', address.address || '');
+    setValue('city', address.city || '');
+    setValue('postalCode', address.postalCode || '');
+  };
 
   const onSubmit = async (values: CheckoutForm) => {
     if (!isAuthenticated) {
@@ -96,12 +141,31 @@ export default function CheckoutPage() {
         <div className="space-y-6 lg:col-span-2">
           <GlassCard className="space-y-4 p-6">
             <h2 className="font-display text-3xl text-ink">Contact</h2>
+            {savedAddresses.length > 0 && (
+              <div>
+                <label className="mb-1 block text-sm text-slate-300">Use saved address</label>
+                <select
+                  value={selectedAddressId}
+                  onChange={(e) => applySavedAddress(e.target.value)}
+                  className="focus-gradient rounded-xl2 w-full"
+                >
+                  {savedAddresses.map((address) => (
+                    <option key={address._id} value={address._id}>
+                      {address.fullName} - {address.city}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
             <Input {...register('fullName', { required: 'Name is required' })} placeholder="Full name" autoComplete="name" />
             {errors.fullName && <p className="text-sm text-[#EF4444]">{errors.fullName.message}</p>}
             <Input type="email" {...register('email', { required: 'Email is required' })} placeholder="Email" autoComplete="email" />
             {errors.email && <p className="text-sm text-[#EF4444]">{errors.email.message}</p>}
             <Input {...register('phone', { required: 'Phone is required' })} placeholder="Phone" autoComplete="tel" />
             {errors.phone && <p className="text-sm text-[#EF4444]">{errors.phone.message}</p>}
+            {savedAddresses.length > 0 && (
+              <p className="text-xs text-slate-400">Manage addresses in your account to auto-fill checkout faster.</p>
+            )}
           </GlassCard>
 
           <GlassCard className="space-y-4 p-6">

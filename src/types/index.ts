@@ -83,7 +83,7 @@ export interface Order {
   discount: number;
   couponCode?: string;
   total: number;
-  status: 'pending' | 'confirmed' | 'processing' | 'shipped' | 'delivered' | 'cancelled';
+  status: 'pending' | 'confirmed' | 'processing' | 'in-progress' | 'shipped' | 'on-the-way' | 'delivered' | 'cancelled';
   trackingNumber?: string;
   trackingUrl?: string;
   statusHistory?: { status: string; timestamp: string; note?: string }[];

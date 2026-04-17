@@ -2,13 +2,14 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useMemo, useState } from 'react';
 import { useCartStore, useAuthStore } from '@/store';
 import GlassCard from '@/components/ui/GlassCard';
 import Button from '@/components/ui/Button';
 import { cartAPI } from '@/lib/api';
 import type { Product } from '@/types';
+import toast from 'react-hot-toast';
 
 const links = [
   { href: '/', label: 'Home' },
@@ -28,10 +29,11 @@ function Icon({ path }: { path: string }) {
 
 export default function Navbar() {
   const pathname = usePathname();
+  const router = useRouter();
   const [cartOpen, setCartOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const { items, getSubtotal, updateQuantity, removeItem } = useCartStore();
-  const { isAuthenticated } = useAuthStore();
+  const { isAuthenticated, user } = useAuthStore();
 
   const itemCount = useMemo(() => items.reduce((sum, item) => sum + item.quantity, 0), [items]);
 
@@ -95,6 +97,15 @@ export default function Navbar() {
     }
   };
 
+  const handleOpenCart = () => {
+    if (!isAuthenticated) {
+      toast.error('Please login to use cart');
+      router.push('/login');
+      return;
+    }
+    setCartOpen(true);
+  };
+
   return (
     <>
       <header className="floating-shell">
@@ -120,16 +131,24 @@ export default function Navbar() {
 
           <div className="flex items-center gap-2">
             <div className="hidden items-center gap-2 lg:flex">
-              <Link href="/login" className="btn-ghost">
-                Login
-              </Link>
-              <Link href="/signup" className="btn-ghost">
-                Sign Up
-              </Link>
+              {isAuthenticated ? (
+                <Link href="/account" className="btn-ghost" title="Open account">
+                  {user?.name || 'My Account'}
+                </Link>
+              ) : (
+                <>
+                  <Link href="/login" className="btn-ghost">
+                    Login
+                  </Link>
+                  <Link href="/signup" className="btn-ghost">
+                    Sign Up
+                  </Link>
+                </>
+              )}
             </div>
             <button
               className="btn-secondary !px-3"
-              onClick={() => setCartOpen(true)}
+              onClick={handleOpenCart}
               aria-label="Open cart"
             >
               <Icon path="M3 4h2l2 12h10l2-8H7" />
@@ -154,12 +173,20 @@ export default function Navbar() {
                 </Link>
               ))}
               <div className="mt-2 grid grid-cols-2 gap-2">
-                <Link href="/login" className="btn-ghost w-full justify-center">
-                  Login
-                </Link>
-                <Link href="/signup" className="btn-ghost w-full justify-center">
-                  Sign Up
-                </Link>
+                {isAuthenticated ? (
+                  <Link href="/account" className="btn-ghost col-span-2 w-full justify-center">
+                    {user?.name || 'My Account'}
+                  </Link>
+                ) : (
+                  <>
+                    <Link href="/login" className="btn-ghost w-full justify-center">
+                      Login
+                    </Link>
+                    <Link href="/signup" className="btn-ghost w-full justify-center">
+                      Sign Up
+                    </Link>
+                  </>
+                )}
               </div>
             </div>
           </div>

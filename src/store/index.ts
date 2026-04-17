@@ -28,6 +28,7 @@ export const useAuthStore = create<AuthState>()(
       },
       logout: () => {
         localStorage.removeItem('token');
+        localStorage.removeItem('cart-storage');
         set({ user: null, token: null, isAuthenticated: false });
       },
       updateUser: (userData) =>
@@ -75,6 +76,20 @@ export const useCartStore = create<CartState>()(
       couponCode: null,
       discount: 0,
       addItem: (product, quantity, variant) => {
+        if (typeof window !== 'undefined') {
+          const rawAuth = localStorage.getItem('auth-storage');
+          if (!rawAuth) return;
+
+          try {
+            const parsed = JSON.parse(rawAuth);
+            const state = parsed?.state;
+            const isAuthed = Boolean(state?.isAuthenticated && state?.token);
+            if (!isAuthed) return;
+          } catch {
+            return;
+          }
+        }
+
         set((state) => {
           const existingIndex = state.items.findIndex(
             (item) =>

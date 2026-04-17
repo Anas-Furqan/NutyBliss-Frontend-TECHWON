@@ -9,9 +9,12 @@ import toast from 'react-hot-toast';
 export default function TrackOrderPage() {
   const [orderId, setOrderId] = useState('');
   const [revealed, setRevealed] = useState(false);
+  const [currentStatus, setCurrentStatus] = useState('pending');
   const [statusHistory, setStatusHistory] = useState<{ status: string; timestamp?: string; note?: string }[]>([]);
   const timelineRef = useRef<HTMLDivElement>(null);
   const markerRef = useRef<HTMLDivElement>(null);
+
+  const stages = ['pending', 'confirmed', 'processing', 'shipped', 'delivered', 'cancelled'];
 
   const onTrack = async (event: FormEvent) => {
     event.preventDefault();
@@ -25,8 +28,11 @@ export default function TrackOrderPage() {
         ? data.order.statusHistory
         : [{ status: data?.order?.status || 'pending' }];
 
+      const liveStatus = String(data?.order?.status || 'pending').toLowerCase();
+
       historyLength = history.length;
       setStatusHistory(history);
+      setCurrentStatus(liveStatus);
       initGSAP();
       setRevealed(true);
     } catch (error: any) {
@@ -51,6 +57,15 @@ export default function TrackOrderPage() {
     });
   };
 
+  const currentPipelineStatus =
+    currentStatus === 'in-progress'
+      ? 'processing'
+      : currentStatus === 'on-the-way'
+        ? 'shipped'
+        : currentStatus;
+
+  const currentStageIndex = stages.indexOf(currentPipelineStatus);
+
   return (
     <main className="min-h-[88vh] bg-surface pb-32 pt-32">
       <section className="mx-auto w-[min(980px,92vw)]">
@@ -74,7 +89,35 @@ export default function TrackOrderPage() {
         </form>
 
         {revealed && (
-          <div ref={timelineRef} className="relative mx-auto mt-12 max-w-3xl">
+          <div ref={timelineRef} className="relative mx-auto mt-12 max-w-4xl space-y-8">
+            <section className="grid gap-3 rounded-2xl border border-white/10 bg-white/[0.03] p-5 backdrop-blur-2xl md:grid-cols-3">
+              {stages.map((stage, index) => {
+                const isCancelledFlow = currentPipelineStatus === 'cancelled';
+                const isActive = stage === currentPipelineStatus;
+                const isCompleted = !isCancelledFlow && index <= currentStageIndex;
+                return (
+                  <article
+                    key={stage}
+                    className={`rounded-xl border p-3 ${
+                      isActive
+                        ? 'border-amber-400/60 bg-amber-500/10'
+                        : isCompleted
+                          ? 'border-emerald-500/30 bg-emerald-500/10'
+                          : 'border-white/10 bg-[#111111]'
+                    }`}
+                  >
+                    <p className="text-[11px] uppercase tracking-[0.16em] text-slate-500">{isCompleted ? 'Completed' : isActive ? 'Current' : 'Pending'}</p>
+                    <h3 className="mt-1 font-semibold capitalize text-slate-200">{stage.replace(/-/g, ' ')}</h3>
+                  </article>
+                );
+              })}
+            </section>
+
+            <div className="rounded-xl border border-white/10 bg-[#0f0f17] px-4 py-3 text-sm text-slate-300">
+              Live status: <span className="font-semibold capitalize text-amber-300">{currentStatus.replace(/-/g, ' ')}</span>
+            </div>
+
+            <div className="relative">
             <div className="absolute left-5 top-0 h-full w-px bg-white/10" />
             <div data-track-line className="absolute left-5 top-0 h-full w-px bg-gradient-to-b from-[#FF8C00] to-[#4B0082]" />
             <div ref={markerRef} className="absolute left-[6px] top-0 z-20 h-8 w-8 overflow-hidden rounded-full border border-white/20 bg-black/70 shadow-[0_12px_30px_rgba(0,0,0,0.45)]">
@@ -89,6 +132,7 @@ export default function TrackOrderPage() {
                   <p className="mt-2 text-sm text-slate-300/75">{item.note || 'Status updated by admin dashboard'}</p>
                 </article>
               ))}
+            </div>
             </div>
           </div>
         )}

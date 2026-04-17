@@ -4,7 +4,16 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import {
-  FiShoppingBag, FiDollarSign, FiUsers, FiPackage, FiTrendingUp, FiAlertCircle, FiTag
+  FiShoppingBag,
+  FiDollarSign,
+  FiUsers,
+  FiPackage,
+  FiTag,
+  FiArrowUpRight,
+  FiCalendar,
+  FiClock,
+  FiBarChart2,
+  FiActivity,
 } from 'react-icons/fi';
 import { adminAPI } from '@/lib/api';
 
@@ -28,215 +37,300 @@ export default function AdminDashboard() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const { data } = await adminAPI.getDashboard();
+        setStats(data.stats);
+      } catch (error) {
+        console.error('Failed to fetch stats:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
     fetchStats();
   }, []);
 
-  const fetchStats = async () => {
-    try {
-      const { data } = await adminAPI.getDashboard();
-      setStats(data.stats);
-    } catch (error) {
-      console.error('Failed to fetch stats:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary-500"></div>
+      <div className="grid min-h-[50vh] place-items-center">
+        <div className="h-12 w-12 animate-spin rounded-full border-b-2 border-t-2 border-amber-400" />
       </div>
     );
   }
 
+  const formatCurrency = (value: number) => `Rs. ${Number(value || 0).toLocaleString()}`;
+
+  const trendValue = Number(stats?.revenueGrowth || 0);
+  const trendLabel = trendValue > 0 ? `+${trendValue}%` : `${trendValue}%`;
+
+  const chartRows = (stats?.salesChart || []).map((row: any) => ({
+    day: row?._id,
+    orders: Number(row?.orders || 0),
+    sales: Number(row?.sales || 0),
+  }));
+  const maxSales = chartRows.reduce((max, row) => Math.max(max, row.sales), 0) || 1;
+
   const statCards = [
     {
       title: 'Total Revenue',
-      value: `Rs. ${stats?.totalRevenue?.toLocaleString() || 0}`,
-      change: `${stats?.revenueGrowth || 0}%`,
+      value: formatCurrency(stats?.totalRevenue || 0),
+      meta: `${trendLabel} vs last month`,
       icon: FiDollarSign,
-      color: 'bg-green-500',
+      iconShell: 'from-emerald-500/20 to-emerald-400/5 text-emerald-300 border-emerald-400/20',
     },
     {
       title: 'Total Orders',
       value: stats?.totalOrders || 0,
-      subtitle: `${stats?.monthlyOrders || 0} this month`,
+      meta: `${stats?.monthlyOrders || 0} this month`,
       icon: FiShoppingBag,
-      color: 'bg-blue-500',
+      iconShell: 'from-cyan-500/20 to-cyan-400/5 text-cyan-300 border-cyan-400/20',
     },
     {
       title: 'Total Products',
       value: stats?.totalProducts || 0,
+      meta: `${stats?.topProducts?.length || 0} top sellers tracked`,
       icon: FiPackage,
-      color: 'bg-purple-500',
+      iconShell: 'from-violet-500/20 to-violet-400/5 text-violet-300 border-violet-400/20',
     },
     {
       title: 'Total Users',
       value: stats?.totalUsers || 0,
+      meta: `${formatCurrency(stats?.avgOrderValue || 0)} avg order`,
       icon: FiUsers,
-      color: 'bg-orange-500',
+      iconShell: 'from-amber-500/20 to-amber-400/5 text-amber-300 border-amber-400/20',
     },
   ];
 
   const getStatusColor = (status: string) => {
     const colors: Record<string, string> = {
-      pending: 'bg-yellow-100 text-yellow-800',
-      confirmed: 'bg-blue-100 text-blue-800',
-      processing: 'bg-purple-100 text-purple-800',
-      shipped: 'bg-indigo-100 text-indigo-800',
-      delivered: 'bg-green-100 text-green-800',
-      cancelled: 'bg-red-100 text-red-800',
+      pending: 'bg-yellow-500/20 text-yellow-300',
+      confirmed: 'bg-blue-500/20 text-blue-300',
+      processing: 'bg-purple-500/20 text-purple-300',
+      'in-progress': 'bg-fuchsia-500/20 text-fuchsia-300',
+      shipped: 'bg-indigo-500/20 text-indigo-300',
+      'on-the-way': 'bg-cyan-500/20 text-cyan-300',
+      delivered: 'bg-emerald-500/20 text-emerald-300',
+      cancelled: 'bg-red-500/20 text-red-300',
     };
-    return colors[status] || 'bg-gray-100 text-gray-800';
+    return colors[status] || 'bg-white/10 text-slate-300';
   };
 
   return (
-    <div>
-      <div className="flex items-center justify-between mb-8">
-        <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
-        <Link href="/admin/products/new" className="btn-primary">
-          Add Product
-        </Link>
-      </div>
+    <div className="space-y-8">
+      <section className="relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-[#121212] via-[#0e0e0e] to-[#080808] p-6 md:p-8">
+        <div className="pointer-events-none absolute -right-20 -top-20 h-56 w-56 rounded-full bg-amber-500/10 blur-3xl" />
+        <div className="pointer-events-none absolute -left-24 -bottom-24 h-56 w-56 rounded-full bg-orange-500/10 blur-3xl" />
 
-      {/* Stats Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div className="relative flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+          <div>
+            <p className="text-xs uppercase tracking-[0.18em] text-amber-300/90">Nuty Bliss Admin</p>
+            <h1 className="mt-2 font-display text-4xl tracking-tight text-slate-100 md:text-5xl">Dashboard Control Room</h1>
+            <p className="mt-3 max-w-2xl text-sm text-slate-400 md:text-base">
+              Track revenue velocity, order momentum, and product performance in one clear command center.
+            </p>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-3">
+            <Link href="/admin/orders" className="btn-secondary !px-4">
+              <FiClock className="mr-2 h-4 w-4" />
+              Review Orders
+            </Link>
+            <Link href="/admin/products/new" className="btn-primary">
+              <FiArrowUpRight className="mr-2 h-4 w-4" />
+              Add Product
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4">
         {statCards.map((stat, index) => (
-          <motion.div
+          <motion.article
             key={stat.title}
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: index * 0.1 }}
-            className="bg-white rounded-2xl p-6 shadow-sm"
+            transition={{ delay: index * 0.06 }}
+            className="rounded-2xl border border-white/10 bg-white/[0.03] p-5 backdrop-blur-2xl"
           >
-            <div className="flex items-center justify-between">
+            <div className="flex items-start justify-between gap-4">
               <div>
-                <p className="text-sm text-gray-500">{stat.title}</p>
-                <p className="text-2xl font-bold text-gray-900 mt-1">{stat.value}</p>
-                {stat.change && (
-                  <p className="text-sm text-green-500 flex items-center gap-1 mt-1">
-                    <FiTrendingUp className="w-4 h-4" />
-                    {stat.change} vs last month
-                  </p>
-                )}
-                {stat.subtitle && (
-                  <p className="text-sm text-gray-500 mt-1">{stat.subtitle}</p>
-                )}
+                <p className="text-xs uppercase tracking-[0.14em] text-slate-400">{stat.title}</p>
+                <p className="mt-2 text-2xl font-semibold tracking-tight text-slate-100">{stat.value}</p>
+                <p className="mt-2 text-sm text-slate-400">{stat.meta}</p>
               </div>
-              <div className={`w-12 h-12 ${stat.color} rounded-xl flex items-center justify-center`}>
-                <stat.icon className="w-6 h-6 text-white" />
+              <div className={`flex h-12 w-12 items-center justify-center rounded-xl border bg-gradient-to-br ${stat.iconShell}`}>
+                <stat.icon className="h-5 w-5" />
               </div>
             </div>
-          </motion.div>
+          </motion.article>
         ))}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Recent Orders */}
-        <div className="bg-white rounded-2xl shadow-sm p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold text-gray-900">Recent Orders</h2>
-            <Link href="/admin/orders" className="text-primary-500 text-sm hover:underline">
+      <div className="grid grid-cols-1 gap-6 xl:grid-cols-12">
+        <section className="rounded-2xl border border-white/10 bg-white/[0.03] p-6 backdrop-blur-2xl xl:col-span-8">
+          <div className="mb-5 flex items-center justify-between">
+            <div>
+              <h2 className="font-display text-3xl tracking-tight text-slate-100">Sales Trend</h2>
+              <p className="text-sm text-slate-400">Last 7 days performance snapshot</p>
+            </div>
+            <div className="rounded-full border border-white/10 bg-white/[0.02] px-3 py-1 text-xs text-slate-300">
+              <FiCalendar className="mr-2 inline h-3.5 w-3.5" />
+              Weekly
+            </div>
+          </div>
+
+          {chartRows.length > 0 ? (
+            <div className="grid grid-cols-7 gap-2 md:gap-3">
+              {chartRows.map((row) => {
+                const barHeight = Math.max(10, Math.round((row.sales / maxSales) * 120));
+                const shortLabel = row.day?.slice(5) || '--';
+                return (
+                  <div key={row.day} className="flex flex-col items-center gap-2">
+                    <div className="flex h-36 w-full max-w-[56px] items-end rounded-xl border border-white/10 bg-[#101010] p-1">
+                      <div
+                        className="w-full rounded-lg bg-gradient-to-t from-amber-500 to-orange-400"
+                        style={{ height: `${barHeight}px` }}
+                        title={`${shortLabel} | ${formatCurrency(row.sales)} | ${row.orders} orders`}
+                      />
+                    </div>
+                    <p className="text-[11px] text-slate-500">{shortLabel}</p>
+                  </div>
+                );
+              })}
+            </div>
+          ) : (
+            <p className="rounded-xl border border-white/10 bg-[#111111] p-4 text-sm text-slate-400">No sales chart data available yet.</p>
+          )}
+
+          <div className="mt-6 grid grid-cols-1 gap-3 md:grid-cols-3">
+            <div className="rounded-xl border border-white/10 bg-[#111111] p-3">
+              <p className="text-xs uppercase tracking-[0.14em] text-slate-500">Monthly Revenue</p>
+              <p className="mt-1 text-lg font-semibold text-slate-100">{formatCurrency(stats?.monthlyRevenue || 0)}</p>
+            </div>
+            <div className="rounded-xl border border-white/10 bg-[#111111] p-3">
+              <p className="text-xs uppercase tracking-[0.14em] text-slate-500">Average Order</p>
+              <p className="mt-1 text-lg font-semibold text-slate-100">{formatCurrency(stats?.avgOrderValue || 0)}</p>
+            </div>
+            <div className="rounded-xl border border-white/10 bg-[#111111] p-3">
+              <p className="text-xs uppercase tracking-[0.14em] text-slate-500">Revenue Growth</p>
+              <p className={`mt-1 text-lg font-semibold ${trendValue >= 0 ? 'text-emerald-300' : 'text-red-300'}`}>
+                {trendLabel}
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section className="rounded-2xl border border-white/10 bg-white/[0.03] p-6 backdrop-blur-2xl xl:col-span-4">
+          <div className="mb-4 flex items-center justify-between">
+            <h2 className="font-display text-3xl tracking-tight text-slate-100">Order Status</h2>
+            <FiBarChart2 className="h-5 w-5 text-slate-400" />
+          </div>
+          <div className="space-y-3">
+            {stats?.ordersByStatus && Object.entries(stats.ordersByStatus).length > 0 ? (
+              Object.entries(stats.ordersByStatus).map(([status, count]) => {
+                const totalOrders = Number(stats?.totalOrders || 0) || 1;
+                const ratio = Math.max(4, Math.round((Number(count) / totalOrders) * 100));
+                return (
+                  <div key={status} className="rounded-xl border border-white/10 bg-[#111111] p-3">
+                    <div className="mb-2 flex items-center justify-between">
+                      <span className={`inline-flex rounded-full px-2 py-1 text-xs font-medium capitalize ${getStatusColor(status)}`}>
+                        {status}
+                      </span>
+                      <span className="text-sm font-semibold text-slate-100">{count}</span>
+                    </div>
+                    <div className="h-2 rounded-full bg-white/10">
+                      <div className="h-2 rounded-full bg-gradient-to-r from-amber-400 to-orange-500" style={{ width: `${ratio}%` }} />
+                    </div>
+                  </div>
+                );
+              })
+            ) : (
+              <p className="rounded-xl border border-white/10 bg-[#111111] p-4 text-sm text-slate-400">No status distribution available yet.</p>
+            )}
+          </div>
+        </section>
+      </div>
+
+      <div className="grid grid-cols-1 gap-6 xl:grid-cols-12">
+        <section className="rounded-2xl border border-white/10 bg-white/[0.03] p-6 backdrop-blur-2xl xl:col-span-7">
+          <div className="mb-4 flex items-center justify-between">
+            <h2 className="font-display text-3xl tracking-tight text-slate-100">Recent Orders</h2>
+            <Link href="/admin/orders" className="text-sm text-amber-300 hover:text-amber-200">
               View All
             </Link>
           </div>
-          <div className="space-y-4">
-            {stats?.recentOrders?.slice(0, 5).map((order: any) => (
-              <div key={order._id} className="flex items-center justify-between py-3 border-b last:border-0">
+          <div className="space-y-3">
+            {stats?.recentOrders?.slice(0, 6).map((order: any) => (
+              <div key={order._id} className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-white/10 bg-[#111111] px-4 py-3">
                 <div>
-                  <p className="font-medium text-gray-900">#{order.orderNumber}</p>
-                  <p className="text-sm text-gray-500">
-                    {order.shippingAddress?.fullName || order.user?.name}
-                  </p>
+                  <p className="text-sm font-semibold text-slate-100">#{order.orderNumber}</p>
+                  <p className="text-xs text-slate-400">{order.shippingAddress?.fullName || order.user?.name || 'Unknown customer'}</p>
                 </div>
                 <div className="text-right">
-                  <p className="font-medium text-gray-900">Rs. {order.total?.toLocaleString()}</p>
-                  <span className={`inline-block px-2 py-1 rounded-full text-xs font-medium capitalize ${getStatusColor(order.status)}`}>
+                  <p className="text-sm font-semibold text-slate-100">{formatCurrency(order.total || 0)}</p>
+                  <span className={`inline-flex rounded-full px-2 py-1 text-xs font-medium capitalize ${getStatusColor(order.status)}`}>
                     {order.status}
                   </span>
                 </div>
               </div>
             ))}
             {(!stats?.recentOrders || stats.recentOrders.length === 0) && (
-              <p className="text-gray-500 text-center py-4">No orders yet</p>
+              <p className="rounded-xl border border-white/10 bg-[#111111] p-4 text-sm text-slate-400">No orders yet.</p>
             )}
           </div>
-        </div>
+        </section>
 
-        {/* Order Status Distribution */}
-        <div className="bg-white rounded-2xl shadow-sm p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Order Status</h2>
-          <div className="space-y-4">
-            {stats?.ordersByStatus && Object.entries(stats.ordersByStatus).map(([status, count]) => (
-              <div key={status} className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <span className={`w-3 h-3 rounded-full ${getStatusColor(status).split(' ')[0]}`} />
-                  <span className="text-gray-600 capitalize">{status}</span>
-                </div>
-                <span className="font-medium text-gray-900">{count}</span>
-              </div>
-            ))}
+        <section className="rounded-2xl border border-white/10 bg-white/[0.03] p-6 backdrop-blur-2xl xl:col-span-5">
+          <div className="mb-4 flex items-center justify-between">
+            <h2 className="font-display text-3xl tracking-tight text-slate-100">Top Products</h2>
+            <FiActivity className="h-5 w-5 text-slate-400" />
           </div>
-        </div>
-
-        {/* Top Products */}
-        <div className="bg-white rounded-2xl shadow-sm p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Top Selling Products</h2>
-          <div className="space-y-4">
+          <div className="space-y-3">
             {stats?.topProducts?.slice(0, 5).map((item: any, index: number) => (
-              <div key={index} className="flex items-center gap-4">
-                <span className="w-8 h-8 bg-primary-100 rounded-full flex items-center justify-center text-primary-500 font-medium">
+              <div key={`${item?._id?._id || index}`} className="flex items-center gap-3 rounded-xl border border-white/10 bg-[#111111] px-4 py-3">
+                <span className="grid h-8 w-8 place-items-center rounded-full bg-amber-500/20 text-xs font-semibold text-amber-300">
                   {index + 1}
                 </span>
-                <div className="flex-1">
-                  <p className="font-medium text-gray-900">{item._id?.title || 'Unknown Product'}</p>
-                  <p className="text-sm text-gray-500">{item.totalSold} sold</p>
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-sm font-semibold text-slate-100">{item?._id?.title || 'Unknown Product'}</p>
+                  <p className="text-xs text-slate-400">{item?.totalSold || 0} sold</p>
                 </div>
-                <p className="font-medium text-gray-900">Rs. {item.revenue?.toLocaleString()}</p>
+                <p className="text-sm font-semibold text-slate-100">{formatCurrency(item?.revenue || 0)}</p>
               </div>
             ))}
             {(!stats?.topProducts || stats.topProducts.length === 0) && (
-              <p className="text-gray-500 text-center py-4">No sales data yet</p>
+              <p className="rounded-xl border border-white/10 bg-[#111111] p-4 text-sm text-slate-400">No sales data yet.</p>
             )}
           </div>
-        </div>
-
-        {/* Quick Actions */}
-        <div className="bg-white rounded-2xl shadow-sm p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h2>
-          <div className="grid grid-cols-2 gap-4">
-            <Link
-              href="/admin/products/new"
-              className="p-4 border-2 border-dashed border-gray-200 rounded-xl text-center hover:border-primary-500 hover:bg-primary-50 transition-colors"
-            >
-              <FiPackage className="w-8 h-8 mx-auto text-gray-400 mb-2" />
-              <p className="font-medium text-gray-700">Add Product</p>
-            </Link>
-            <Link
-              href="/admin/orders"
-              className="p-4 border-2 border-dashed border-gray-200 rounded-xl text-center hover:border-primary-500 hover:bg-primary-50 transition-colors"
-            >
-              <FiShoppingBag className="w-8 h-8 mx-auto text-gray-400 mb-2" />
-              <p className="font-medium text-gray-700">View Orders</p>
-            </Link>
-            <Link
-              href="/admin/coupons"
-              className="p-4 border-2 border-dashed border-gray-200 rounded-xl text-center hover:border-primary-500 hover:bg-primary-50 transition-colors"
-            >
-              <FiTag className="w-8 h-8 mx-auto text-gray-400 mb-2" />
-              <p className="font-medium text-gray-700">Manage Coupons</p>
-            </Link>
-            <Link
-              href="/admin/users"
-              className="p-4 border-2 border-dashed border-gray-200 rounded-xl text-center hover:border-primary-500 hover:bg-primary-50 transition-colors"
-            >
-              <FiUsers className="w-8 h-8 mx-auto text-gray-400 mb-2" />
-              <p className="font-medium text-gray-700">View Users</p>
-            </Link>
-          </div>
-        </div>
+        </section>
       </div>
+
+      <section className="rounded-2xl border border-white/10 bg-white/[0.03] p-6 backdrop-blur-2xl">
+        <h2 className="mb-4 font-display text-3xl tracking-tight text-slate-100">Quick Actions</h2>
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          <Link href="/admin/products/new" className="group rounded-xl border border-white/10 bg-[#111111] p-4 transition hover:border-amber-400/40 hover:bg-[#141414]">
+            <FiPackage className="mb-3 h-6 w-6 text-amber-300" />
+            <p className="text-sm font-semibold text-slate-100">Add Product</p>
+            <p className="mt-1 text-xs text-slate-400">Create a new catalog item</p>
+          </Link>
+          <Link href="/admin/orders" className="group rounded-xl border border-white/10 bg-[#111111] p-4 transition hover:border-amber-400/40 hover:bg-[#141414]">
+            <FiShoppingBag className="mb-3 h-6 w-6 text-amber-300" />
+            <p className="text-sm font-semibold text-slate-100">Manage Orders</p>
+            <p className="mt-1 text-xs text-slate-400">Update order statuses quickly</p>
+          </Link>
+          <Link href="/admin/coupons" className="group rounded-xl border border-white/10 bg-[#111111] p-4 transition hover:border-amber-400/40 hover:bg-[#141414]">
+            <FiTag className="mb-3 h-6 w-6 text-amber-300" />
+            <p className="text-sm font-semibold text-slate-100">Manage Coupons</p>
+            <p className="mt-1 text-xs text-slate-400">Launch discount campaigns</p>
+          </Link>
+          <Link href="/admin/users" className="group rounded-xl border border-white/10 bg-[#111111] p-4 transition hover:border-amber-400/40 hover:bg-[#141414]">
+            <FiUsers className="mb-3 h-6 w-6 text-amber-300" />
+            <p className="text-sm font-semibold text-slate-100">View Users</p>
+            <p className="mt-1 text-xs text-slate-400">Monitor customer activity</p>
+          </Link>
+        </div>
+      </section>
     </div>
   );
 }
