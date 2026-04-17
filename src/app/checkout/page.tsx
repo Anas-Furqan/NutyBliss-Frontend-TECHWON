@@ -29,6 +29,8 @@ export default function CheckoutPage() {
 
   const { register, handleSubmit, watch, formState: { errors } } = useForm<CheckoutForm>({
     defaultValues: { paymentMethod: 'cod' },
+    mode: 'onSubmit',
+    reValidateMode: 'onChange',
   });
 
   const paymentMethod = watch('paymentMethod');
@@ -49,6 +51,11 @@ export default function CheckoutPage() {
       return;
     }
 
+    if (items.length === 0) {
+      toast.error('Your cart is empty');
+      return;
+    }
+
     setLoading(true);
     try {
       const payload = {
@@ -58,12 +65,12 @@ export default function CheckoutPage() {
           variant: item.variant,
         })),
         shippingAddress: {
-          fullName: values.fullName,
-          email: values.email,
-          phone: values.phone,
-          address: values.address,
-          city: values.city,
-          postalCode: values.postalCode,
+          fullName: values.fullName.trim(),
+          email: values.email.trim(),
+          phone: values.phone.trim(),
+          address: values.address.trim(),
+          city: values.city.trim(),
+          postalCode: values.postalCode?.trim(),
         },
         paymentMethod: values.paymentMethod,
       };
@@ -85,28 +92,28 @@ export default function CheckoutPage() {
         <h1 className="font-display text-6xl text-ink">One-Page Checkout</h1>
       </section>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="mx-auto mt-8 grid w-[min(1200px,92vw)] gap-8 lg:grid-cols-3">
+      <form noValidate onSubmit={handleSubmit(onSubmit)} className="mx-auto mt-8 grid w-[min(1200px,92vw)] gap-8 lg:grid-cols-3">
         <div className="space-y-6 lg:col-span-2">
           <GlassCard className="space-y-4 p-6">
             <h2 className="font-display text-3xl text-ink">Contact</h2>
-            <Input {...register('fullName', { required: 'Name is required' })} placeholder="Full name" />
-            {errors.fullName && <p className="text-sm text-red-700">{errors.fullName.message}</p>}
-            <Input {...register('email', { required: 'Email is required' })} placeholder="Email" />
-            {errors.email && <p className="text-sm text-red-700">{errors.email.message}</p>}
-            <Input {...register('phone', { required: 'Phone is required' })} placeholder="Phone" />
-            {errors.phone && <p className="text-sm text-red-700">{errors.phone.message}</p>}
+            <Input {...register('fullName', { required: 'Name is required' })} placeholder="Full name" autoComplete="name" />
+            {errors.fullName && <p className="text-sm text-[#EF4444]">{errors.fullName.message}</p>}
+            <Input type="email" {...register('email', { required: 'Email is required' })} placeholder="Email" autoComplete="email" />
+            {errors.email && <p className="text-sm text-[#EF4444]">{errors.email.message}</p>}
+            <Input {...register('phone', { required: 'Phone is required' })} placeholder="Phone" autoComplete="tel" />
+            {errors.phone && <p className="text-sm text-[#EF4444]">{errors.phone.message}</p>}
           </GlassCard>
 
           <GlassCard className="space-y-4 p-6">
             <h2 className="font-display text-3xl text-ink">Shipping</h2>
-            <Input {...register('address', { required: 'Address is required' })} placeholder="Address" />
-            {errors.address && <p className="text-sm text-red-700">{errors.address.message}</p>}
+            <Input {...register('address', { required: 'Address is required' })} placeholder="Address" autoComplete="street-address" />
+            {errors.address && <p className="text-sm text-[#EF4444]">{errors.address.message}</p>}
             <div className="grid gap-4 md:grid-cols-2">
               <div>
-                <Input {...register('city', { required: 'City is required' })} placeholder="City" />
-                {errors.city && <p className="text-sm text-red-700">{errors.city.message}</p>}
+                <Input {...register('city', { required: 'City is required' })} placeholder="City" autoComplete="address-level2" />
+                {errors.city && <p className="text-sm text-[#EF4444]">{errors.city.message}</p>}
               </div>
-              <Input {...register('postalCode')} placeholder="Postal code" />
+              <Input {...register('postalCode')} placeholder="Postal code" autoComplete="postal-code" />
             </div>
           </GlassCard>
 

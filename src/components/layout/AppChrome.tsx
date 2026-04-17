@@ -12,7 +12,7 @@ export default function AppChrome({ children }: { children: React.ReactNode }) {
   const isAdminRoute = pathname?.startsWith('/admin');
 
   if (isAdminRoute) {
-    return <main className="min-h-screen bg-[#f6ead8]">{children}</main>;
+    return <main className="min-h-screen bg-[#050505] pb-32 text-slate-200">{children}</main>;
   }
 
   return (

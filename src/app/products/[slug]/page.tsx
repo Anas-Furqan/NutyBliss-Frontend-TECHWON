@@ -15,7 +15,8 @@ import toast from 'react-hot-toast';
 
 export default function ProductDetailPage() {
   const { slug } = useParams();
-  const slugValue = Array.isArray(slug) ? slug[0] : slug;
+  const slugValueRaw = Array.isArray(slug) ? slug[0] : slug;
+  const slugValue = decodeURIComponent(String(slugValueRaw || '')).trim().toLowerCase();
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const [showAuthGate, setShowAuthGate] = useState(false);

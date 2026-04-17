@@ -51,6 +51,10 @@ export default function AddProductPage() {
   });
 
   const title = watch('title');
+  const sectionClass = 'rounded-2xl border border-white/10 bg-[#0a0a0a] p-6';
+  const fieldClass = 'w-full rounded-xl border border-white/15 bg-[#1a1a1a] px-4 py-3 text-slate-200 placeholder:text-slate-500 outline-none transition focus:border-amber-400/70';
+  const labelClass = 'mb-1 block text-sm font-medium text-slate-100';
+  const tinyLabelClass = 'mb-1 block text-xs text-slate-400';
 
   useEffect(() => {
     const loadCategories = async () => {
@@ -164,44 +168,44 @@ export default function AddProductPage() {
   };
 
   return (
-    <div>
+    <div className="rounded-2xl bg-[#050505] p-1">
       <div className="flex items-center justify-between mb-8">
-        <h1 className="text-2xl font-bold text-gray-900">Add New Product</h1>
+        <h1 className="text-2xl font-bold text-slate-100">Add New Product</h1>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
         {/* Basic Info */}
-        <div className="bg-white rounded-xl shadow-sm p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Basic Information</h2>
+        <div className={sectionClass}>
+          <h2 className="mb-4 text-lg font-semibold text-slate-100">Basic Information</h2>
 
           <div className="grid md:grid-cols-2 gap-6">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Product Title *</label>
+              <label className={labelClass}>Product Title *</label>
               <input
                 {...register('title', { required: 'Title is required' })}
                 onChange={(e) => {
                   register('title').onChange(e);
                   handleTitleChange(e);
                 }}
-                className="input-field"
+                className={fieldClass}
                 placeholder="e.g., Creamy Peanut Butter"
               />
-              {errors.title && <p className="text-red-500 text-sm mt-1">{errors.title.message}</p>}
+              {errors.title && <p className="mt-1 text-sm text-[#EF4444]">{errors.title.message}</p>}
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Slug *</label>
+              <label className={labelClass}>Slug *</label>
               <input
                 {...register('slug', { required: 'Slug is required' })}
-                className="input-field"
+                className={fieldClass}
                 placeholder="creamy-peanut-butter"
               />
-              {errors.slug && <p className="text-red-500 text-sm mt-1">{errors.slug.message}</p>}
+              {errors.slug && <p className="mt-1 text-sm text-[#EF4444]">{errors.slug.message}</p>}
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Category *</label>
-              <select {...register('categoryId', { required: true })} className="input-field">
+              <label className={labelClass}>Category *</label>
+              <select {...register('categoryId', { required: true })} className={fieldClass}>
                 {categories.map((category) => (
                   <option key={category._id} value={category._id}>{category.name}</option>
                 ))}
@@ -209,58 +213,58 @@ export default function AddProductPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Total Stock *</label>
+              <label className={labelClass}>Total Stock *</label>
               <input
                 type="number"
                 {...register('totalStock', { required: true, min: 0 })}
-                className="input-field"
+                className={fieldClass}
                 placeholder="100"
               />
             </div>
 
             <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-gray-700 mb-1">Short Description</label>
+              <label className={labelClass}>Short Description</label>
               <input
                 {...register('shortDescription')}
-                className="input-field"
+                className={fieldClass}
                 placeholder="Brief description for product cards..."
               />
             </div>
 
             <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-gray-700 mb-1">Full Description *</label>
+              <label className={labelClass}>Full Description *</label>
               <textarea
                 {...register('description', { required: 'Description is required' })}
                 rows={4}
-                className="input-field resize-none"
+                className={`${fieldClass} resize-none`}
                 placeholder="Detailed product description..."
               />
-              {errors.description && <p className="text-red-500 text-sm mt-1">{errors.description.message}</p>}
+              {errors.description && <p className="mt-1 text-sm text-[#EF4444]">{errors.description.message}</p>}
             </div>
           </div>
         </div>
 
         {/* Pricing */}
-        <div className="bg-white rounded-xl shadow-sm p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Pricing</h2>
+        <div className={sectionClass}>
+          <h2 className="mb-4 text-lg font-semibold text-slate-100">Pricing</h2>
 
           <div className="grid md:grid-cols-2 gap-6">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Base Price (Rs.) *</label>
+              <label className={labelClass}>Base Price (Rs.) *</label>
               <input
                 type="number"
                 {...register('basePrice', { required: true, min: 1 })}
-                className="input-field"
+                className={fieldClass}
                 placeholder="1500"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Discounted Price (Rs.)</label>
+              <label className={labelClass}>Discounted Price (Rs.)</label>
               <input
                 type="number"
                 {...register('baseDiscountPrice')}
-                className="input-field"
+                className={fieldClass}
                 placeholder="1200"
               />
             </div>
@@ -268,9 +272,9 @@ export default function AddProductPage() {
         </div>
 
         {/* Images */}
-        <div className="bg-white rounded-xl shadow-sm p-6">
+        <div className={sectionClass}>
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold text-gray-900">Product Images</h2>
+            <h2 className="text-lg font-semibold text-slate-100">Product Images</h2>
             <label className={`btn-outline flex items-center gap-2 cursor-pointer ${uploadingImages ? 'opacity-50 pointer-events-none' : ''}`}>
               <FiUpload className="w-5 h-5" />
               {uploadingImages ? 'Uploading...' : 'Upload Images'}
@@ -285,19 +289,19 @@ export default function AddProductPage() {
           </div>
 
           {images.length === 0 ? (
-            <p className="text-sm text-gray-500">Upload at least 1 image (stored in Supabase Storage).</p>
+            <p className="text-sm text-slate-400">Upload at least 1 image (stored in Supabase Storage).</p>
           ) : (
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
               {images.map((url, index) => (
-                <div key={`${url}-${index}`} className="relative aspect-square rounded-xl overflow-hidden bg-gray-100 border">
+                <div key={`${url}-${index}`} className="relative aspect-square rounded-xl overflow-hidden border border-white/10 bg-[#1a1a1a]">
                   <Image src={url} alt={`Product image ${index + 1}`} fill className="object-cover" />
                   <button
                     type="button"
                     onClick={() => removeImage(index)}
-                    className="absolute top-2 right-2 p-2 bg-white/90 hover:bg-white rounded-full shadow"
+                    className="absolute top-2 right-2 rounded-full bg-black/75 p-2 shadow transition hover:bg-black/90"
                     aria-label="Remove image"
                   >
-                    <FiX className="w-4 h-4 text-gray-700" />
+                    <FiX className="w-4 h-4 text-slate-100" />
                   </button>
                 </div>
               ))}
@@ -306,9 +310,9 @@ export default function AddProductPage() {
         </div>
 
         {/* Variants */}
-        <div className="bg-white rounded-xl shadow-sm p-6">
+        <div className={sectionClass}>
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold text-gray-900">Variants (Sizes)</h2>
+            <h2 className="text-lg font-semibold text-slate-100">Variants (Sizes)</h2>
             <button
               type="button"
               onClick={addVariant}
@@ -320,53 +324,53 @@ export default function AddProductPage() {
 
           <div className="space-y-4">
             {variants.map((variant, index) => (
-              <div key={index} className="flex gap-4 items-start p-4 bg-gray-50 rounded-lg">
+              <div key={index} className="flex items-start gap-4 rounded-lg border border-white/10 bg-[#121212] p-4">
                 <div className="flex-1 grid grid-cols-2 md:grid-cols-5 gap-4">
                   <div>
-                    <label className="block text-xs text-gray-500 mb-1">Size</label>
+                    <label className={tinyLabelClass}>Size</label>
                     <input
                       value={variant.size}
                       onChange={(e) => updateVariant(index, 'size', e.target.value)}
-                      className="input-field text-sm"
+                      className={`${fieldClass} text-sm`}
                       placeholder="500g"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs text-gray-500 mb-1">Price</label>
+                    <label className={tinyLabelClass}>Price</label>
                     <input
                       type="number"
                       value={variant.price || ''}
                       onChange={(e) => updateVariant(index, 'price', Number(e.target.value))}
-                      className="input-field text-sm"
+                      className={`${fieldClass} text-sm`}
                       placeholder="1500"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs text-gray-500 mb-1">Sale Price</label>
+                    <label className={tinyLabelClass}>Sale Price</label>
                     <input
                       type="number"
                       value={variant.discountPrice || ''}
                       onChange={(e) => updateVariant(index, 'discountPrice', Number(e.target.value))}
-                      className="input-field text-sm"
+                      className={`${fieldClass} text-sm`}
                       placeholder="1200"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs text-gray-500 mb-1">Stock</label>
+                    <label className={tinyLabelClass}>Stock</label>
                     <input
                       type="number"
                       value={variant.stock || ''}
                       onChange={(e) => updateVariant(index, 'stock', Number(e.target.value))}
-                      className="input-field text-sm"
+                      className={`${fieldClass} text-sm`}
                       placeholder="50"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs text-gray-500 mb-1">SKU</label>
+                    <label className={tinyLabelClass}>SKU</label>
                     <input
                       value={variant.sku}
                       onChange={(e) => updateVariant(index, 'sku', e.target.value)}
-                      className="input-field text-sm"
+                      className={`${fieldClass} text-sm`}
                       placeholder="PB-500"
                     />
                   </div>
@@ -375,7 +379,7 @@ export default function AddProductPage() {
                   <button
                     type="button"
                     onClick={() => removeVariant(index)}
-                    className="p-2 text-red-500 hover:bg-red-50 rounded-lg mt-5"
+                    className="mt-5 rounded-lg p-2 text-red-400 transition hover:bg-red-500/10"
                   >
                     <FiTrash2 className="w-4 h-4" />
                   </button>
@@ -386,9 +390,9 @@ export default function AddProductPage() {
         </div>
 
         {/* Ingredients */}
-        <div className="bg-white rounded-xl shadow-sm p-6">
+        <div className={sectionClass}>
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold text-gray-900">Ingredients</h2>
+            <h2 className="text-lg font-semibold text-slate-100">Ingredients</h2>
             <button
               type="button"
               onClick={addIngredient}
@@ -404,13 +408,13 @@ export default function AddProductPage() {
                 <input
                   value={ingredient}
                   onChange={(e) => updateIngredient(index, e.target.value)}
-                  className="input-field flex-1"
+                  className={`${fieldClass} flex-1`}
                   placeholder="e.g., Roasted Peanuts"
                 />
                 <button
                   type="button"
                   onClick={() => removeIngredient(index)}
-                  className="p-3 text-red-500 hover:bg-red-50 rounded-lg"
+                  className="rounded-lg p-3 text-red-400 transition hover:bg-red-500/10"
                 >
                   <FiX className="w-4 h-4" />
                 </button>
@@ -420,8 +424,8 @@ export default function AddProductPage() {
         </div>
 
         {/* Flags */}
-        <div className="bg-white rounded-xl shadow-sm p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Product Flags</h2>
+        <div className={sectionClass}>
+          <h2 className="mb-4 text-lg font-semibold text-slate-100">Product Flags</h2>
 
           <div className="flex flex-wrap gap-6">
             <label className="flex items-center gap-2 cursor-pointer">
@@ -430,7 +434,7 @@ export default function AddProductPage() {
                 {...register('isFeatured')}
                 className="w-4 h-4 text-primary-500 rounded focus:ring-primary-500"
               />
-              <span className="text-gray-700">Featured Product</span>
+              <span className="text-slate-300">Featured Product</span>
             </label>
             <label className="flex items-center gap-2 cursor-pointer">
               <input
@@ -438,7 +442,7 @@ export default function AddProductPage() {
                 {...register('isHotSelling')}
                 className="w-4 h-4 text-primary-500 rounded focus:ring-primary-500"
               />
-              <span className="text-gray-700">Hot Selling</span>
+              <span className="text-slate-300">Hot Selling</span>
             </label>
             <label className="flex items-center gap-2 cursor-pointer">
               <input
@@ -446,7 +450,7 @@ export default function AddProductPage() {
                 {...register('isNewArrival')}
                 className="w-4 h-4 text-primary-500 rounded focus:ring-primary-500"
               />
-              <span className="text-gray-700">New Arrival</span>
+              <span className="text-slate-300">New Arrival</span>
             </label>
           </div>
         </div>

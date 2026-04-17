@@ -4,9 +4,11 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { useMemo, useState } from 'react';
-import { useCartStore } from '@/store';
+import { useCartStore, useAuthStore } from '@/store';
 import GlassCard from '@/components/ui/GlassCard';
 import Button from '@/components/ui/Button';
+import { cartAPI } from '@/lib/api';
+import type { Product } from '@/types';
 
 const links = [
   { href: '/', label: 'Home' },
@@ -28,9 +30,70 @@ export default function Navbar() {
   const pathname = usePathname();
   const [cartOpen, setCartOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const { items, getSubtotal } = useCartStore();
+  const { items, getSubtotal, updateQuantity, removeItem } = useCartStore();
+  const { isAuthenticated } = useAuthStore();
 
   const itemCount = useMemo(() => items.reduce((sum, item) => sum + item.quantity, 0), [items]);
+
+  const resolveServerCartItemId = async (productId: string, variantSize?: string) => {
+    const { data } = await cartAPI.get();
+    const serverItems = data?.cart?.items || [];
+    const matched = serverItems.find((serverItem: any) => {
+      const serverProductId =
+        typeof serverItem.product === 'string' ? serverItem.product : serverItem.product?._id;
+      const serverVariantSize = serverItem.variant?.size;
+      return serverProductId === productId && (serverVariantSize || '') === (variantSize || '');
+    });
+    return matched?._id as string | undefined;
+  };
+
+  const syncQuantityToBackend = async (
+    productId: string,
+    variantSize: string | undefined,
+    nextQuantity: number
+  ) => {
+    if (!isAuthenticated) return;
+    const serverItemId = await resolveServerCartItemId(productId, variantSize);
+    if (!serverItemId) return;
+    if (nextQuantity < 1) {
+      await cartAPI.remove(serverItemId);
+      return;
+    }
+    await cartAPI.update(serverItemId, nextQuantity);
+  };
+
+  const handleDecrement = async (item: { productId: string; quantity: number; variant?: { size: string }; product: Product }) => {
+    const nextQuantity = item.quantity - 1;
+    if (nextQuantity < 1) {
+      removeItem(item.productId, item.variant?.size);
+    } else {
+      updateQuantity(item.productId, item.variant?.size, nextQuantity);
+    }
+    try {
+      await syncQuantityToBackend(item.productId, item.variant?.size, nextQuantity);
+    } catch {
+      // Keep local UX responsive even if API sync fails.
+    }
+  };
+
+  const handleIncrement = async (item: { productId: string; quantity: number; variant?: { size: string }; product: Product }) => {
+    const nextQuantity = item.quantity + 1;
+    updateQuantity(item.productId, item.variant?.size, nextQuantity);
+    try {
+      await syncQuantityToBackend(item.productId, item.variant?.size, nextQuantity);
+    } catch {
+      // Keep local UX responsive even if API sync fails.
+    }
+  };
+
+  const handleRemove = async (item: { productId: string; variant?: { size: string }; product: Product }) => {
+    removeItem(item.productId, item.variant?.size);
+    try {
+      await syncQuantityToBackend(item.productId, item.variant?.size, 0);
+    } catch {
+      // Keep local UX responsive even if API sync fails.
+    }
+  };
 
   return (
     <>
@@ -122,8 +185,44 @@ export default function Navbar() {
               ) : (
                 items.map((item) => (
                   <GlassCard key={`${item.productId}-${item.variant?.size ?? 'default'}`} className="p-3">
-                    <p className="text-sm font-semibold text-white">{item.product.title}</p>
-                    <p className="text-xs text-white/70">Qty {item.quantity}</p>
+                    <div className="flex items-start gap-3">
+                      <div className="min-w-0 flex-1">
+                        <p className="truncate text-sm font-semibold text-white">{item.product.title}</p>
+                        <div className="mt-2 flex items-center gap-2">
+                          <p className="text-xs text-white/70">Qty {item.quantity}</p>
+                          <button
+                            type="button"
+                            className="inline-flex h-6 w-6 items-center justify-center rounded-full border border-white/20 text-white/85 transition hover:bg-white/10"
+                            onClick={() => void handleDecrement(item)}
+                            aria-label="Decrease quantity"
+                          >
+                            <Icon path="M6 12h12" />
+                          </button>
+                          <button
+                            type="button"
+                            className="inline-flex h-6 w-6 items-center justify-center rounded-full border border-white/20 text-white/85 transition hover:bg-white/10"
+                            onClick={() => void handleIncrement(item)}
+                            aria-label="Increase quantity"
+                          >
+                            <Icon path="M12 6v12M6 12h12" />
+                          </button>
+                        </div>
+                      </div>
+
+                      <button
+                        type="button"
+                        className="ml-auto inline-flex h-8 w-8 items-center justify-center rounded-full text-red-400 transition hover:bg-red-500/15"
+                        onClick={() => void handleRemove(item)}
+                        aria-label="Remove item"
+                      >
+                        <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.8">
+                          <path d="M4 7h16" strokeLinecap="round" strokeLinejoin="round" />
+                          <path d="M10 11v6M14 11v6" strokeLinecap="round" strokeLinejoin="round" />
+                          <path d="M7 7l1 12h8l1-12" strokeLinecap="round" strokeLinejoin="round" />
+                          <path d="M9 7V5h6v2" strokeLinecap="round" strokeLinejoin="round" />
+                        </svg>
+                      </button>
+                    </div>
                   </GlassCard>
                 ))
               )}

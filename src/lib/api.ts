@@ -61,8 +61,8 @@ export const authAPI = {
 // Products API
 export const productsAPI = {
   getAll: (params?: any) => api.get('/products', { params }),
-  getOne: (idOrSlug: string) => api.get(`/products/${idOrSlug}`),
-  getRelated: (id: string) => api.get(`/products/${id}/related`),
+  getOne: (idOrSlug: string) => api.get(`/products/${encodeURIComponent(idOrSlug)}`),
+  getRelated: (id: string) => api.get(`/products/${encodeURIComponent(id)}/related`),
   getCategories: () => api.get('/products/categories'),
 };
 

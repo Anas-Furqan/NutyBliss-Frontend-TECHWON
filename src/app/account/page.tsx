@@ -59,9 +59,9 @@ export default function AccountPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-8">My Account</h1>
+    <main className="bg-surface pb-32 pt-32">
+      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+        <h1 className="mb-8 text-3xl font-bold text-slate-100">My Account</h1>
 
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           {/* Sidebar */}
@@ -247,6 +247,6 @@ export default function AccountPage() {
           </div>
         </div>
       </div>
-    </div>
+    </main>
   );
 }
