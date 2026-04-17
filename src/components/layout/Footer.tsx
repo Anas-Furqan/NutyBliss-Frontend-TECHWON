@@ -23,35 +23,38 @@ export default function Footer() {
   }, []);
 
   return (
-    <footer ref={footerRef} className="relative z-30 mt-14 overflow-hidden border-t border-white/10 bg-[#08080c]">
-      <div data-footer-float className="pointer-events-none absolute -left-10 top-8 h-24 w-24 rounded-full border border-white/10 bg-white/5 blur-[1px]" />
-      <div data-footer-float className="pointer-events-none absolute -right-8 bottom-6 h-20 w-20 rounded-full border border-white/10 bg-amber-400/10 blur-[1px]" />
-      <div className="mx-auto grid w-[min(1200px,92vw)] gap-10 py-14 md:grid-cols-3">
-        <div>
+    <footer ref={footerRef} className="relative z-30 mt-14 overflow-hidden border-t border-gray-200 bg-[#F9FAFB]">
+      <div data-footer-float className="pointer-events-none absolute -left-10 top-8 h-24 w-24 rounded-full border border-gray-200 bg-[#D2B48C]/12 blur-[1px]" />
+      <div data-footer-float className="pointer-events-none absolute -right-8 bottom-6 h-20 w-20 rounded-full border border-gray-200 bg-[#FF8C00]/10 blur-[1px]" />
+      <div className="mx-auto grid w-[min(1100px,92vw)] gap-10 py-14 text-center md:grid-cols-3 md:text-left">
+        <div className="md:text-left">
           <p className="text-xs uppercase tracking-[0.2em] text-amber-400/85">Nuty Bliss</p>
-          <h3 className="mt-3 font-display text-4xl tracking-tighter leading-tight text-slate-200">Crafted for ritual.</h3>
+          <h3 className="mt-3 font-display text-4xl tracking-tighter leading-tight text-[#3E2723]">Crafted for ritual.</h3>
+          <p className="mt-3 text-sm text-[#2D3748]">Lahore, Pakistan</p>
         </div>
-        <div className="grid grid-cols-2 gap-2 text-sm">
-          <Link href="/shop" className="text-slate-300/90 hover:text-amber-400">Shop</Link>
-          <Link href="/about" className="text-slate-300/90 hover:text-amber-400">About</Link>
-          <Link href="/contact" className="text-slate-300/90 hover:text-amber-400">Contact</Link>
-          <Link href="/checkout" className="text-slate-300/90 hover:text-amber-400">Checkout</Link>
-          <Link href="/login" className="text-slate-300/90 hover:text-amber-400">Login</Link>
-          <Link href="/signup" className="text-slate-300/90 hover:text-amber-400">Signup</Link>
-        </div>
-        <div className="space-y-3">
-          <p className="text-sm text-white/80">Lahore, Pakistan</p>
-          <p className="text-sm text-white/80">hello@nutybliss.com</p>
-          <form className="glass-card mt-2 flex items-center gap-2 p-2">
-            <input type="email" placeholder="Join newsletter" className="w-full bg-transparent px-3 py-2 text-sm text-white outline-none placeholder:text-white/45" />
+
+        <div className="space-y-4 text-center">
+          <p className="text-xs uppercase tracking-[0.18em] text-[#2D3748]">Stay in the Loop</p>
+          <form className="glass-card mx-auto mt-2 flex w-full max-w-sm items-center gap-2 p-2 shadow-sm">
+            <input type="email" placeholder="Join newsletter" className="w-full bg-transparent px-3 py-2 text-sm text-[#3E2723] outline-none placeholder:text-[#2D3748]/55" />
             <button type="submit" className="rounded-full bg-[#FF8C00] px-4 py-2 text-xs font-semibold text-[#1b1207] shadow-neon transition hover:brightness-110">
               Subscribe
             </button>
           </form>
-          <p className="text-xs uppercase tracking-[0.18em] text-white/55">
+          <div className="flex flex-wrap items-center justify-center gap-4 text-sm pt-1">
+            <Link href="/shop" className="text-[#5C4033] hover:text-[#FF8C00]">Shop</Link>
+            <Link href="/about" className="text-[#5C4033] hover:text-[#FF8C00]">About</Link>
+            <Link href="/contact" className="text-[#5C4033] hover:text-[#FF8C00]">Contact</Link>
+            <Link href="/track-order" className="text-[#5C4033] hover:text-[#FF8C00]">Track Order</Link>
+          </div>
+          <p className="text-xs uppercase tracking-[0.18em] text-[#2D3748]">
             &copy; {new Date().getFullYear()} Nuty Bliss
           </p>
-          <p className="text-xs text-slate-300/90">
+        </div>
+
+        <div className="space-y-3 md:text-right">
+          <p className="text-sm text-[#2D3748]">hello@nutybliss.com</p>
+          <p className="text-xs text-[#2D3748]">
             Designed and Developed by{' '}
             <a
               href="https://www.linkedin.com/in/anas-furqan/"

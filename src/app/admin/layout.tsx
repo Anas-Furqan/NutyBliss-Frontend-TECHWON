@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useEffect, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
@@ -53,23 +53,23 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   };
 
   return (
-    <div className="min-h-screen bg-[#050505] text-slate-200">
+    <div className="min-h-screen bg-[#F9FAFB] text-[#3E2723]">
       {/* Mobile sidebar overlay */}
       {sidebarOpen && (
         <div
-          className="fixed inset-0 z-40 bg-black/60 lg:hidden"
+          className="fixed inset-0 z-40 bg-[#2D3748]/20 lg:hidden"
           onClick={() => setSidebarOpen(false)}
         />
       )}
 
       {/* Sidebar */}
-      <aside className={`fixed top-0 left-0 z-50 h-full w-64 transform border-r border-white/10 bg-[#08080c]/95 transition-transform duration-300 ease-in-out lg:translate-x-0 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+      <aside className={`fixed top-0 left-0 z-50 h-full w-64 transform border-r border-gray-200 bg-white transition-transform duration-300 ease-in-out lg:translate-x-0 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
         <div className="p-6">
           <Link href="/admin" className="flex items-center space-x-2">
             <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-[#ff8c00] to-[#ff6f00] shadow-[0_12px_24px_rgba(255,140,0,0.32)]">
               <span className="text-white font-bold text-xl">N</span>
             </div>
-            <span className="text-xl font-bold tracking-tight text-slate-100">Admin</span>
+            <span className="text-xl font-bold tracking-tight text-[#3E2723]">Admin</span>
           </Link>
         </div>
 
@@ -83,8 +83,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 onClick={() => setSidebarOpen(false)}
                 className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
                   isActive
-                    ? 'bg-white/[0.08] text-amber-400'
-                    : 'text-slate-300 hover:bg-white/[0.06] hover:text-slate-100'
+                    ? 'bg-gray-100 text-amber-400'
+                    : 'text-[#2D3748] hover:bg-gray-100 hover:text-[#3E2723]'
                 }`}
               >
                 <link.icon className="w-5 h-5" />
@@ -94,17 +94,17 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           })}
         </nav>
 
-        <div className="absolute bottom-0 left-0 right-0 border-t border-white/10 p-4">
+        <div className="absolute bottom-0 left-0 right-0 border-t border-gray-200 p-4">
           <Link
             href="/"
-            className="mb-2 flex items-center gap-3 rounded-lg px-4 py-3 text-slate-300 transition-colors hover:bg-white/[0.06]"
+            className="mb-2 flex items-center gap-3 rounded-lg px-4 py-3 text-[#2D3748] transition-colors hover:bg-gray-100"
           >
             <FiHome className="w-5 h-5" />
             View Store
           </Link>
           <button
             onClick={handleLogout}
-            className="w-full flex items-center gap-3 rounded-lg px-4 py-3 text-red-400 transition-colors hover:bg-white/[0.06]"
+            className="w-full flex items-center gap-3 rounded-lg px-4 py-3 text-red-400 transition-colors hover:bg-gray-100"
           >
             <FiLogOut className="w-5 h-5" />
             Logout
@@ -115,18 +115,18 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       {/* Main content */}
       <div className="lg:ml-64">
         {/* Top bar */}
-        <header className="sticky top-0 z-30 border-b border-white/10 bg-[#090909]/85 backdrop-blur-md">
+        <header className="sticky top-0 z-30 border-b border-gray-200 bg-white/95 backdrop-blur-md">
           <div className="flex items-center justify-between px-4 py-4">
             <button
               onClick={() => setSidebarOpen(true)}
-              className="rounded-lg p-2 hover:bg-white/[0.06] lg:hidden"
+              className="rounded-lg p-2 hover:bg-gray-100 lg:hidden"
             >
               <FiMenu className="w-6 h-6" />
             </button>
             <div className="flex-1 lg:flex-none" />
             <div className="flex items-center gap-4">
-              <span className="text-sm text-slate-300">Welcome, {user?.name}</span>
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white/[0.08]">
+              <span className="text-sm text-[#2D3748]">Welcome, {user?.name}</span>
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-100">
                 <span className="font-medium text-amber-400">
                   {user?.name?.[0]?.toUpperCase()}
                 </span>
@@ -143,3 +143,4 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     </div>
   );
 }
+

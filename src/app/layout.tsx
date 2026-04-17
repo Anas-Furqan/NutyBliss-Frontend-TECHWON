@@ -35,7 +35,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${inter.variable} ${fredoka.variable} font-sans`}>
+      <body className={`${inter.variable} ${fredoka.variable} font-sans bg-white text-[#2D3748]`}>
         <Toaster
           position="top-center"
           toastOptions={{

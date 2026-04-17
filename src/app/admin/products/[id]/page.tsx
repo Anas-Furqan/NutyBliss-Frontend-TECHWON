@@ -44,10 +44,10 @@ export default function AdminEditProductPage() {
   const [ingredients, setIngredients] = useState<string[]>(['']);
   const [categories, setCategories] = useState<Array<{ _id: string; name: string }>>([]);
 
-  const sectionClass = 'rounded-2xl border border-white/10 bg-[#0a0a0a] p-6';
-  const fieldClass = 'w-full rounded-xl border border-white/15 bg-[#1a1a1a] px-4 py-3 text-slate-200 placeholder:text-slate-500 outline-none transition focus:border-amber-400/70';
-  const labelClass = 'mb-1 block text-sm font-medium text-slate-100';
-  const tinyLabelClass = 'mb-1 block text-xs text-slate-400';
+  const sectionClass = 'rounded-2xl border border-gray-200 bg-white p-6';
+  const fieldClass = 'w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-[#3E2723] placeholder:text-[#2D3748] outline-none transition focus:border-amber-400/70';
+  const labelClass = 'mb-1 block text-sm font-medium text-[#3E2723]';
+  const tinyLabelClass = 'mb-1 block text-xs text-[#2D3748]';
 
   const { register, handleSubmit, reset, setValue, formState: { errors } } = useForm<ProductForm>();
 
@@ -187,14 +187,14 @@ export default function AdminEditProductPage() {
   }
 
   return (
-    <div className="rounded-2xl bg-[#050505] p-1">
+    <div className="rounded-2xl bg-[#F9FAFB] p-1">
       <div className="flex items-center justify-between mb-8">
-        <h1 className="text-2xl font-bold text-slate-100">Edit Product</h1>
+        <h1 className="text-2xl font-bold text-[#3E2723]">Edit Product</h1>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
         <div className={sectionClass}>
-          <h2 className="mb-4 text-lg font-semibold text-slate-100">Basic Information</h2>
+          <h2 className="mb-4 text-lg font-semibold text-[#3E2723]">Basic Information</h2>
           <div className="grid md:grid-cols-2 gap-6">
             <div>
               <label className={labelClass}>Product Title *</label>
@@ -237,7 +237,7 @@ export default function AdminEditProductPage() {
         </div>
 
         <div className={sectionClass}>
-          <h2 className="mb-4 text-lg font-semibold text-slate-100">Pricing</h2>
+          <h2 className="mb-4 text-lg font-semibold text-[#3E2723]">Pricing</h2>
           <div className="grid md:grid-cols-2 gap-6">
             <div>
               <label className={labelClass}>Base Price (Rs.) *</label>
@@ -252,7 +252,7 @@ export default function AdminEditProductPage() {
 
         <div className={sectionClass}>
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold text-slate-100">Product Images</h2>
+            <h2 className="text-lg font-semibold text-[#3E2723]">Product Images</h2>
             <label className={`btn-outline flex items-center gap-2 cursor-pointer ${uploadingImages ? 'opacity-50 pointer-events-none' : ''}`}>
               <FiUpload className="w-5 h-5" />
               {uploadingImages ? 'Uploading...' : 'Upload Images'}
@@ -262,14 +262,14 @@ export default function AdminEditProductPage() {
 
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
             {images.map((url, index) => (
-              <div key={`${url}-${index}`} className="relative aspect-square rounded-xl overflow-hidden border border-white/10 bg-[#1a1a1a]">
+              <div key={`${url}-${index}`} className="relative aspect-square rounded-xl overflow-hidden border border-gray-200 bg-white">
                 <Image src={url} alt={`Product image ${index + 1}`} fill className="object-cover" />
                 <button
                   type="button"
                   onClick={() => removeImage(index)}
-                  className="absolute top-2 right-2 rounded-full bg-black/75 p-2 shadow transition hover:bg-black/90"
+                  className="absolute top-2 right-2 rounded-full bg-[#2D3748]/20 p-2 shadow transition hover:bg-[#2D3748]/30"
                 >
-                  <FiX className="w-4 h-4 text-slate-100" />
+                  <FiX className="w-4 h-4 text-[#3E2723]" />
                 </button>
               </div>
             ))}
@@ -278,14 +278,14 @@ export default function AdminEditProductPage() {
 
         <div className={sectionClass}>
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold text-slate-100">Variants (Sizes)</h2>
+            <h2 className="text-lg font-semibold text-[#3E2723]">Variants (Sizes)</h2>
             <button type="button" onClick={addVariant} className="text-primary-500 hover:text-primary-600 text-sm font-medium flex items-center gap-1">
               <FiPlus className="w-4 h-4" /> Add Variant
             </button>
           </div>
           <div className="space-y-4">
             {variants.map((variant, index) => (
-              <div key={index} className="flex items-start gap-4 rounded-lg border border-white/10 bg-[#121212] p-4">
+              <div key={index} className="flex items-start gap-4 rounded-lg border border-gray-200 bg-white p-4">
                 <div className="flex-1 grid grid-cols-2 md:grid-cols-5 gap-4">
                   <div>
                     <label className={tinyLabelClass}>Size</label>
@@ -320,7 +320,7 @@ export default function AdminEditProductPage() {
 
         <div className={sectionClass}>
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold text-slate-100">Ingredients</h2>
+            <h2 className="text-lg font-semibold text-[#3E2723]">Ingredients</h2>
             <button type="button" onClick={addIngredient} className="text-primary-500 hover:text-primary-600 text-sm font-medium flex items-center gap-1">
               <FiPlus className="w-4 h-4" /> Add Ingredient
             </button>
@@ -338,23 +338,23 @@ export default function AdminEditProductPage() {
         </div>
 
         <div className={sectionClass}>
-          <h2 className="mb-4 text-lg font-semibold text-slate-100">Flags</h2>
+          <h2 className="mb-4 text-lg font-semibold text-[#3E2723]">Flags</h2>
           <div className="flex flex-wrap gap-6">
             <label className="flex items-center gap-2 cursor-pointer">
               <input type="checkbox" {...register('isFeatured')} className="w-4 h-4 text-primary-500 rounded focus:ring-primary-500" />
-              <span className="text-slate-300">Featured</span>
+              <span className="text-[#2D3748]">Featured</span>
             </label>
             <label className="flex items-center gap-2 cursor-pointer">
               <input type="checkbox" {...register('isHotSelling')} className="w-4 h-4 text-primary-500 rounded focus:ring-primary-500" />
-              <span className="text-slate-300">Hot Selling</span>
+              <span className="text-[#2D3748]">Hot Selling</span>
             </label>
             <label className="flex items-center gap-2 cursor-pointer">
               <input type="checkbox" {...register('isNewArrival')} className="w-4 h-4 text-primary-500 rounded focus:ring-primary-500" />
-              <span className="text-slate-300">New Arrival</span>
+              <span className="text-[#2D3748]">New Arrival</span>
             </label>
             <label className="flex items-center gap-2 cursor-pointer">
               <input type="checkbox" {...register('isActive')} className="w-4 h-4 text-primary-500 rounded focus:ring-primary-500" />
-              <span className="text-slate-300">Active</span>
+              <span className="text-[#2D3748]">Active</span>
             </label>
           </div>
         </div>

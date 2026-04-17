@@ -50,7 +50,7 @@ export default function OrderSuccessPage() {
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="rounded-2xl border border-white/10 bg-white/[0.03] p-8 text-center shadow-glass backdrop-blur-2xl md:p-12"
+          className="rounded-2xl border border-gray-200 bg-white p-8 text-center shadow-glass backdrop-blur-2xl md:p-12"
         >
           {/* Success Icon */}
           <motion.div
@@ -62,31 +62,31 @@ export default function OrderSuccessPage() {
             <FiCheck className="h-12 w-12 text-emerald-300" />
           </motion.div>
 
-          <h1 className="mb-4 font-display text-3xl font-bold text-slate-100 md:text-4xl">
+          <h1 className="mb-4 font-display text-3xl font-bold text-[#3E2723] md:text-4xl">
             Order Confirmed!
           </h1>
-          <p className="mb-2 text-lg text-slate-300">
+          <p className="mb-2 text-lg text-[#2D3748]">
             Thank you for your order. We&apos;ve received it and will process it shortly.
           </p>
 
           {orderNumber && (
             <div className="mb-8 mt-4 inline-block rounded-xl border border-orange-500/30 bg-orange-500/10 px-5 py-4">
-              <p className="text-sm text-slate-400">Order Number</p>
+              <p className="text-sm text-[#2D3748]">Order Number</p>
               <p className="font-mono text-2xl font-bold text-amber-300">{orderNumber}</p>
             </div>
           )}
 
           {/* Next Steps */}
-          <div className="mt-8 border-t border-white/10 pt-8">
-            <h2 className="mb-6 text-lg font-bold text-slate-100">What&apos;s Next?</h2>
+          <div className="mt-8 border-t border-gray-200 pt-8">
+            <h2 className="mb-6 text-lg font-bold text-[#3E2723]">What&apos;s Next?</h2>
             <div className="grid md:grid-cols-3 gap-6 text-left">
               <div className="flex gap-4">
                 <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-white/10">
                   <FiMail className="h-5 w-5 text-amber-300" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-slate-100">Confirmation Email</h3>
-                  <p className="text-sm text-slate-400">Check your inbox for order details</p>
+                  <h3 className="font-semibold text-[#3E2723]">Confirmation Email</h3>
+                  <p className="text-sm text-[#2D3748]">Check your inbox for order details</p>
                 </div>
               </div>
               <div className="flex gap-4">
@@ -94,8 +94,8 @@ export default function OrderSuccessPage() {
                   <FiPackage className="h-5 w-5 text-amber-300" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-slate-100">Order Processing</h3>
-                  <p className="text-sm text-slate-400">We&apos;ll pack your order with care</p>
+                  <h3 className="font-semibold text-[#3E2723]">Order Processing</h3>
+                  <p className="text-sm text-[#2D3748]">We&apos;ll pack your order with care</p>
                 </div>
               </div>
               <div className="flex gap-4">
@@ -103,8 +103,8 @@ export default function OrderSuccessPage() {
                   <FiPhone className="h-5 w-5 text-amber-300" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-slate-100">Track Order</h3>
-                  <p className="text-sm text-slate-400">Get updates on delivery status</p>
+                  <h3 className="font-semibold text-[#3E2723]">Track Order</h3>
+                  <p className="text-sm text-[#2D3748]">Get updates on delivery status</p>
                 </div>
               </div>
             </div>
@@ -126,7 +126,7 @@ export default function OrderSuccessPage() {
           </div>
 
           {/* Support Info */}
-          <p className="mt-8 text-sm text-slate-400">
+          <p className="mt-8 text-sm text-[#2D3748]">
             Need help?{' '}
             <Link href="/contact" className="text-amber-300 hover:underline">
               Contact our support team
@@ -137,3 +137,4 @@ export default function OrderSuccessPage() {
     </div>
   );
 }
+

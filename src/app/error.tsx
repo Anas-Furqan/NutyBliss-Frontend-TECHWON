@@ -23,11 +23,11 @@ export default function Error({
           <FiAlertTriangle className="h-10 w-10 text-red-300" />
         </div>
 
-        <h1 className="mb-4 font-display text-2xl font-bold text-slate-100 md:text-3xl">
+        <h1 className="mb-4 font-display text-2xl font-bold text-[#3E2723] md:text-3xl">
           Oops! Something went wrong
         </h1>
 
-        <p className="mb-8 text-slate-300">
+        <p className="mb-8 text-[#2D3748]">
           We apologize for the inconvenience. An unexpected error has occurred.
           Please try again or contact support if the problem persists.
         </p>
@@ -57,3 +57,4 @@ export default function Error({
     </div>
   );
 }
+

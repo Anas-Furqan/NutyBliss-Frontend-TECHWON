@@ -80,7 +80,7 @@ export default function HomePage() {
         <div className="mb-8 flex items-end justify-between gap-4">
           <div>
             <p className="text-xs uppercase tracking-[0.2em] text-primary/80">Featured Collection</p>
-            <h2 className="mt-3 font-display text-5xl tracking-tighter leading-tight text-slate-200">Scroll-Revealed Favorites</h2>
+            <h2 className="mt-3 font-display text-5xl tracking-tighter leading-tight text-[#3E2723]">Scroll-Revealed Favorites</h2>
           </div>
           <Link href="/shop" className="btn-secondary">View all</Link>
         </div>
@@ -96,4 +96,5 @@ export default function HomePage() {
     </main>
   );
 }
+
 

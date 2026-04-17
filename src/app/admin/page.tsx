@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
@@ -113,20 +113,20 @@ export default function AdminDashboard() {
       delivered: 'bg-emerald-500/20 text-emerald-300',
       cancelled: 'bg-red-500/20 text-red-300',
     };
-    return colors[status] || 'bg-white/10 text-slate-300';
+    return colors[status] || 'bg-gray-100 text-[#2D3748]';
   };
 
   return (
     <div className="space-y-8">
-      <section className="relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-[#121212] via-[#0e0e0e] to-[#080808] p-6 md:p-8">
-        <div className="pointer-events-none absolute -right-20 -top-20 h-56 w-56 rounded-full bg-amber-500/10 blur-3xl" />
-        <div className="pointer-events-none absolute -left-24 -bottom-24 h-56 w-56 rounded-full bg-orange-500/10 blur-3xl" />
+      <section className="relative overflow-hidden rounded-2xl border border-gray-200 bg-white p-6 md:p-8 shadow-sm">
+        <div className="pointer-events-none absolute -right-20 -top-20 h-56 w-56 rounded-full bg-[#D2B48C]/20 blur-3xl" />
+        <div className="pointer-events-none absolute -left-24 -bottom-24 h-56 w-56 rounded-full bg-orange-500/12 blur-3xl" />
 
         <div className="relative flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
           <div>
             <p className="text-xs uppercase tracking-[0.18em] text-amber-300/90">Nuty Bliss Admin</p>
-            <h1 className="mt-2 font-display text-4xl tracking-tight text-slate-100 md:text-5xl">Dashboard Control Room</h1>
-            <p className="mt-3 max-w-2xl text-sm text-slate-400 md:text-base">
+            <h1 className="mt-2 font-display text-4xl tracking-tight text-[#3E2723] md:text-5xl">Dashboard Control Room</h1>
+            <p className="mt-3 max-w-2xl text-sm text-[#2D3748] md:text-base">
               Track revenue velocity, order momentum, and product performance in one clear command center.
             </p>
           </div>
@@ -151,13 +151,13 @@ export default function AdminDashboard() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.06 }}
-            className="rounded-2xl border border-white/10 bg-white/[0.03] p-5 backdrop-blur-2xl"
+            className="rounded-2xl border border-gray-200 bg-white p-5 backdrop-blur-2xl"
           >
             <div className="flex items-start justify-between gap-4">
               <div>
-                <p className="text-xs uppercase tracking-[0.14em] text-slate-400">{stat.title}</p>
-                <p className="mt-2 text-2xl font-semibold tracking-tight text-slate-100">{stat.value}</p>
-                <p className="mt-2 text-sm text-slate-400">{stat.meta}</p>
+                <p className="text-xs uppercase tracking-[0.14em] text-[#2D3748]">{stat.title}</p>
+                <p className="mt-2 text-2xl font-semibold tracking-tight text-[#3E2723]">{stat.value}</p>
+                <p className="mt-2 text-sm text-[#2D3748]">{stat.meta}</p>
               </div>
               <div className={`flex h-12 w-12 items-center justify-center rounded-xl border bg-gradient-to-br ${stat.iconShell}`}>
                 <stat.icon className="h-5 w-5" />
@@ -168,13 +168,13 @@ export default function AdminDashboard() {
       </div>
 
       <div className="grid grid-cols-1 gap-6 xl:grid-cols-12">
-        <section className="rounded-2xl border border-white/10 bg-white/[0.03] p-6 backdrop-blur-2xl xl:col-span-8">
+        <section className="rounded-2xl border border-gray-200 bg-white p-6 backdrop-blur-2xl xl:col-span-8">
           <div className="mb-5 flex items-center justify-between">
             <div>
-              <h2 className="font-display text-3xl tracking-tight text-slate-100">Sales Trend</h2>
-              <p className="text-sm text-slate-400">Last 7 days performance snapshot</p>
+              <h2 className="font-display text-3xl tracking-tight text-[#3E2723]">Sales Trend</h2>
+              <p className="text-sm text-[#2D3748]">Last 7 days performance snapshot</p>
             </div>
-            <div className="rounded-full border border-white/10 bg-white/[0.02] px-3 py-1 text-xs text-slate-300">
+            <div className="rounded-full border border-gray-200 bg-white px-3 py-1 text-xs text-[#2D3748]">
               <FiCalendar className="mr-2 inline h-3.5 w-3.5" />
               Weekly
             </div>
@@ -187,33 +187,33 @@ export default function AdminDashboard() {
                 const shortLabel = row.day?.slice(5) || '--';
                 return (
                   <div key={row.day} className="flex flex-col items-center gap-2">
-                    <div className="flex h-36 w-full max-w-[56px] items-end rounded-xl border border-white/10 bg-[#101010] p-1">
+                    <div className="flex h-36 w-full max-w-[56px] items-end rounded-xl border border-gray-200 bg-white p-1">
                       <div
                         className="w-full rounded-lg bg-gradient-to-t from-amber-500 to-orange-400"
                         style={{ height: `${barHeight}px` }}
                         title={`${shortLabel} | ${formatCurrency(row.sales)} | ${row.orders} orders`}
                       />
                     </div>
-                    <p className="text-[11px] text-slate-500">{shortLabel}</p>
+                    <p className="text-[11px] text-[#2D3748]">{shortLabel}</p>
                   </div>
                 );
               })}
             </div>
           ) : (
-            <p className="rounded-xl border border-white/10 bg-[#111111] p-4 text-sm text-slate-400">No sales chart data available yet.</p>
+            <p className="rounded-xl border border-gray-200 bg-white p-4 text-sm text-[#2D3748]">No sales chart data available yet.</p>
           )}
 
           <div className="mt-6 grid grid-cols-1 gap-3 md:grid-cols-3">
-            <div className="rounded-xl border border-white/10 bg-[#111111] p-3">
-              <p className="text-xs uppercase tracking-[0.14em] text-slate-500">Monthly Revenue</p>
-              <p className="mt-1 text-lg font-semibold text-slate-100">{formatCurrency(stats?.monthlyRevenue || 0)}</p>
+            <div className="rounded-xl border border-gray-200 bg-white p-3">
+              <p className="text-xs uppercase tracking-[0.14em] text-[#2D3748]">Monthly Revenue</p>
+              <p className="mt-1 text-lg font-semibold text-[#3E2723]">{formatCurrency(stats?.monthlyRevenue || 0)}</p>
             </div>
-            <div className="rounded-xl border border-white/10 bg-[#111111] p-3">
-              <p className="text-xs uppercase tracking-[0.14em] text-slate-500">Average Order</p>
-              <p className="mt-1 text-lg font-semibold text-slate-100">{formatCurrency(stats?.avgOrderValue || 0)}</p>
+            <div className="rounded-xl border border-gray-200 bg-white p-3">
+              <p className="text-xs uppercase tracking-[0.14em] text-[#2D3748]">Average Order</p>
+              <p className="mt-1 text-lg font-semibold text-[#3E2723]">{formatCurrency(stats?.avgOrderValue || 0)}</p>
             </div>
-            <div className="rounded-xl border border-white/10 bg-[#111111] p-3">
-              <p className="text-xs uppercase tracking-[0.14em] text-slate-500">Revenue Growth</p>
+            <div className="rounded-xl border border-gray-200 bg-white p-3">
+              <p className="text-xs uppercase tracking-[0.14em] text-[#2D3748]">Revenue Growth</p>
               <p className={`mt-1 text-lg font-semibold ${trendValue >= 0 ? 'text-emerald-300' : 'text-red-300'}`}>
                 {trendLabel}
               </p>
@@ -221,10 +221,10 @@ export default function AdminDashboard() {
           </div>
         </section>
 
-        <section className="rounded-2xl border border-white/10 bg-white/[0.03] p-6 backdrop-blur-2xl xl:col-span-4">
+        <section className="rounded-2xl border border-gray-200 bg-white p-6 backdrop-blur-2xl xl:col-span-4">
           <div className="mb-4 flex items-center justify-between">
-            <h2 className="font-display text-3xl tracking-tight text-slate-100">Order Status</h2>
-            <FiBarChart2 className="h-5 w-5 text-slate-400" />
+            <h2 className="font-display text-3xl tracking-tight text-[#3E2723]">Order Status</h2>
+            <FiBarChart2 className="h-5 w-5 text-[#2D3748]" />
           </div>
           <div className="space-y-3">
             {stats?.ordersByStatus && Object.entries(stats.ordersByStatus).length > 0 ? (
@@ -232,43 +232,43 @@ export default function AdminDashboard() {
                 const totalOrders = Number(stats?.totalOrders || 0) || 1;
                 const ratio = Math.max(4, Math.round((Number(count) / totalOrders) * 100));
                 return (
-                  <div key={status} className="rounded-xl border border-white/10 bg-[#111111] p-3">
+                  <div key={status} className="rounded-xl border border-gray-200 bg-white p-3">
                     <div className="mb-2 flex items-center justify-between">
                       <span className={`inline-flex rounded-full px-2 py-1 text-xs font-medium capitalize ${getStatusColor(status)}`}>
                         {status}
                       </span>
-                      <span className="text-sm font-semibold text-slate-100">{count}</span>
+                      <span className="text-sm font-semibold text-[#3E2723]">{count}</span>
                     </div>
-                    <div className="h-2 rounded-full bg-white/10">
+                    <div className="h-2 rounded-full bg-gray-200">
                       <div className="h-2 rounded-full bg-gradient-to-r from-amber-400 to-orange-500" style={{ width: `${ratio}%` }} />
                     </div>
                   </div>
                 );
               })
             ) : (
-              <p className="rounded-xl border border-white/10 bg-[#111111] p-4 text-sm text-slate-400">No status distribution available yet.</p>
+              <p className="rounded-xl border border-gray-200 bg-white p-4 text-sm text-[#2D3748]">No status distribution available yet.</p>
             )}
           </div>
         </section>
       </div>
 
       <div className="grid grid-cols-1 gap-6 xl:grid-cols-12">
-        <section className="rounded-2xl border border-white/10 bg-white/[0.03] p-6 backdrop-blur-2xl xl:col-span-7">
+        <section className="rounded-2xl border border-gray-200 bg-white p-6 backdrop-blur-2xl xl:col-span-7">
           <div className="mb-4 flex items-center justify-between">
-            <h2 className="font-display text-3xl tracking-tight text-slate-100">Recent Orders</h2>
-            <Link href="/admin/orders" className="text-sm text-amber-300 hover:text-amber-200">
+            <h2 className="font-display text-3xl tracking-tight text-[#3E2723]">Recent Orders</h2>
+            <Link href="/admin/orders" className="text-sm text-[#FF8C00] hover:text-[#e67e00]">
               View All
             </Link>
           </div>
           <div className="space-y-3">
             {stats?.recentOrders?.slice(0, 6).map((order: any) => (
-              <div key={order._id} className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-white/10 bg-[#111111] px-4 py-3">
+              <div key={order._id} className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-gray-200 bg-white px-4 py-3">
                 <div>
-                  <p className="text-sm font-semibold text-slate-100">#{order.orderNumber}</p>
-                  <p className="text-xs text-slate-400">{order.shippingAddress?.fullName || order.user?.name || 'Unknown customer'}</p>
+                  <p className="text-sm font-semibold text-[#3E2723]">#{order.orderNumber}</p>
+                  <p className="text-xs text-[#2D3748]">{order.shippingAddress?.fullName || order.user?.name || 'Unknown customer'}</p>
                 </div>
                 <div className="text-right">
-                  <p className="text-sm font-semibold text-slate-100">{formatCurrency(order.total || 0)}</p>
+                  <p className="text-sm font-semibold text-[#3E2723]">{formatCurrency(order.total || 0)}</p>
                   <span className={`inline-flex rounded-full px-2 py-1 text-xs font-medium capitalize ${getStatusColor(order.status)}`}>
                     {order.status}
                   </span>
@@ -276,61 +276,62 @@ export default function AdminDashboard() {
               </div>
             ))}
             {(!stats?.recentOrders || stats.recentOrders.length === 0) && (
-              <p className="rounded-xl border border-white/10 bg-[#111111] p-4 text-sm text-slate-400">No orders yet.</p>
+              <p className="rounded-xl border border-gray-200 bg-white p-4 text-sm text-[#2D3748]">No orders yet.</p>
             )}
           </div>
         </section>
 
-        <section className="rounded-2xl border border-white/10 bg-white/[0.03] p-6 backdrop-blur-2xl xl:col-span-5">
+        <section className="rounded-2xl border border-gray-200 bg-white p-6 backdrop-blur-2xl xl:col-span-5">
           <div className="mb-4 flex items-center justify-between">
-            <h2 className="font-display text-3xl tracking-tight text-slate-100">Top Products</h2>
-            <FiActivity className="h-5 w-5 text-slate-400" />
+            <h2 className="font-display text-3xl tracking-tight text-[#3E2723]">Top Products</h2>
+            <FiActivity className="h-5 w-5 text-[#2D3748]" />
           </div>
           <div className="space-y-3">
             {stats?.topProducts?.slice(0, 5).map((item: any, index: number) => (
-              <div key={`${item?._id?._id || index}`} className="flex items-center gap-3 rounded-xl border border-white/10 bg-[#111111] px-4 py-3">
-                <span className="grid h-8 w-8 place-items-center rounded-full bg-amber-500/20 text-xs font-semibold text-amber-300">
+              <div key={`${item?._id?._id || index}`} className="flex items-center gap-3 rounded-xl border border-gray-200 bg-white px-4 py-3">
+                <span className="grid h-8 w-8 place-items-center rounded-full bg-amber-100 text-xs font-semibold text-[#FF8C00]">
                   {index + 1}
                 </span>
                 <div className="min-w-0 flex-1">
-                  <p className="truncate text-sm font-semibold text-slate-100">{item?._id?.title || 'Unknown Product'}</p>
-                  <p className="text-xs text-slate-400">{item?.totalSold || 0} sold</p>
+                  <p className="truncate text-sm font-semibold text-[#3E2723]">{item?._id?.title || 'Unknown Product'}</p>
+                  <p className="text-xs text-[#2D3748]">{item?.totalSold || 0} sold</p>
                 </div>
-                <p className="text-sm font-semibold text-slate-100">{formatCurrency(item?.revenue || 0)}</p>
+                <p className="text-sm font-semibold text-[#3E2723]">{formatCurrency(item?.revenue || 0)}</p>
               </div>
             ))}
             {(!stats?.topProducts || stats.topProducts.length === 0) && (
-              <p className="rounded-xl border border-white/10 bg-[#111111] p-4 text-sm text-slate-400">No sales data yet.</p>
+              <p className="rounded-xl border border-gray-200 bg-white p-4 text-sm text-[#2D3748]">No sales data yet.</p>
             )}
           </div>
         </section>
       </div>
 
-      <section className="rounded-2xl border border-white/10 bg-white/[0.03] p-6 backdrop-blur-2xl">
-        <h2 className="mb-4 font-display text-3xl tracking-tight text-slate-100">Quick Actions</h2>
+      <section className="rounded-2xl border border-gray-200 bg-white p-6 backdrop-blur-2xl">
+        <h2 className="mb-4 font-display text-3xl tracking-tight text-[#3E2723]">Quick Actions</h2>
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
-          <Link href="/admin/products/new" className="group rounded-xl border border-white/10 bg-[#111111] p-4 transition hover:border-amber-400/40 hover:bg-[#141414]">
-            <FiPackage className="mb-3 h-6 w-6 text-amber-300" />
-            <p className="text-sm font-semibold text-slate-100">Add Product</p>
-            <p className="mt-1 text-xs text-slate-400">Create a new catalog item</p>
+          <Link href="/admin/products/new" className="group rounded-xl border border-gray-200 bg-white p-4 transition hover:border-amber-400/40 hover:bg-orange-50">
+            <FiPackage className="mb-3 h-6 w-6 text-[#FF8C00]" />
+            <p className="text-sm font-semibold text-[#3E2723]">Add Product</p>
+            <p className="mt-1 text-xs text-[#2D3748]">Create a new catalog item</p>
           </Link>
-          <Link href="/admin/orders" className="group rounded-xl border border-white/10 bg-[#111111] p-4 transition hover:border-amber-400/40 hover:bg-[#141414]">
-            <FiShoppingBag className="mb-3 h-6 w-6 text-amber-300" />
-            <p className="text-sm font-semibold text-slate-100">Manage Orders</p>
-            <p className="mt-1 text-xs text-slate-400">Update order statuses quickly</p>
+          <Link href="/admin/orders" className="group rounded-xl border border-gray-200 bg-white p-4 transition hover:border-amber-400/40 hover:bg-orange-50">
+            <FiShoppingBag className="mb-3 h-6 w-6 text-[#FF8C00]" />
+            <p className="text-sm font-semibold text-[#3E2723]">Manage Orders</p>
+            <p className="mt-1 text-xs text-[#2D3748]">Update order statuses quickly</p>
           </Link>
-          <Link href="/admin/coupons" className="group rounded-xl border border-white/10 bg-[#111111] p-4 transition hover:border-amber-400/40 hover:bg-[#141414]">
-            <FiTag className="mb-3 h-6 w-6 text-amber-300" />
-            <p className="text-sm font-semibold text-slate-100">Manage Coupons</p>
-            <p className="mt-1 text-xs text-slate-400">Launch discount campaigns</p>
+          <Link href="/admin/coupons" className="group rounded-xl border border-gray-200 bg-white p-4 transition hover:border-amber-400/40 hover:bg-orange-50">
+            <FiTag className="mb-3 h-6 w-6 text-[#FF8C00]" />
+            <p className="text-sm font-semibold text-[#3E2723]">Manage Coupons</p>
+            <p className="mt-1 text-xs text-[#2D3748]">Launch discount campaigns</p>
           </Link>
-          <Link href="/admin/users" className="group rounded-xl border border-white/10 bg-[#111111] p-4 transition hover:border-amber-400/40 hover:bg-[#141414]">
-            <FiUsers className="mb-3 h-6 w-6 text-amber-300" />
-            <p className="text-sm font-semibold text-slate-100">View Users</p>
-            <p className="mt-1 text-xs text-slate-400">Monitor customer activity</p>
+          <Link href="/admin/users" className="group rounded-xl border border-gray-200 bg-white p-4 transition hover:border-amber-400/40 hover:bg-orange-50">
+            <FiUsers className="mb-3 h-6 w-6 text-[#FF8C00]" />
+            <p className="text-sm font-semibold text-[#3E2723]">View Users</p>
+            <p className="mt-1 text-xs text-[#2D3748]">Monitor customer activity</p>
           </Link>
         </div>
       </section>
     </div>
   );
 }
+

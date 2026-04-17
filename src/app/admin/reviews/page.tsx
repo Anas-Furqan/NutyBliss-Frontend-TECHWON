@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useCallback, useEffect, useState } from 'react';
 import { FiCheck, FiX } from 'react-icons/fi';
@@ -43,47 +43,47 @@ export default function AdminReviewsPage() {
   return (
     <div>
       <div className="flex items-center justify-between gap-4 mb-6">
-        <h1 className="font-display text-4xl tracking-tighter text-slate-100">Reviews</h1>
+        <h1 className="font-display text-4xl tracking-tighter text-[#3E2723]">Reviews</h1>
         <select
           value={approvedFilter}
           onChange={(e) => setApprovedFilter(e.target.value as any)}
-          className="h-11 rounded-lg border border-white/10 bg-white/[0.02] px-4 text-sm text-slate-200 outline-none"
+          className="h-11 rounded-lg border border-gray-200 bg-white px-4 text-sm text-[#3E2723] outline-none"
         >
-          <option value="all" className="bg-[#0f0f14]">All</option>
-          <option value="pending" className="bg-[#0f0f14]">Pending</option>
-          <option value="approved" className="bg-[#0f0f14]">Approved</option>
+          <option value="all" className="bg-white">All</option>
+          <option value="pending" className="bg-white">Pending</option>
+          <option value="approved" className="bg-white">Approved</option>
         </select>
       </div>
 
-      <div className="overflow-hidden rounded-xl border border-white/10 bg-white/[0.03] backdrop-blur-2xl">
+      <div className="overflow-hidden rounded-xl border border-gray-200 bg-white backdrop-blur-2xl">
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead className="border-b border-white/10 bg-white/[0.02]">
+            <thead className="border-b border-gray-200 bg-white">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-[0.14em] text-slate-400">Product</th>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-[0.14em] text-slate-400">User</th>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-[0.14em] text-slate-400">Rating</th>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-[0.14em] text-slate-400">Comment</th>
-                <th className="px-6 py-3 text-right text-xs font-medium uppercase tracking-[0.14em] text-slate-400">Actions</th>
+                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-[0.14em] text-[#2D3748]">Product</th>
+                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-[0.14em] text-[#2D3748]">User</th>
+                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-[0.14em] text-[#2D3748]">Rating</th>
+                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-[0.14em] text-[#2D3748]">Comment</th>
+                <th className="px-6 py-3 text-right text-xs font-medium uppercase tracking-[0.14em] text-[#2D3748]">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-white/5">
               {loading ? (
                 <tr>
-                  <td colSpan={5} className="px-6 py-12 text-center text-slate-400">Loading...</td>
+                  <td colSpan={5} className="px-6 py-12 text-center text-[#2D3748]">Loading...</td>
                 </tr>
               ) : reviews.length > 0 ? (
                 reviews.map((review) => (
-                  <tr key={review._id} className="hover:bg-white/[0.02]">
+                  <tr key={review._id} className="hover:bg-white">
                     <td className="px-6 py-4">
                       <div className="min-w-0">
-                        <p className="line-clamp-1 font-medium text-slate-100">{review.product?.title || 'Unknown'}</p>
-                        <p className="text-sm text-slate-400">{review.product?.slug}</p>
+                        <p className="line-clamp-1 font-medium text-[#3E2723]">{review.product?.title || 'Unknown'}</p>
+                        <p className="text-sm text-[#2D3748]">{review.product?.slug}</p>
                       </div>
                     </td>
                     <td className="px-6 py-4">
-                      <p className="text-slate-100">{review.user?.name}</p>
-                      <p className="text-sm text-slate-400">{review.user?.email}</p>
+                      <p className="text-[#3E2723]">{review.user?.name}</p>
+                      <p className="text-sm text-[#2D3748]">{review.user?.email}</p>
                     </td>
                     <td className="px-6 py-4">
                       <span className="font-medium text-amber-300">{review.rating}/5</span>
@@ -93,7 +93,7 @@ export default function AdminReviewsPage() {
                         </span>
                       )}
                     </td>
-                    <td className="max-w-md px-6 py-4 text-slate-300">
+                    <td className="max-w-md px-6 py-4 text-[#2D3748]">
                       <p className="line-clamp-2">{review.comment}</p>
                     </td>
                     <td className="px-6 py-4 text-right">
@@ -118,7 +118,7 @@ export default function AdminReviewsPage() {
                 ))
               ) : (
                 <tr>
-                  <td colSpan={5} className="px-6 py-12 text-center text-slate-400">No reviews found</td>
+                  <td colSpan={5} className="px-6 py-12 text-center text-[#2D3748]">No reviews found</td>
                 </tr>
               )}
             </tbody>
@@ -128,4 +128,5 @@ export default function AdminReviewsPage() {
     </div>
   );
 }
+
 

@@ -55,15 +55,15 @@ export default function FAQSection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.05 }}
-              className="overflow-hidden rounded-xl border border-white/10 bg-white/[0.03] backdrop-blur-2xl"
+              className="overflow-hidden rounded-xl border border-gray-200 bg-white backdrop-blur-2xl"
             >
               <button
                 onClick={() => setOpenIndex(openIndex === index ? null : index)}
                 className="w-full flex items-center justify-between p-5 text-left"
               >
-                <span className="font-semibold text-slate-100">{faq.question}</span>
+                <span className="font-semibold text-[#3E2723]">{faq.question}</span>
                 <FiChevronDown
-                  className={`h-5 w-5 text-slate-400 transition-transform ${
+                  className={`h-5 w-5 text-[#2D3748] transition-transform ${
                     openIndex === index ? 'rotate-180' : ''
                   }`}
                 />
@@ -76,7 +76,7 @@ export default function FAQSection() {
                     exit={{ height: 0, opacity: 0 }}
                     transition={{ duration: 0.2 }}
                   >
-                    <div className="px-5 pb-5 text-slate-300">
+                    <div className="px-5 pb-5 text-[#2D3748]">
                       {faq.answer}
                     </div>
                   </motion.div>
@@ -89,3 +89,4 @@ export default function FAQSection() {
     </section>
   );
 }
+

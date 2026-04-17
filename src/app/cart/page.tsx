@@ -64,9 +64,9 @@ export default function CartPage() {
                       <p className="font-semibold text-ink">{item.product.title}</p>
                       <p className="text-sm text-ink/70">PKR {price.toLocaleString()}</p>
                       <div className="mt-3 flex items-center gap-2">
-                        <button className="btn-secondary !px-3" onClick={() => updateQuantity(item.productId, item.variant?.size, Math.max(1, item.quantity - 1))}>-</button>
+                        <button className="btn-primary !px-3" onClick={() => updateQuantity(item.productId, item.variant?.size, Math.max(1, item.quantity - 1))}>-</button>
                         <span className="w-8 text-center text-sm text-ink">{item.quantity}</span>
-                        <button className="btn-secondary !px-3" onClick={() => updateQuantity(item.productId, item.variant?.size, item.quantity + 1)}>+</button>
+                        <button className="btn-primary !px-3" onClick={() => updateQuantity(item.productId, item.variant?.size, item.quantity + 1)}>+</button>
                         <button className="btn-secondary ml-auto !px-3" onClick={() => removeItem(item.productId, item.variant?.size)}>Remove</button>
                       </div>
                     </div>

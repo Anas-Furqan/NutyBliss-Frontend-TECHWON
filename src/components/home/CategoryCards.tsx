@@ -1,7 +1,6 @@
 'use client';
 
 import Link from 'next/link';
-import Image from 'next/image';
 import { motion } from 'framer-motion';
 
 const categories = [
@@ -56,12 +55,11 @@ export default function CategoryCards() {
                 className="block group relative h-64 rounded-2xl overflow-hidden"
               >
                 <div className={`absolute inset-0 bg-gradient-to-br ${category.color}`} />
-                <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition-colors" />
-                <div className="relative h-full flex flex-col items-center justify-center text-white p-6 text-center">
-                  <h3 className="text-2xl font-bold mb-2">{category.name}</h3>
-                  <p className="text-white/80 mb-4">{category.description}</p>
-                  <span className="px-6 py-2 border-2 border-white rounded-full font-semibold
-                                 group-hover:bg-white group-hover:text-gray-900 transition-colors">
+                <div className="absolute inset-0 bg-[#2D3748]/10 group-hover:bg-[#2D3748]/15 transition-colors" />
+                <div className="relative h-full flex flex-col items-center justify-center p-6 text-center text-[#FDF5E6]">
+                  <h3 className="mb-2 text-2xl font-bold tracking-tighter leading-tight">{category.name}</h3>
+                  <p className="mb-4 text-[#FDF5E6]/82">{category.description}</p>
+                  <span className="rounded-full border-2 border-[#FDF5E6]/70 px-6 py-2 font-semibold transition-colors group-hover:border-[#FF8C00] group-hover:bg-[#FF8C00] group-hover:text-[#1b1207]">
                     Shop Now
                   </span>
                 </div>
@@ -73,3 +71,4 @@ export default function CategoryCards() {
     </section>
   );
 }
+

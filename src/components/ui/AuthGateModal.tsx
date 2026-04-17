@@ -32,15 +32,15 @@ export default function AuthGateModal({
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-[120] flex items-center justify-center bg-black/65 p-4 backdrop-blur-md" onClick={onClose}>
+    <div className="fixed inset-0 z-[120] flex items-center justify-center bg-[#2D3748]/20 p-4 backdrop-blur-md" onClick={onClose}>
       <div
         ref={panelRef}
-        className="w-full max-w-md rounded-[1.4rem] border border-white/[0.1] bg-[#090909]/95 p-6 shadow-[0_20px_50px_rgba(0,0,0,0.55)]"
+        className="w-full max-w-md rounded-[1.4rem] border border-gray-200 bg-white p-6 shadow-[0_20px_50px_rgba(0,0,0,0.55)]"
         onClick={(event) => event.stopPropagation()}
       >
         <p className="text-xs uppercase tracking-[0.2em] text-amber-400">Nuty Bliss Access</p>
-        <h3 className="mt-2 font-display text-3xl tracking-tighter leading-tight text-slate-200">{title}</h3>
-        <p className="mt-3 text-sm text-slate-300/80">{message}</p>
+        <h3 className="mt-2 font-display text-3xl tracking-tighter leading-tight text-[#3E2723]">{title}</h3>
+        <p className="mt-3 text-sm text-[#2D3748]/80">{message}</p>
 
         <div className="mt-6 grid grid-cols-2 gap-3">
           <Link href="/login" className="btn-primary w-full text-center" onClick={onClose}>
@@ -51,10 +51,11 @@ export default function AuthGateModal({
           </Link>
         </div>
 
-        <button type="button" onClick={onClose} className="mt-3 w-full text-sm text-slate-400 hover:text-slate-200">
+        <button type="button" onClick={onClose} className="mt-3 w-full text-sm text-[#2D3748] hover:text-[#3E2723]">
           Not now
         </button>
       </div>
     </div>
   );
 }
+

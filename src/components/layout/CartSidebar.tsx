@@ -32,7 +32,7 @@ export default function CartSidebar({ isOpen, onClose }: CartSidebarProps) {
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm" />
+          <div className="fixed inset-0 bg-[#2D3748]/20 backdrop-blur-sm" />
         </Transition.Child>
 
         <div className="fixed inset-0 overflow-hidden">
@@ -48,15 +48,15 @@ export default function CartSidebar({ isOpen, onClose }: CartSidebarProps) {
                 leaveTo="translate-x-full"
               >
                 <Dialog.Panel className="pointer-events-auto w-screen max-w-md">
-                  <div className="flex h-full flex-col border-l border-white/10 bg-[#0d0d12]/95 shadow-glass backdrop-blur-2xl">
+                  <div className="flex h-full flex-col border-l border-gray-200 bg-white shadow-glass backdrop-blur-2xl">
                     {/* Header */}
-                    <div className="flex items-center justify-between border-b border-white/10 px-4 py-4">
-                      <Dialog.Title className="text-lg font-semibold text-slate-100">
+                    <div className="flex items-center justify-between border-b border-gray-200 px-4 py-4">
+                      <Dialog.Title className="text-lg font-semibold text-[#3E2723]">
                         Shopping Cart ({items.length})
                       </Dialog.Title>
                       <button
                         onClick={onClose}
-                        className="rounded-full p-2 text-slate-200 transition-colors hover:bg-white/[0.08]"
+                        className="rounded-full p-2 text-[#3E2723] transition-colors hover:bg-gray-100"
                       >
                         <FiX className="w-5 h-5" />
                       </button>
@@ -66,8 +66,8 @@ export default function CartSidebar({ isOpen, onClose }: CartSidebarProps) {
                     <div className="flex-1 overflow-y-auto px-4 py-4">
                       {items.length === 0 ? (
                         <div className="flex flex-col items-center justify-center h-full text-center">
-                          <FiShoppingBag className="mb-4 h-16 w-16 text-slate-500" />
-                          <p className="mb-4 text-slate-400">Your cart is empty</p>
+                          <FiShoppingBag className="mb-4 h-16 w-16 text-[#2D3748]" />
+                          <p className="mb-4 text-[#2D3748]">Your cart is empty</p>
                           <button
                             onClick={onClose}
                             className="btn-primary"
@@ -86,9 +86,9 @@ export default function CartSidebar({ isOpen, onClose }: CartSidebarProps) {
                                   initial={{ opacity: 0, x: 20 }}
                                   animate={{ opacity: 1, x: 0 }}
                                   exit={{ opacity: 0, x: -20 }}
-                                  className="flex gap-4 rounded-xl border border-white/10 bg-white/[0.03] p-3"
+                                  className="flex gap-4 rounded-xl border border-gray-200 bg-white p-3"
                                 >
-                                  <div className="relative h-20 w-20 overflow-hidden rounded-lg bg-white/[0.08]">
+                                  <div className="relative h-20 w-20 overflow-hidden rounded-lg bg-gray-100">
                                     <Image
                                       src={item.product.images[0]?.url || '/images/placeholder.svg'}
                                       alt={item.product.title}
@@ -97,11 +97,11 @@ export default function CartSidebar({ isOpen, onClose }: CartSidebarProps) {
                                     />
                                   </div>
                                   <div className="flex-1">
-                                    <h4 className="line-clamp-1 text-sm font-medium text-slate-100">
+                                    <h4 className="line-clamp-1 text-sm font-medium text-[#3E2723]">
                                       {item.product.title}
                                     </h4>
                                     {item.variant && (
-                                      <p className="text-xs text-slate-400">{item.variant.size}</p>
+                                      <p className="text-xs text-[#2D3748]">{item.variant.size}</p>
                                     )}
                                     <p className="mt-1 font-semibold text-amber-300">
                                       Rs. {price.toLocaleString()}
@@ -116,11 +116,11 @@ export default function CartSidebar({ isOpen, onClose }: CartSidebarProps) {
                                               Math.max(1, item.quantity - 1)
                                             )
                                           }
-                                          className="rounded p-1 text-slate-200 transition-colors hover:bg-white/[0.1]"
+                                          className="rounded p-1 text-[#3E2723] transition-colors hover:bg-gray-100"
                                         >
                                           <FiMinus className="w-4 h-4" />
                                         </button>
-                                        <span className="w-8 text-center text-sm font-medium text-slate-200">
+                                        <span className="w-8 text-center text-sm font-medium text-[#3E2723]">
                                           {item.quantity}
                                         </span>
                                         <button
@@ -131,7 +131,7 @@ export default function CartSidebar({ isOpen, onClose }: CartSidebarProps) {
                                               item.quantity + 1
                                             )
                                           }
-                                          className="rounded p-1 text-slate-200 transition-colors hover:bg-white/[0.1]"
+                                          className="rounded p-1 text-[#3E2723] transition-colors hover:bg-gray-100"
                                         >
                                           <FiPlus className="w-4 h-4" />
                                         </button>
@@ -156,10 +156,10 @@ export default function CartSidebar({ isOpen, onClose }: CartSidebarProps) {
 
                     {/* Footer */}
                     {items.length > 0 && (
-                      <div className="space-y-4 border-t border-white/10 px-4 py-4">
+                      <div className="space-y-4 border-t border-gray-200 px-4 py-4">
                         {/* Summary */}
                         <div className="space-y-2 text-sm">
-                          <div className="flex justify-between text-slate-300">
+                          <div className="flex justify-between text-[#2D3748]">
                             <span>Subtotal</span>
                             <span>Rs. {subtotal.toLocaleString()}</span>
                           </div>
@@ -169,11 +169,11 @@ export default function CartSidebar({ isOpen, onClose }: CartSidebarProps) {
                               <span>-Rs. {discount.toLocaleString()}</span>
                             </div>
                           )}
-                          <div className="flex justify-between text-slate-300">
+                          <div className="flex justify-between text-[#2D3748]">
                             <span>Shipping</span>
                             <span>{shippingCost === 0 ? 'Free' : `Rs. ${shippingCost}`}</span>
                           </div>
-                          <div className="flex justify-between border-t border-white/10 pt-2 text-lg font-semibold text-slate-100">
+                          <div className="flex justify-between border-t border-gray-200 pt-2 text-lg font-semibold text-[#3E2723]">
                             <span>Total</span>
                             <span className="text-amber-300">
                               Rs. {(total + shippingCost).toLocaleString()}
@@ -183,7 +183,7 @@ export default function CartSidebar({ isOpen, onClose }: CartSidebarProps) {
 
                         {/* Free shipping notice */}
                         {subtotal < 2000 && (
-                          <p className="text-center text-xs text-slate-400">
+                          <p className="text-center text-xs text-[#2D3748]">
                             Add Rs. {(2000 - subtotal).toLocaleString()} more for free shipping!
                           </p>
                         )}
@@ -217,3 +217,4 @@ export default function CartSidebar({ isOpen, onClose }: CartSidebarProps) {
     </Transition.Root>
   );
 }
+

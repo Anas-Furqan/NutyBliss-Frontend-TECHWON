@@ -57,7 +57,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm" />
+          <div className="fixed inset-0 bg-[#2D3748]/20 backdrop-blur-sm" />
         </Transition.Child>
 
         <div className="fixed inset-0 overflow-y-auto">
@@ -71,21 +71,21 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="w-full max-w-2xl transform rounded-2xl border border-white/10 bg-[#0d0d12]/95 shadow-glass backdrop-blur-2xl transition-all">
+              <Dialog.Panel className="w-full max-w-2xl transform rounded-2xl border border-gray-200 bg-white shadow-glass backdrop-blur-2xl transition-all">
                 {/* Search Input */}
-                <div className="flex items-center gap-3 border-b border-white/10 p-4">
-                  <FiSearch className="h-5 w-5 text-slate-400" />
+                <div className="flex items-center gap-3 border-b border-gray-200 p-4">
+                  <FiSearch className="h-5 w-5 text-[#2D3748]" />
                   <input
                     type="text"
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
                     placeholder="Search products..."
-                    className="flex-1 bg-transparent text-lg text-slate-100 outline-none placeholder:text-slate-500"
+                    className="flex-1 bg-transparent text-lg text-[#3E2723] outline-none placeholder:text-[#2D3748]"
                     autoFocus
                   />
                   <button
                     onClick={handleClose}
-                    className="rounded-full p-2 text-slate-300 transition-colors hover:bg-white/[0.08]"
+                    className="rounded-full p-2 text-[#2D3748] transition-colors hover:bg-gray-100"
                   >
                     <FiX className="w-5 h-5" />
                   </button>
@@ -94,7 +94,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                 {/* Results */}
                 <div className="max-h-96 overflow-y-auto">
                   {loading ? (
-                    <div className="p-8 text-center text-slate-400">
+                    <div className="p-8 text-center text-[#2D3748]">
                       Searching...
                     </div>
                   ) : results.length > 0 ? (
@@ -104,9 +104,9 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                           key={product._id}
                           href={`/products/${product.slug}`}
                           onClick={handleClose}
-                          className="flex items-center gap-4 rounded-xl p-3 transition-colors hover:bg-white/[0.05]"
+                          className="flex items-center gap-4 rounded-xl p-3 transition-colors hover:bg-gray-100"
                         >
-                          <div className="relative h-16 w-16 overflow-hidden rounded-lg bg-white/[0.08]">
+                          <div className="relative h-16 w-16 overflow-hidden rounded-lg bg-gray-100">
                             <Image
                               src={product.images[0]?.url || '/images/placeholder.svg'}
                               alt={product.title}
@@ -115,8 +115,8 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                             />
                           </div>
                           <div className="flex-1">
-                            <h4 className="font-medium text-slate-100">{product.title}</h4>
-                            <p className="text-sm text-slate-400">{product.category}</p>
+                            <h4 className="font-medium text-[#3E2723]">{product.title}</h4>
+                            <p className="text-sm text-[#2D3748]">{product.category}</p>
                             <p className="font-semibold text-amber-300">
                               Rs. {(product.baseDiscountPrice || product.basePrice).toLocaleString()}
                             </p>
@@ -125,11 +125,11 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                       ))}
                     </div>
                   ) : query.trim() ? (
-                    <div className="p-8 text-center text-slate-400">
+                    <div className="p-8 text-center text-[#2D3748]">
                       No products found for &quot;{query}&quot;
                     </div>
                   ) : (
-                    <div className="p-8 text-center text-slate-400">
+                    <div className="p-8 text-center text-[#2D3748]">
                       Start typing to search products...
                     </div>
                   )}
@@ -137,14 +137,14 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
 
                 {/* Quick Links */}
                 {!query.trim() && (
-                  <div className="border-t border-white/10 p-4">
-                    <p className="mb-2 text-sm text-slate-400">Popular searches</p>
+                  <div className="border-t border-gray-200 p-4">
+                    <p className="mb-2 text-sm text-[#2D3748]">Popular searches</p>
                     <div className="flex flex-wrap gap-2">
                       {['Peanut Butter', 'Crunchy', 'Oats', 'Bundle'].map((term) => (
                         <button
                           key={term}
                           onClick={() => setQuery(term)}
-                          className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-sm text-slate-200 transition-colors hover:bg-white/[0.1]"
+                          className="rounded-full border border-gray-200 bg-gray-100 px-3 py-1 text-sm text-[#3E2723] transition-colors hover:bg-gray-100"
                         >
                           {term}
                         </button>
@@ -160,3 +160,4 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
     </Transition.Root>
   );
 }
+

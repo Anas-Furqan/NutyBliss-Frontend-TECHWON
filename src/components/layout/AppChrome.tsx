@@ -12,15 +12,15 @@ export default function AppChrome({ children }: { children: React.ReactNode }) {
   const isAdminRoute = pathname?.startsWith('/admin');
 
   if (isAdminRoute) {
-    return <main className="min-h-screen bg-[#050505] pb-32 text-slate-200">{children}</main>;
+    return <main className="min-h-screen bg-[#F9FAFB] pb-20 text-[#2D3748]">{children}</main>;
   }
 
   return (
     <ScrollWrapper>
-      <div className="relative isolate flex min-h-screen flex-col overflow-x-hidden overflow-y-visible bg-[#050505] text-slate-200">
+      <div className="relative isolate flex min-h-screen flex-col overflow-x-hidden overflow-y-visible bg-white text-[#2D3748]">
         <FlyingOrnaments />
         <Navbar />
-        <div className="relative flex-1 overflow-y-visible pb-32">
+        <div className="relative flex-1 overflow-y-visible pb-24 pt-20 md:pt-24">
           <PageTransition>{children}</PageTransition>
         </div>
         <Footer />

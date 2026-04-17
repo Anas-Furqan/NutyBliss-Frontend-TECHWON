@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
@@ -51,22 +51,22 @@ export default function AdminOrdersPage() {
       delivered: 'bg-emerald-500/20 text-emerald-300',
       cancelled: 'bg-red-500/20 text-red-300',
     };
-    return colors[status] || 'bg-white/10 text-slate-300';
+    return colors[status] || 'bg-white/10 text-[#2D3748]';
   };
 
   const statuses = ['', 'pending', 'confirmed', 'processing', 'in-progress', 'shipped', 'on-the-way', 'delivered', 'cancelled'];
 
   return (
     <div>
-      <h1 className="mb-6 font-display text-4xl tracking-tighter text-slate-100">Orders</h1>
+      <h1 className="mb-6 font-display text-4xl tracking-tighter text-[#3E2723]">Orders</h1>
 
       {/* Filters */}
-      <div className="mb-6 rounded-xl border border-white/10 bg-white/[0.03] p-4 backdrop-blur-2xl">
+      <div className="mb-6 rounded-xl border border-gray-200 bg-white p-4 backdrop-blur-2xl">
         <div className="flex flex-wrap gap-4">
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="h-11 rounded-lg border border-white/10 bg-white/[0.02] px-4 text-sm text-slate-200 outline-none"
+            className="h-11 rounded-lg border border-gray-200 bg-white px-4 text-sm text-[#3E2723] outline-none"
           >
             <option value="">All Status</option>
             {statuses.slice(1).map((status) => (
@@ -79,41 +79,41 @@ export default function AdminOrdersPage() {
       </div>
 
       {/* Orders Table */}
-      <div className="overflow-hidden rounded-xl border border-white/10 bg-white/[0.03] backdrop-blur-2xl">
+      <div className="overflow-hidden rounded-xl border border-gray-200 bg-white backdrop-blur-2xl">
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead className="border-b border-white/10 bg-white/[0.02]">
+            <thead className="border-b border-gray-200 bg-white">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-[0.14em] text-slate-400">Order</th>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-[0.14em] text-slate-400">Customer</th>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-[0.14em] text-slate-400">Items</th>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-[0.14em] text-slate-400">Total</th>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-[0.14em] text-slate-400">Payment</th>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-[0.14em] text-slate-400">Status</th>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-[0.14em] text-slate-400">Date</th>
-                <th className="px-6 py-3 text-right text-xs font-medium uppercase tracking-[0.14em] text-slate-400">Actions</th>
+                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-[0.14em] text-[#2D3748]">Order</th>
+                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-[0.14em] text-[#2D3748]">Customer</th>
+                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-[0.14em] text-[#2D3748]">Items</th>
+                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-[0.14em] text-[#2D3748]">Total</th>
+                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-[0.14em] text-[#2D3748]">Payment</th>
+                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-[0.14em] text-[#2D3748]">Status</th>
+                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-[0.14em] text-[#2D3748]">Date</th>
+                <th className="px-6 py-3 text-right text-xs font-medium uppercase tracking-[0.14em] text-[#2D3748]">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-white/5">
               {loading ? (
                 <tr>
-                  <td colSpan={8} className="px-6 py-12 text-center text-slate-400">Loading...</td>
+                  <td colSpan={8} className="px-6 py-12 text-center text-[#2D3748]">Loading...</td>
                 </tr>
               ) : orders.length > 0 ? (
                 orders.map((order: any) => (
-                  <tr key={order._id} className="hover:bg-white/[0.02]">
+                  <tr key={order._id} className="hover:bg-white">
                     <td className="px-6 py-4">
-                      <p className="font-medium text-slate-100">#{order.orderNumber}</p>
+                      <p className="font-medium text-[#3E2723]">#{order.orderNumber}</p>
                     </td>
                     <td className="px-6 py-4">
-                      <p className="text-slate-100">{order.shippingAddress?.fullName}</p>
-                      <p className="text-sm text-slate-400">{order.shippingAddress?.phone}</p>
+                      <p className="text-[#3E2723]">{order.shippingAddress?.fullName}</p>
+                      <p className="text-sm text-[#2D3748]">{order.shippingAddress?.phone}</p>
                     </td>
                     <td className="px-6 py-4">
-                      <span className="text-slate-300">{order.items?.length} items</span>
+                      <span className="text-[#2D3748]">{order.items?.length} items</span>
                     </td>
                     <td className="px-6 py-4">
-                      <p className="font-medium text-slate-100">Rs. {order.total?.toLocaleString()}</p>
+                      <p className="font-medium text-[#3E2723]">Rs. {order.total?.toLocaleString()}</p>
                     </td>
                     <td className="px-6 py-4">
                       <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full uppercase ${
@@ -134,23 +134,23 @@ export default function AdminOrdersPage() {
                       </select>
                     </td>
                     <td className="px-6 py-4">
-                      <p className="text-sm text-slate-400">
+                      <p className="text-sm text-[#2D3748]">
                         {new Date(order.createdAt).toLocaleDateString()}
                       </p>
                     </td>
                     <td className="px-6 py-4 text-right">
                       <Link
                         href={`/admin/orders/${order._id}`}
-                        className="inline-block rounded-lg p-2 transition-colors hover:bg-white/[0.08]"
+                        className="inline-block rounded-lg p-2 transition-colors hover:bg-gray-100"
                       >
-                        <FiEye className="w-4 h-4 text-slate-300" />
+                        <FiEye className="w-4 h-4 text-[#2D3748]" />
                       </Link>
                     </td>
                   </tr>
                 ))
               ) : (
                 <tr>
-                  <td colSpan={8} className="px-6 py-12 text-center text-slate-400">No orders found</td>
+                  <td colSpan={8} className="px-6 py-12 text-center text-[#2D3748]">No orders found</td>
                 </tr>
               )}
             </tbody>
@@ -159,8 +159,8 @@ export default function AdminOrdersPage() {
 
         {/* Pagination */}
         {pagination.pages > 1 && (
-          <div className="flex items-center justify-between border-t border-white/10 px-6 py-4">
-            <p className="text-sm text-slate-400">
+          <div className="flex items-center justify-between border-t border-gray-200 px-6 py-4">
+            <p className="text-sm text-[#2D3748]">
               Showing {orders.length} of {pagination.total} orders
             </p>
             <div className="flex gap-2">
@@ -171,7 +171,7 @@ export default function AdminOrdersPage() {
                   className={`w-8 h-8 rounded-lg text-sm ${
                     pagination.page === i + 1
                       ? 'bg-orange-500 text-[#1c1206]'
-                      : 'bg-white/[0.08] text-slate-300 hover:bg-white/[0.14]'
+                      : 'bg-gray-100 text-[#2D3748] hover:bg-gray-100'
                   }`}
                 >
                   {i + 1}
@@ -184,3 +184,4 @@ export default function AdminOrdersPage() {
     </div>
   );
 }
+

@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { FormEvent, useEffect, useState } from 'react';
 import { adminAPI } from '@/lib/api';
@@ -99,8 +99,8 @@ export default function AdminCategoriesPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="font-display text-4xl tracking-tighter text-slate-100">Categories</h1>
-        <p className="mt-2 text-sm text-slate-400">Manage product categories for shop filters and admin product forms.</p>
+        <h1 className="font-display text-4xl tracking-tighter text-[#3E2723]">Categories</h1>
+        <p className="mt-2 text-sm text-[#2D3748]">Manage product categories for shop filters and admin product forms.</p>
       </div>
 
       <form onSubmit={onCreate} className="glass-card space-y-4 p-5">
@@ -110,13 +110,13 @@ export default function AdminCategoriesPage() {
             value={name}
             onChange={(event) => setName(event.target.value)}
             placeholder="Category name"
-            className="h-12 rounded-xl border border-white/10 bg-white/[0.03] px-4 text-sm text-slate-200 outline-none"
+            className="h-12 rounded-xl border border-gray-200 bg-white px-4 text-sm text-[#3E2723] outline-none"
           />
           <input
             value={description}
             onChange={(event) => setDescription(event.target.value)}
             placeholder="Description (optional)"
-            className="h-12 rounded-xl border border-white/10 bg-white/[0.03] px-4 text-sm text-slate-200 outline-none"
+            className="h-12 rounded-xl border border-gray-200 bg-white px-4 text-sm text-[#3E2723] outline-none"
           />
         </div>
         <button type="submit" className="btn-primary">Add Category</button>
@@ -124,28 +124,28 @@ export default function AdminCategoriesPage() {
 
       <div className="glass-card overflow-hidden">
         <table className="w-full">
-          <thead className="border-b border-white/10 bg-white/[0.02]">
+          <thead className="border-b border-gray-200 bg-white">
             <tr>
-              <th className="px-4 py-3 text-left text-xs uppercase tracking-[0.14em] text-slate-400">Name</th>
-              <th className="px-4 py-3 text-left text-xs uppercase tracking-[0.14em] text-slate-400">Slug</th>
-              <th className="px-4 py-3 text-left text-xs uppercase tracking-[0.14em] text-slate-400">Status</th>
-              <th className="px-4 py-3 text-right text-xs uppercase tracking-[0.14em] text-slate-400">Action</th>
+              <th className="px-4 py-3 text-left text-xs uppercase tracking-[0.14em] text-[#2D3748]">Name</th>
+              <th className="px-4 py-3 text-left text-xs uppercase tracking-[0.14em] text-[#2D3748]">Slug</th>
+              <th className="px-4 py-3 text-left text-xs uppercase tracking-[0.14em] text-[#2D3748]">Status</th>
+              <th className="px-4 py-3 text-right text-xs uppercase tracking-[0.14em] text-[#2D3748]">Action</th>
             </tr>
           </thead>
           <tbody>
             {loading ? (
               <tr>
-                <td className="px-4 py-8 text-slate-400" colSpan={4}>Loading categories...</td>
+                <td className="px-4 py-8 text-[#2D3748]" colSpan={4}>Loading categories...</td>
               </tr>
             ) : categories.length === 0 ? (
               <tr>
-                <td className="px-4 py-8 text-slate-400" colSpan={4}>No categories found.</td>
+                <td className="px-4 py-8 text-[#2D3748]" colSpan={4}>No categories found.</td>
               </tr>
             ) : (
               categories.map((category) => (
-                <tr key={category._id} className="border-b border-white/5">
-                  <td className="px-4 py-3 text-sm text-slate-200">{category.name}</td>
-                  <td className="px-4 py-3 text-sm text-slate-400">{category.slug}</td>
+                <tr key={category._id} className="border-b border-gray-200">
+                  <td className="px-4 py-3 text-sm text-[#3E2723]">{category.name}</td>
+                  <td className="px-4 py-3 text-sm text-[#2D3748]">{category.slug}</td>
                   <td className="px-4 py-3 text-sm">
                     <span className={`rounded-full px-2 py-1 text-xs ${category.isActive ? 'bg-emerald-500/15 text-emerald-300' : 'bg-red-500/15 text-red-300'}`}>
                       {category.isActive ? 'Active' : 'Inactive'}
@@ -179,13 +179,13 @@ export default function AdminCategoriesPage() {
               value={editingName}
               onChange={(event) => setEditingName(event.target.value)}
               placeholder="Category name"
-              className="h-12 rounded-xl border border-white/10 bg-white/[0.03] px-4 text-sm text-slate-200 outline-none"
+              className="h-12 rounded-xl border border-gray-200 bg-white px-4 text-sm text-[#3E2723] outline-none"
             />
             <input
               value={editingDescription}
               onChange={(event) => setEditingDescription(event.target.value)}
               placeholder="Description (optional)"
-              className="h-12 rounded-xl border border-white/10 bg-white/[0.03] px-4 text-sm text-slate-200 outline-none"
+              className="h-12 rounded-xl border border-gray-200 bg-white px-4 text-sm text-[#3E2723] outline-none"
             />
           </div>
           <div className="flex gap-2">
@@ -207,3 +207,4 @@ export default function AdminCategoriesPage() {
     </div>
   );
 }
+

@@ -5,10 +5,11 @@
 :root {
   --nuty-purple: #4b0082;
   --nuty-orange: #ff8c00;
-  --nuty-amber: #fbbf24;
-  --nuty-text: #e2e8f0;
-  --nuty-surface: #050505;
-  --nuty-surface-alt: #0d0d0d;
+  --nuty-brown: #5c4033;
+  --nuty-amber: #ff8c00;
+  --nuty-text: #2d3748;
+  --nuty-surface: #ffffff;
+  --nuty-surface-alt: #f9fafb;
 }
 
 * {
@@ -19,9 +20,7 @@ html,
 body {
   margin: 0;
   padding: 0;
-  background:
-    radial-gradient(80% 65% at 50% 20%, #1a1000 0%, transparent 58%),
-    linear-gradient(180deg, var(--nuty-surface) 0%, var(--nuty-surface-alt) 100%);
+  background: linear-gradient(180deg, var(--nuty-surface) 0%, var(--nuty-surface-alt) 100%);
   color: var(--nuty-text);
   overflow-x: hidden;
   overflow-y: auto;
@@ -71,15 +70,15 @@ html.lenis body {
   h4,
   h5,
   h6 {
-    color: var(--nuty-text);
+    color: #3e2723;
     font-family: var(--font-fredoka), Fredoka, sans-serif;
-    letter-spacing: -0.05em;
-    line-height: 1.04;
+    letter-spacing: -0.045em;
+    line-height: 1.05;
     text-wrap: balance;
   }
 
   p, li, span {
-    color: color-mix(in srgb, var(--nuty-text) 82%, #000 18%);
+    color: #2d3748;
   }
 
   a {
@@ -90,54 +89,50 @@ html.lenis body {
 
 @layer components {
   .glass-card {
-    @apply rounded-glass border border-white/[0.08] bg-white/[0.03] shadow-glass backdrop-blur-2xl;
+    @apply rounded-glass border border-gray-200 bg-white shadow-sm;
   }
 
   .floating-shell {
-    @apply sticky top-0 z-50 mx-auto mt-3 w-[min(1200px,94vw)] rounded-[1.35rem] border border-white/[0.08] bg-[#090909]/75 px-4 py-3 shadow-glass backdrop-blur-md;
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    @apply sticky top-0 z-50 mx-auto mt-3 w-[min(1200px,94vw)] rounded-[1.35rem] border border-gray-200 bg-white px-4 py-3 shadow-sm;
   }
 
   .btn-primary {
-    @apply inline-flex items-center justify-center rounded-full px-5 py-2.5 text-sm font-semibold text-[#fff7ea] transition-all duration-300 hover:-translate-y-0.5;
-    background: linear-gradient(110deg, #ff8c00, #ff7a00);
-    box-shadow: 0 14px 28px rgba(255, 140, 0, 0.26);
+    @apply inline-flex items-center justify-center rounded-full px-5 py-2.5 text-sm font-semibold text-white transition-all duration-300 hover:-translate-y-0.5;
+    background: #ff8c00;
+    box-shadow: 0 8px 18px rgba(255, 140, 0, 0.22);
   }
 
   .btn-secondary {
-    @apply inline-flex items-center justify-center rounded-full border px-5 py-2.5 text-sm font-semibold transition-all duration-300 hover:bg-white/10;
-    border-color: rgba(255, 255, 255, 0.16);
-    color: var(--nuty-text);
+    @apply inline-flex items-center justify-center rounded-full border px-5 py-2.5 text-sm font-semibold text-white transition-all duration-300;
+    border-color: #5c4033;
+    background: #5c4033;
   }
 
   .btn-ghost {
-    @apply inline-flex items-center justify-center rounded-full border border-orange-500 px-4 py-2 text-sm font-semibold text-orange-500 transition-all duration-300;
-    background: transparent;
+    @apply inline-flex items-center justify-center rounded-full border px-4 py-2 text-sm font-semibold transition-all duration-300;
+    color: #5c4033;
+    border-color: #d1d5db;
+    background: #ffffff;
   }
 
   .btn-ghost:hover {
-    color: #2b1605;
-    border-color: transparent;
-    background: linear-gradient(110deg, #ff8c00, #ff6f00);
-    box-shadow: 0 14px 30px rgba(255, 140, 0, 0.28);
+    color: #3e2723;
+    border-color: #ff8c00;
+    background: #fff7ed;
   }
 
   .focus-gradient {
-    @apply border border-white/10 bg-white/[0.03] px-4 py-3 text-white outline-none transition-all duration-300;
-    border-image-slice: 1;
+    @apply border border-gray-300 bg-white px-4 py-3 text-[#3E2723] outline-none transition-all duration-300;
   }
 
   .focus-gradient:focus {
-    border-image-source: linear-gradient(120deg, var(--nuty-purple), var(--nuty-orange));
-    box-shadow: 0 0 0 4px rgba(255, 140, 0, 0.16);
+    border-color: #ff8c00;
+    box-shadow: 0 0 0 3px rgba(255, 140, 0, 0.2);
   }
 }
 
 .grain-bg {
-  background-image:
-    radial-gradient(circle at 30% 20%, rgba(255, 140, 0, 0.12) 0%, transparent 45%),
-    radial-gradient(circle at 80% 80%, rgba(75, 0, 130, 0.18) 0%, transparent 50%),
-    linear-gradient(135deg, #080808 0%, #101010 100%);
+  background-image: linear-gradient(180deg, #ffffff 0%, #f9fafb 100%);
 }
 
 .grain-bg::before {
@@ -145,14 +140,34 @@ html.lenis body {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  opacity: 0.14;
-  background-image: radial-gradient(rgba(255, 255, 255, 0.55) 0.5px, transparent 0.5px);
+  opacity: 0.05;
+  background-image: radial-gradient(rgba(62, 39, 35, 0.35) 0.5px, transparent 0.5px);
   background-size: 3px 3px;
 }
 
+.nut-glow-hover {
+  position: relative;
+}
+
+.nut-glow-hover::after {
+  content: '';
+  position: absolute;
+  inset: -18%;
+  z-index: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  background: radial-gradient(circle at 50% 40%, color-mix(in srgb, var(--nuty-brown) 44%, transparent) 0%, transparent 62%);
+}
+
+.nut-glow-hover:hover::after {
+  opacity: 1;
+}
+
 ::selection {
-  background: rgba(255, 140, 0, 0.3);
-  color: #fff7ea;
+  background: rgba(255, 140, 0, 0.25);
+  color: #3e2723;
 }
 
 ::-webkit-scrollbar {
@@ -161,16 +176,16 @@ html.lenis body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #0b0b10;
+  background: #f3f4f6;
 }
 
 ::-webkit-scrollbar-thumb {
   border-radius: 999px;
-  border: 2px solid #0b0b10;
-  background: linear-gradient(180deg, var(--nuty-purple), var(--nuty-orange));
+  border: 2px solid #f3f4f6;
+  background: linear-gradient(180deg, #5c4033, #ff8c00);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg, #430073, #f98000);
+  background: linear-gradient(180deg, #3e2723, #ff8c00);
 }
 

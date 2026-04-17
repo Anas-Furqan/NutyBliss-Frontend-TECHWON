@@ -220,22 +220,22 @@ export default function AccountPage() {
       delivered: 'bg-emerald-500/20 text-emerald-300',
       cancelled: 'bg-red-500/20 text-red-300',
     };
-    return colors[status] || 'bg-white/10 text-slate-300';
+    return colors[status] || 'bg-white/10 text-[#2D3748]';
   };
 
   return (
     <main className="bg-surface pb-32 pt-32">
       <div className="mx-auto w-[min(1240px,94vw)]">
-        <h1 className="mb-8 font-display text-5xl tracking-tighter text-slate-100">My Account</h1>
+        <h1 className="mb-8 font-display text-5xl tracking-tighter text-[#3E2723]">My Account</h1>
 
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-4">
-          <aside className="rounded-2xl border border-white/10 bg-white/[0.03] p-6 backdrop-blur-2xl lg:col-span-1">
+          <aside className="rounded-2xl border border-gray-200 bg-white p-6 backdrop-blur-2xl lg:col-span-1">
             <div className="mb-6 text-center">
-              <div className="mx-auto mb-3 grid h-20 w-20 place-items-center rounded-full bg-white/[0.08]">
+              <div className="mx-auto mb-3 grid h-20 w-20 place-items-center rounded-full bg-gray-100">
                 <span className="text-3xl font-semibold text-amber-300">{user?.name?.[0]?.toUpperCase()}</span>
               </div>
-              <h2 className="text-lg font-semibold text-slate-100">{user?.name}</h2>
-              <p className="text-sm text-slate-400">{user?.email}</p>
+              <h2 className="text-lg font-semibold text-[#3E2723]">{user?.name}</h2>
+              <p className="text-sm text-[#2D3748]">{user?.email}</p>
             </div>
 
             <nav className="space-y-2">
@@ -250,7 +250,7 @@ export default function AccountPage() {
                   className={`flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left text-sm transition ${
                     activeTab === item.id
                       ? 'bg-white/[0.10] text-amber-300'
-                      : 'text-slate-300 hover:bg-white/[0.06]'
+                      : 'text-[#2D3748] hover:bg-gray-100'
                   }`}
                 >
                   <item.icon className="h-4 w-4" />
@@ -276,10 +276,10 @@ export default function AccountPage() {
 
           <section className="lg:col-span-3">
             {activeTab === 'orders' && (
-              <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-6 backdrop-blur-2xl">
-                <h2 className="mb-6 font-display text-3xl tracking-tight text-slate-100">My Orders</h2>
+              <div className="rounded-2xl border border-gray-200 bg-white p-6 backdrop-blur-2xl">
+                <h2 className="mb-6 font-display text-3xl tracking-tight text-[#3E2723]">My Orders</h2>
                 {loadingOrders ? (
-                  <p className="py-8 text-center text-slate-400">Loading orders...</p>
+                  <p className="py-8 text-center text-[#2D3748]">Loading orders...</p>
                 ) : orders.length > 0 ? (
                   <div className="space-y-3">
                     {orders.map((order) => (
@@ -287,12 +287,12 @@ export default function AccountPage() {
                         key={order._id}
                         initial={{ opacity: 0, y: 8 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="rounded-xl border border-white/10 bg-[#111111] p-4"
+                        className="rounded-xl border border-gray-200 bg-white p-4"
                       >
                         <div className="flex flex-wrap items-center justify-between gap-3">
                           <div>
-                            <p className="font-semibold text-slate-100">#{order.orderNumber}</p>
-                            <p className="text-sm text-slate-400">{new Date(order.createdAt).toLocaleDateString()}</p>
+                            <p className="font-semibold text-[#3E2723]">#{order.orderNumber}</p>
+                            <p className="text-sm text-[#2D3748]">{new Date(order.createdAt).toLocaleDateString()}</p>
                           </div>
                           <div className="text-right">
                             <p className="font-semibold text-amber-300">Rs. {order.total.toLocaleString()}</p>
@@ -303,7 +303,7 @@ export default function AccountPage() {
                         </div>
 
                         <div className="mt-3 flex items-center justify-between">
-                          <p className="text-sm text-slate-400">{order.items.length} item(s)</p>
+                          <p className="text-sm text-[#2D3748]">{order.items.length} item(s)</p>
                           <Link href={`/track-order?orderNumber=${order.orderNumber}`} className="text-sm font-medium text-amber-300 hover:text-amber-200">
                             Track Order
                           </Link>
@@ -312,8 +312,8 @@ export default function AccountPage() {
                     ))}
                   </div>
                 ) : (
-                  <div className="rounded-xl border border-white/10 bg-[#111111] p-8 text-center">
-                    <p className="mb-4 text-slate-400">No orders yet</p>
+                  <div className="rounded-xl border border-gray-200 bg-white p-8 text-center">
+                    <p className="mb-4 text-[#2D3748]">No orders yet</p>
                     <Link href="/shop" className="btn-primary">
                       Start Shopping
                     </Link>
@@ -323,37 +323,37 @@ export default function AccountPage() {
             )}
 
             {activeTab === 'profile' && (
-              <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-6 backdrop-blur-2xl">
-                <h2 className="mb-6 font-display text-3xl tracking-tight text-slate-100">Profile Settings</h2>
+              <div className="rounded-2xl border border-gray-200 bg-white p-6 backdrop-blur-2xl">
+                <h2 className="mb-6 font-display text-3xl tracking-tight text-[#3E2723]">Profile Settings</h2>
 
                 {loadingProfile ? (
-                  <p className="py-8 text-center text-slate-400">Loading profile...</p>
+                  <p className="py-8 text-center text-[#2D3748]">Loading profile...</p>
                 ) : (
                   <form onSubmit={handleProfileSave} className="grid max-w-xl gap-4">
                     <label className="grid gap-2">
-                      <span className="text-sm text-slate-300">Full Name</span>
+                      <span className="text-sm text-[#2D3748]">Full Name</span>
                       <input
                         value={profileForm.name}
                         onChange={(e) => setProfileForm((prev) => ({ ...prev, name: e.target.value }))}
-                        className="rounded-xl border border-white/15 bg-[#1a1a1a] px-4 py-3 text-slate-100 outline-none focus:border-amber-400/70"
+                        className="rounded-xl border border-gray-300 bg-white px-4 py-3 text-[#3E2723] outline-none focus:border-amber-400/70"
                       />
                     </label>
 
                     <label className="grid gap-2">
-                      <span className="text-sm text-slate-300">Email</span>
+                      <span className="text-sm text-[#2D3748]">Email</span>
                       <input
                         value={user?.email || ''}
                         disabled
-                        className="cursor-not-allowed rounded-xl border border-white/10 bg-[#131313] px-4 py-3 text-slate-400"
+                        className="cursor-not-allowed rounded-xl border border-gray-200 bg-white px-4 py-3 text-[#2D3748]"
                       />
                     </label>
 
                     <label className="grid gap-2">
-                      <span className="text-sm text-slate-300">Phone</span>
+                      <span className="text-sm text-[#2D3748]">Phone</span>
                       <input
                         value={profileForm.phone}
                         onChange={(e) => setProfileForm((prev) => ({ ...prev, phone: e.target.value }))}
-                        className="rounded-xl border border-white/15 bg-[#1a1a1a] px-4 py-3 text-slate-100 outline-none focus:border-amber-400/70"
+                        className="rounded-xl border border-gray-300 bg-white px-4 py-3 text-[#3E2723] outline-none focus:border-amber-400/70"
                       />
                     </label>
 
@@ -367,8 +367,8 @@ export default function AccountPage() {
 
             {activeTab === 'addresses' && (
               <div className="space-y-6">
-                <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-6 backdrop-blur-2xl">
-                  <h2 className="mb-5 font-display text-3xl tracking-tight text-slate-100">
+                <div className="rounded-2xl border border-gray-200 bg-white p-6 backdrop-blur-2xl">
+                  <h2 className="mb-5 font-display text-3xl tracking-tight text-[#3E2723]">
                     {editingAddressId ? 'Edit Address' : 'Add Address'}
                   </h2>
 
@@ -377,34 +377,34 @@ export default function AccountPage() {
                       placeholder="Full Name"
                       value={addressForm.fullName}
                       onChange={(e) => setAddressForm((prev) => ({ ...prev, fullName: e.target.value }))}
-                      className="rounded-xl border border-white/15 bg-[#1a1a1a] px-4 py-3 text-slate-100 outline-none focus:border-amber-400/70"
+                      className="rounded-xl border border-gray-300 bg-white px-4 py-3 text-[#3E2723] outline-none focus:border-amber-400/70"
                     />
                     <input
                       placeholder="Phone"
                       value={addressForm.phone}
                       onChange={(e) => setAddressForm((prev) => ({ ...prev, phone: e.target.value }))}
-                      className="rounded-xl border border-white/15 bg-[#1a1a1a] px-4 py-3 text-slate-100 outline-none focus:border-amber-400/70"
+                      className="rounded-xl border border-gray-300 bg-white px-4 py-3 text-[#3E2723] outline-none focus:border-amber-400/70"
                     />
                     <input
                       placeholder="Address"
                       value={addressForm.address}
                       onChange={(e) => setAddressForm((prev) => ({ ...prev, address: e.target.value }))}
-                      className="rounded-xl border border-white/15 bg-[#1a1a1a] px-4 py-3 text-slate-100 outline-none focus:border-amber-400/70 md:col-span-2"
+                      className="rounded-xl border border-gray-300 bg-white px-4 py-3 text-[#3E2723] outline-none focus:border-amber-400/70 md:col-span-2"
                     />
                     <input
                       placeholder="City"
                       value={addressForm.city}
                       onChange={(e) => setAddressForm((prev) => ({ ...prev, city: e.target.value }))}
-                      className="rounded-xl border border-white/15 bg-[#1a1a1a] px-4 py-3 text-slate-100 outline-none focus:border-amber-400/70"
+                      className="rounded-xl border border-gray-300 bg-white px-4 py-3 text-[#3E2723] outline-none focus:border-amber-400/70"
                     />
                     <input
                       placeholder="Postal Code"
                       value={addressForm.postalCode}
                       onChange={(e) => setAddressForm((prev) => ({ ...prev, postalCode: e.target.value }))}
-                      className="rounded-xl border border-white/15 bg-[#1a1a1a] px-4 py-3 text-slate-100 outline-none focus:border-amber-400/70"
+                      className="rounded-xl border border-gray-300 bg-white px-4 py-3 text-[#3E2723] outline-none focus:border-amber-400/70"
                     />
 
-                    <label className="md:col-span-2 flex items-center gap-2 text-sm text-slate-300">
+                    <label className="md:col-span-2 flex items-center gap-2 text-sm text-[#2D3748]">
                       <input
                         type="checkbox"
                         checked={addressForm.isDefault}
@@ -426,30 +426,30 @@ export default function AccountPage() {
                   </form>
                 </div>
 
-                <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-6 backdrop-blur-2xl">
-                  <h3 className="mb-4 font-display text-2xl tracking-tight text-slate-100">Saved Addresses</h3>
+                <div className="rounded-2xl border border-gray-200 bg-white p-6 backdrop-blur-2xl">
+                  <h3 className="mb-4 font-display text-2xl tracking-tight text-[#3E2723]">Saved Addresses</h3>
                   {addresses.length > 0 ? (
                     <div className="grid gap-3 md:grid-cols-2">
                       {addresses.map((address) => (
-                        <article key={address._id} className="rounded-xl border border-white/10 bg-[#111111] p-4">
+                        <article key={address._id} className="rounded-xl border border-gray-200 bg-white p-4">
                           <div className="mb-2 flex items-start justify-between gap-2">
-                            <p className="font-medium text-slate-100">{address.fullName}</p>
+                            <p className="font-medium text-[#3E2723]">{address.fullName}</p>
                             {address.isDefault && (
                               <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/20 px-2 py-1 text-xs text-emerald-300">
                                 <FiCheck className="h-3 w-3" /> Default
                               </span>
                             )}
                           </div>
-                          <p className="text-sm text-slate-300">{address.address}</p>
-                          <p className="text-sm text-slate-400">{address.city} {address.postalCode}</p>
-                          <p className="text-sm text-slate-400">{address.phone}</p>
+                          <p className="text-sm text-[#2D3748]">{address.address}</p>
+                          <p className="text-sm text-[#2D3748]">{address.city} {address.postalCode}</p>
+                          <p className="text-sm text-[#2D3748]">{address.phone}</p>
 
                           <div className="mt-3 flex flex-wrap items-center gap-2">
-                            <button onClick={() => editAddress(address)} className="inline-flex items-center gap-1 rounded-lg px-2 py-1 text-sm text-amber-300 hover:bg-white/[0.08]">
+                            <button onClick={() => editAddress(address)} className="inline-flex items-center gap-1 rounded-lg px-2 py-1 text-sm text-amber-300 hover:bg-gray-100">
                               <FiEdit2 className="h-4 w-4" /> Edit
                             </button>
                             {!address.isDefault && (
-                              <button onClick={() => setDefaultAddress(address)} className="inline-flex items-center gap-1 rounded-lg px-2 py-1 text-sm text-cyan-300 hover:bg-white/[0.08]">
+                              <button onClick={() => setDefaultAddress(address)} className="inline-flex items-center gap-1 rounded-lg px-2 py-1 text-sm text-cyan-300 hover:bg-gray-100">
                                 <FiCheck className="h-4 w-4" /> Set Default
                               </button>
                             )}
@@ -461,7 +461,7 @@ export default function AccountPage() {
                       ))}
                     </div>
                   ) : (
-                    <p className="rounded-xl border border-white/10 bg-[#111111] p-4 text-center text-slate-400">No saved addresses yet.</p>
+                    <p className="rounded-xl border border-gray-200 bg-white p-4 text-center text-[#2D3748]">No saved addresses yet.</p>
                   )}
                 </div>
               </div>
@@ -472,3 +472,4 @@ export default function AccountPage() {
     </main>
   );
 }
+

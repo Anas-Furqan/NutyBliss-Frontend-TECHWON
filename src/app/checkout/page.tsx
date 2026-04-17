@@ -143,7 +143,7 @@ export default function CheckoutPage() {
             <h2 className="font-display text-3xl text-ink">Contact</h2>
             {savedAddresses.length > 0 && (
               <div>
-                <label className="mb-1 block text-sm text-slate-300">Use saved address</label>
+                <label className="mb-1 block text-sm text-[#2D3748]">Use saved address</label>
                 <select
                   value={selectedAddressId}
                   onChange={(e) => applySavedAddress(e.target.value)}
@@ -164,7 +164,7 @@ export default function CheckoutPage() {
             <Input {...register('phone', { required: 'Phone is required' })} placeholder="Phone" autoComplete="tel" />
             {errors.phone && <p className="text-sm text-[#EF4444]">{errors.phone.message}</p>}
             {savedAddresses.length > 0 && (
-              <p className="text-xs text-slate-400">Manage addresses in your account to auto-fill checkout faster.</p>
+              <p className="text-xs text-[#2D3748]">Manage addresses in your account to auto-fill checkout faster.</p>
             )}
           </GlassCard>
 
@@ -213,3 +213,4 @@ export default function CheckoutPage() {
     </main>
   );
 }
+

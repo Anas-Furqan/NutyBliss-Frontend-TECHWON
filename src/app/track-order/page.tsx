@@ -69,17 +69,17 @@ export default function TrackOrderPage() {
   return (
     <main className="min-h-[88vh] bg-surface pb-32 pt-32">
       <section className="mx-auto w-[min(980px,92vw)]">
-        <h1 className="text-center font-display text-6xl tracking-tighter leading-tight text-slate-200">Track Order</h1>
-        <p className="mt-3 text-center text-slate-300/80">Enter your order ID and reveal delivery progress.</p>
+        <h1 className="text-center font-display text-6xl tracking-tighter leading-tight text-[#3E2723]">Track Order</h1>
+        <p className="mt-3 text-center text-[#2D3748]/80">Enter your order ID and reveal delivery progress.</p>
 
         <form onSubmit={onTrack} className="mx-auto mt-8 max-w-2xl">
-          <div className="rounded-full border border-orange-500/50 bg-white/[0.03] p-2 shadow-[0_0_0_1px_rgba(255,140,0,0.22),0_0_24px_rgba(255,140,0,0.22)] backdrop-blur-2xl">
+          <div className="rounded-full border border-orange-500/50 bg-white p-2 shadow-[0_0_0_1px_rgba(255,140,0,0.22),0_0_24px_rgba(255,140,0,0.22)] backdrop-blur-2xl">
             <div className="flex flex-wrap items-center gap-3">
               <input
                 value={orderId}
                 onChange={(e) => setOrderId(e.target.value)}
                 placeholder="NUTY-0001"
-                className="h-14 flex-1 rounded-full border border-white/10 bg-[#090913] px-6 text-lg text-slate-200 outline-none placeholder:text-slate-500 focus:border-[#FF8C00]"
+                className="h-14 flex-1 rounded-full border border-gray-200 bg-white px-6 text-lg text-[#3E2723] outline-none placeholder:text-[#2D3748] focus:border-[#FF8C00]"
               />
               <button type="submit" className="h-14 rounded-full bg-[#FF8C00] px-7 text-sm font-semibold text-[#1c1206] shadow-neon transition hover:brightness-110">
                 Track
@@ -90,7 +90,7 @@ export default function TrackOrderPage() {
 
         {revealed && (
           <div ref={timelineRef} className="relative mx-auto mt-12 max-w-4xl space-y-8">
-            <section className="grid gap-3 rounded-2xl border border-white/10 bg-white/[0.03] p-5 backdrop-blur-2xl md:grid-cols-3">
+            <section className="grid gap-3 rounded-2xl border border-gray-200 bg-white p-5 backdrop-blur-2xl md:grid-cols-3">
               {stages.map((stage, index) => {
                 const isCancelledFlow = currentPipelineStatus === 'cancelled';
                 const isActive = stage === currentPipelineStatus;
@@ -103,24 +103,24 @@ export default function TrackOrderPage() {
                         ? 'border-amber-400/60 bg-amber-500/10'
                         : isCompleted
                           ? 'border-emerald-500/30 bg-emerald-500/10'
-                          : 'border-white/10 bg-[#111111]'
+                          : 'border-gray-200 bg-white'
                     }`}
                   >
-                    <p className="text-[11px] uppercase tracking-[0.16em] text-slate-500">{isCompleted ? 'Completed' : isActive ? 'Current' : 'Pending'}</p>
-                    <h3 className="mt-1 font-semibold capitalize text-slate-200">{stage.replace(/-/g, ' ')}</h3>
+                    <p className="text-[11px] uppercase tracking-[0.16em] text-[#2D3748]">{isCompleted ? 'Completed' : isActive ? 'Current' : 'Pending'}</p>
+                    <h3 className="mt-1 font-semibold capitalize text-[#3E2723]">{stage.replace(/-/g, ' ')}</h3>
                   </article>
                 );
               })}
             </section>
 
-            <div className="rounded-xl border border-white/10 bg-[#0f0f17] px-4 py-3 text-sm text-slate-300">
+            <div className="rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-[#2D3748]">
               Live status: <span className="font-semibold capitalize text-amber-300">{currentStatus.replace(/-/g, ' ')}</span>
             </div>
 
             <div className="relative">
             <div className="absolute left-5 top-0 h-full w-px bg-white/10" />
             <div data-track-line className="absolute left-5 top-0 h-full w-px bg-gradient-to-b from-[#FF8C00] to-[#4B0082]" />
-            <div ref={markerRef} className="absolute left-[6px] top-0 z-20 h-8 w-8 overflow-hidden rounded-full border border-white/20 bg-black/70 shadow-[0_12px_30px_rgba(0,0,0,0.45)]">
+            <div ref={markerRef} className="absolute left-[6px] top-0 z-20 h-8 w-8 overflow-hidden rounded-full border border-gray-300 bg-white shadow-sm">
               <Image src="/images/logo.jpeg" alt="Nuty marker" fill className="object-cover" />
             </div>
 
@@ -128,8 +128,8 @@ export default function TrackOrderPage() {
               {statusHistory.map((item, index) => (
                 <article key={`${item.status}-${index}`} data-track-item className="glass-card p-5">
                   <p className="text-xs uppercase tracking-[0.18em] text-amber-400">Step {index + 1}</p>
-                  <h2 className="mt-2 font-display text-3xl tracking-tighter leading-tight text-slate-200">{item.status.replace(/-/g, ' ')}</h2>
-                  <p className="mt-2 text-sm text-slate-300/75">{item.note || 'Status updated by admin dashboard'}</p>
+                  <h2 className="mt-2 font-display text-3xl tracking-tighter leading-tight text-[#3E2723]">{item.status.replace(/-/g, ' ')}</h2>
+                  <p className="mt-2 text-sm text-[#2D3748]/75">{item.note || 'Status updated by admin dashboard'}</p>
                 </article>
               ))}
             </div>
@@ -140,3 +140,4 @@ export default function TrackOrderPage() {
     </main>
   );
 }
+
